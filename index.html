@@ -1,166 +1,84 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>szlinux-btc · 主页</title>
-  <style>
-    /* 变量定义：极简配色与间距 */
-    :root {
-      --bg: #ffffff;
-      --text: #111111;
-      --accent: #f57c00;       /* 橙色 */
-      --border-light: #eaeaea;
-      --text-muted: #666666;
-      --space-unit: 1rem;
-      --content-width: 700px;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 2rem;
-    }
-
-    /* 主内容容器 */
-    .container {
-      max-width: var(--content-width);
-      width: 100%;
-      margin: 0 auto;
-    }
-
-    /* 标题区 */
-    header {
-      margin-bottom: 3rem;
-    }
-
-    h1 {
-      font-size: 2.5rem;
-      font-weight: 450;        /* 稍微减轻字重，更优雅 */
-      letter-spacing: -0.02em;
-      margin-bottom: 0.5rem;
-    }
-
-    /* 橙色分隔线 — 仅保留一个简洁版本 */
-    .divider {
-      height: 2px;
-      background-color: var(--accent);
-      width: 5rem;             /* 相对单位，适应字体缩放 */
-      margin: 2rem 0;          /* 上下间距统一 */
-    }
-
-    /* 标签列表 */
-    .tag-list {
-      list-style: none;
-      margin-bottom: 2.5rem;
-    }
-
-    .tag-list li {
-      font-size: 1.25rem;
-      margin-bottom: 0.75rem;
-      display: flex;
-      align-items: center;
-      line-height: 1.4;        /* 优化多行文本间距 */
-    }
-
-    /* 链接区域 */
-    .links {
-      display: flex;
-      gap: 2rem;
-      margin: 2rem 0 3rem 0;
-      flex-wrap: wrap;
-    }
-
-    .links a {
-      color: var(--text);
-      text-decoration: none;
-      font-size: 1.1rem;
-      border-bottom: 2px solid transparent;
-      transition: color 0.2s ease, border-color 0.2s ease;
-      padding: 0.25rem 0;       /* 增加点击区域，不影响布局 */
-    }
-
-    .links a:hover {
-      color: var(--accent);
-      border-bottom-color: var(--accent);
-    }
-
-    /* 底部名言 */
-    footer {
-      margin-top: 4rem;
-      color: var(--text-muted);
-      font-style: italic;
-      border-top: 1px solid var(--border-light);
-      padding-top: 2rem;
-      text-align: center;
-    }
-
-    /* 响应式：手机适配 */
-    @media (max-width: 600px) {
-      body {
-        padding: 1.5rem;
-        justify-content: flex-start;
-        padding-top: 3rem;
-      }
-
-      h1 {
-        font-size: 2rem;
-      }
-
-      .tag-list li {
-        font-size: 1.1rem;
-      }
-
-      .links {
-        gap: 1.5rem;
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .divider {
-        width: 4rem;           /* 小屏适当缩小 */
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>szlinux-btc</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+            min-height: 100vh;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        .container { max-width: 700px; margin: 0 auto; }
+        h1 { font-size: 2.5rem; text-align: center; margin-bottom: 50px; font-weight: 700; }
+        .card {
+            border: 2px solid #1a1a1a;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            background: #f7931a;
+            border-color: #f7931a;
+            color: #ffffff;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(247,147,26,0.3);
+        }
+        .card-icon { font-size: 2.5rem; margin-bottom: 15px; display: block; }
+        .card-title { font-size: 1.4rem; font-weight: 600; margin-bottom: 12px; }
+        .card-desc { font-size: 0.95rem; opacity: 0.85; line-height: 1.7; }
+        .divider { width: 80px; height: 3px; background: #f7931a; margin: 40px auto; border-radius: 2px; }
+        .links { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 35px; }
+        .link {
+            color: #1a1a1a;
+            text-decoration: none;
+            padding: 12px 28px;
+            border: 2px solid #1a1a1a;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .link:hover { background: #1a1a1a; color: #ffffff; transform: translateY(-2px); }
+        .quote { text-align: center; font-size: 0.95rem; color: #666; font-style: italic; }
+        @media (max-width: 480px) {
+            h1 { font-size: 2rem; }
+            .card { padding: 20px; }
+            .card-title { font-size: 1.2rem; }
+            .card-desc { font-size: 0.9rem; }
+            .link { padding: 10px 20px; }
+        }
+    </style>
 </head>
 <body>
-  <main class="container">
-    <header>
-      <h1>👋 Hi, I'm szlinux-btc</h1>
-    </header>
-
-    <div class="divider" aria-hidden="true"></div>
-
-    <ul class="tag-list">
-      <li>🪙 大饼爱好者</li>
-      <li>🐧 Linux 狂热份子</li>
-      <li>🤖 AI 学习者</li>
-    </ul>
-
-    <div class="links">
-      <!-- 请替换为你的真实链接 -->
-      <a href="https://github.com/szlinux-btc" target="_blank" rel="noopener noreferrer">GitHub</a>
-      <a href="mailto:hbszhblinux@gmail.com">Contact</a>
+    <div class="container">
+        <h1>👋 Hi, I'm szlinux-btc</h1>
+        <div class="card">
+            <span class="card-icon">🪙</span>
+            <div class="card-title">大饼爱好者</div>
+            <div class="card-desc">区块链信仰者 · 长期持有者<br>相信去中心化改变世界</div>
+        </div>
+        <div class="card">
+            <span class="card-icon">🐧</span>
+            <div class="card-title">Linux 狂热份子</div>
+            <div class="card-desc">10 年 + Linux 经验 · 开源贡献者<br>Arch/Debian 双修 · 终端就是我的家</div>
+        </div>
+        <div class="card">
+            <span class="card-icon">🤖</span>
+            <div class="card-title">AI 学习者</div>
+            <div class="card-desc">探索 AGI 边界 · 让 AI 为人类服务<br>每天学习新模型/新工具</div>
+        </div>
+        <div class="divider"></div>
+        <div class="links">
+            <a href="https://github.com/szlinux-btc" class="link" target="_blank">💼 GitHub</a>
+            <a href="mailto:contact@138138100.xyz" class="link">📧 Contact</a>
+        </div>
+        <p class="quote">"Talk is cheap. Show me the code." — Linus Torvalds</p>
     </div>
-
-    <div class="divider" aria-hidden="true"></div>
-
-    <footer>
-      “Talk is cheap. Show me the code.” —— Linus Torvalds
-    </footer>
-  </main>
 </body>
 </html>
