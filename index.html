@@ -137,6 +137,27 @@
             margin-top: 4px;
             display: block;
         }
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .timeline-item {
+            flex: 1;
+            min-width: 80px;
+            text-align: center;
+            padding: 8px;
+            background: #ffffff;
+            border-radius: 6px;
+            font-size: 0.75rem;
+        }
+        .timeline-item strong {
+            color: #f7931a;
+            display: block;
+            font-size: 0.9rem;
+        }
         .divider {
             width: 80px;
             height: 3px;
@@ -205,6 +226,7 @@
             .quote { font-size: 0.85rem; padding: 15px; }
             .counter { font-size: 0.8rem; }
             .log-date { float: none; display: block; margin-top: 5px; }
+            .timeline { flex-direction: column; }
         }
         @media (hover: none) {
             .card:active { transform: translateY(-2px); }
@@ -221,6 +243,39 @@
             <div class="card-desc">
                 区块链信仰者 · 长期持有者<br>
                 相信去中心化改变世界
+            </div>
+            <div class="log-box" style="border-left-color: #f7931a;">
+                <strong>₿ 见证永恒稀缺：第 2000 万枚比特币诞生</strong>
+                <span class="log-date">📅 2026 年 3 月 9 日</span>
+                <br>
+                <strong>🎯 核心里程碑：</strong>
+                <ul style="margin: 8px 0; padding-left: 18px; font-size: 0.8rem;">
+                    <li>区块高度 939,999 被挖出，第 2000 万枚 BTC 诞生</li>
+                    <li>已流通量占总上限 2100 万的 <strong>95.2%</strong></li>
+                    <li>绝版倒计时正式开启，剩余 100 万枚需 <strong>114 年</strong> 挖完</li>
+                </ul>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <strong>2009</strong>
+                        创世区块
+                    </div>
+                    <div class="timeline-item">
+                        <strong>2026</strong>
+                        2000 万枚
+                    </div>
+                    <div class="timeline-item">
+                        <strong>2028</strong>
+                        下次减半
+                    </div>
+                    <div class="timeline-item">
+                        <strong>2140</strong>
+                        最后一枚
+                    </div>
+                </div>
+                <div style="margin-top: 10px; font-size: 0.8rem; color: #555;">
+                    <strong>💎 永恒特性：</strong>固定供应 2100 万 · 不可增发 · 去中心化 · 抗审查<br>
+                    <strong>📈 有效流通：</strong>约 1500-1800 万枚（200-370 万枚永久丢失）
+                </div>
             </div>
         </div>
         <div class="card">
