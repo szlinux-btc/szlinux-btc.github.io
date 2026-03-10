@@ -90,6 +90,12 @@
         .log-box strong {
             color: #f7931a;
         }
+        .log-date {
+            float: right;
+            font-size: 0.75rem;
+            color: #888;
+            font-weight: 400;
+        }
         .log-comparison {
             display: flex;
             gap: 15px;
@@ -198,6 +204,7 @@
             .link { padding: 12px 24px; font-size: 0.9rem; }
             .quote { font-size: 0.85rem; padding: 15px; }
             .counter { font-size: 0.8rem; }
+            .log-date { float: none; display: block; margin-top: 5px; }
         }
         @media (hover: none) {
             .card:active { transform: translateY(-2px); }
@@ -232,8 +239,9 @@
                 每天学习新模型/新工具
             </div>
             <div class="log-box">
-                <strong>📌 ChatGPT 和龙虾有什么区别？</strong><br>
-                💡 一句话：ChatGPT 是聊天窗口，龙虾是帮你干活的员工<br>
+                <strong>📌 ChatGPT 和龙虾有什么区别？</strong>
+                <span class="log-date">📅 2026 年 3 月 10 日</span>
+                <br>💡 一句话：ChatGPT 是聊天窗口，龙虾是帮你干活的员工<br>
                 <div class="log-comparison">
                     <div class="log-item bad">
                         <strong>🤖 普通 AI（ChatGPT 等）</strong><br>
@@ -254,7 +262,9 @@
                 </div>
             </div>
             <div class="log-box" style="margin-top: 15px; border-left-color: #28a745;">
-                <strong>🦞 我的第一只龙虾：hb250</strong><br>
+                <strong>🦞 我的第一只龙虾：hb250</strong>
+                <span class="log-date">📅 2026 年 3 月 10 日</span>
+                <br>
                 <div class="stats-grid">
                     <div class="stat-item">
                         <span class="stat-value">7×24</span>
