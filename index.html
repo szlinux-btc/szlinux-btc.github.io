@@ -78,6 +78,34 @@
             line-height: 1.8;
             transition: opacity 0.3s ease;
         }
+        .log-box {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 3px solid #f7931a;
+            font-size: 0.85rem;
+            line-height: 1.7;
+        }
+        .log-box strong {
+            color: #f7931a;
+        }
+        .log-comparison {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .log-item {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px;
+            background: #ffffff;
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+        .log-item.bad { border-left: 3px solid #dc3545; }
+        .log-item.good { border-left: 3px solid #28a745; }
         .divider {
             width: 80px;
             height: 3px;
@@ -140,6 +168,7 @@
             .card-icon { font-size: 2.4rem; }
             .card-title { font-size: 1.25rem; }
             .card-desc { font-size: 0.9rem; }
+            .log-box { font-size: 0.8rem; }
             .link { padding: 12px 24px; font-size: 0.9rem; }
             .quote { font-size: 0.85rem; padding: 15px; }
             .counter { font-size: 0.8rem; }
@@ -175,6 +204,28 @@
             <div class="card-desc">
                 探索 AGI 边界 · 让 AI 为人类服务<br>
                 每天学习新模型/新工具
+            </div>
+            <div class="log-box">
+                <strong>📌 ChatGPT 和龙虾有什么区别？</strong><br>
+                💡 一句话：ChatGPT 是聊天窗口，龙虾是帮你干活的员工<br>
+                <div class="log-comparison">
+                    <div class="log-item bad">
+                        <strong>🤖 普通 AI（ChatGPT 等）</strong><br>
+                        • 你问它答，聊完就忘<br>
+                        • 没有记忆，每次从头开始<br>
+                        • 不能行动，只能给建议<br>
+                        • 需要你一直盯着<br>
+                        • 关掉窗口就没了
+                    </div>
+                    <div class="log-item good">
+                        <strong>🦞 龙虾（AI Agent）</strong><br>
+                        • 交代一句话，它自己去干<br>
+                        • 有记忆，记得你说过的每一件事<br>
+                        • 能行动：写代码、发邮件、查资料<br>
+                        • 7×24 自动运行，你睡它不睡<br>
+                        • 拥有一台自己的电脑
+                    </div>
+                </div>
             </div>
         </div>
         <div class="divider"></div>
