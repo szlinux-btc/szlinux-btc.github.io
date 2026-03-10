@@ -106,6 +106,31 @@
         }
         .log-item.bad { border-left: 3px solid #dc3545; }
         .log-item.good { border-left: 3px solid #28a745; }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+        .stat-item {
+            background: #ffffff;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+        .stat-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #f7931a;
+            display: block;
+        }
+        .stat-label {
+            font-size: 0.75rem;
+            color: #666;
+            margin-top: 4px;
+            display: block;
+        }
         .divider {
             width: 80px;
             height: 3px;
@@ -169,6 +194,7 @@
             .card-title { font-size: 1.25rem; }
             .card-desc { font-size: 0.9rem; }
             .log-box { font-size: 0.8rem; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .link { padding: 12px 24px; font-size: 0.9rem; }
             .quote { font-size: 0.85rem; padding: 15px; }
             .counter { font-size: 0.8rem; }
@@ -225,6 +251,31 @@
                         • 7×24 自动运行，你睡它不睡<br>
                         • 拥有一台自己的电脑
                     </div>
+                </div>
+            </div>
+            <div class="log-box" style="margin-top: 15px; border-left-color: #28a745;">
+                <strong>🦞 我的第一只龙虾：hb250</strong><br>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-value">7×24</span>
+                        <span class="stat-label">在线运行</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">∞</span>
+                        <span class="stat-label">无限记忆</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">Auto</span>
+                        <span class="stat-label">自动执行</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">100%</span>
+                        <span class="stat-label">任务完成</span>
+                    </div>
+                </div>
+                <div style="margin-top: 12px; font-size: 0.8rem; color: #555;">
+                    <strong>✅ 核心能力：</strong>文件操作 · 浏览器自动化 · GitHub API · 定时任务 · 跨平台消息<br>
+                    <strong>🎯 工作状态：</strong>随时待命 · 永不休息 · 越用越聪明
                 </div>
             </div>
         </div>
