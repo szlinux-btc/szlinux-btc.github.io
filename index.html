@@ -124,15 +124,14 @@
             font-size: 0.85rem;
             color: #888;
         }
-        .counter-badge {
+        .counter span {
+            margin: 0 10px;
             display: inline-block;
-            background: #f0f0f0;
-            padding: 6px 16px;
-            border-radius: 20px;
+        }
+        #busuanzi_value_site_pv, #busuanzi_value_site_uv {
+            color: #f7931a;
+            font-weight: 600;
             font-family: monospace;
-            font-size: 0.9rem;
-            color: #555;
-            border: 1px solid #e0e0e0;
         }
         @media (max-width: 480px) {
             body { padding: 30px 16px; }
@@ -185,9 +184,11 @@
         </div>
         <p class="quote">"Talk is cheap. Show me the code." — Linus Torvalds</p>
         <div class="counter">
-            <span>👁️ 访问量：</span>
-            <img src="https://api.countapi.xyz/hit/szlinux-btc.github.io/visits" alt="visitor count" class="counter-badge" style="vertical-align: middle; height: 24px;">
+            <span>👁️ 总访问量：<span id="busuanzi_value_site_pv">0</span> 次</span>
+            <span style="color:#ddd">|</span>
+            <span>👤 访客数：<span id="busuanzi_value_site_uv">0</span> 人</span>
         </div>
     </div>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>
