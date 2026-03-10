@@ -1,159 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>szlinux-btc · 主页</title>
-    <style>
-        /* --- 极简风格核心样式 --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>szlinux-btc · 主页</title>
+  <style>
+    /* 变量定义：极简配色与间距 */
+    :root {
+      --bg: #ffffff;
+      --text: #111111;
+      --accent: #f57c00;       /* 橙色 */
+      --border-light: #eaeaea;
+      --text-muted: #666666;
+      --space-unit: 1rem;
+      --content-width: 700px;
+    }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: #ffffff; /* 白底 */
-            color: #111111; /* 黑字 */
-            line-height: 1.6;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem;
-        }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        .container {
-            max-width: 700px;
-            width: 100%;
-            margin: 0 auto;
-        }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
 
-        /* 标题区 */
-        header {
-            margin-bottom: 3rem;
-        }
+    /* 主内容容器 */
+    .container {
+      max-width: var(--content-width);
+      width: 100%;
+      margin: 0 auto;
+    }
 
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 500;
-            letter-spacing: -0.02em;
-            margin-bottom: 0.5rem;
-        }
+    /* 标题区 */
+    header {
+      margin-bottom: 3rem;
+    }
 
-        /* 橙色分隔线 */
-        .divider {
-            height: 2px;
-            background-color: #f57c00; /* 标准橙色 */
-            width: 80px;
-            margin: 1.5rem 0 2rem 0;
-        }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 450;        /* 稍微减轻字重，更优雅 */
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
 
-        /* 标签列表 */
-        .tag-list {
-            list-style: none;
-            margin-bottom: 2.5rem;
-        }
+    /* 橙色分隔线 — 仅保留一个简洁版本 */
+    .divider {
+      height: 2px;
+      background-color: var(--accent);
+      width: 5rem;             /* 相对单位，适应字体缩放 */
+      margin: 2rem 0;          /* 上下间距统一 */
+    }
 
-        .tag-list li {
-            font-size: 1.25rem;
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-        }
+    /* 标签列表 */
+    .tag-list {
+      list-style: none;
+      margin-bottom: 2.5rem;
+    }
 
-        /* 链接区域 */
-        .links {
-            display: flex;
-            gap: 2rem;
-            margin: 2rem 0 3rem 0;
-            flex-wrap: wrap;
-        }
+    .tag-list li {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      line-height: 1.4;        /* 优化多行文本间距 */
+    }
 
-        .links a {
-            color: #111111;
-            text-decoration: none;
-            font-size: 1.1rem;
-            border-bottom: 2px solid transparent;
-            transition: all 0.2s ease;
-            padding-bottom: 2px;
-        }
+    /* 链接区域 */
+    .links {
+      display: flex;
+      gap: 2rem;
+      margin: 2rem 0 3rem 0;
+      flex-wrap: wrap;
+    }
 
-        /* 橙色悬停动效 */
-        .links a:hover {
-            color: #f57c00;
-            border-bottom-color: #f57c00;
-        }
+    .links a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 1.1rem;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s ease, border-color 0.2s ease;
+      padding: 0.25rem 0;       /* 增加点击区域，不影响布局 */
+    }
 
-        /* 底部名言 */
-        footer {
-            margin-top: 4rem;
-            color: #666666;
-            font-style: italic;
-            border-top: 1px solid #eaeaea;
-            padding-top: 2rem;
-            text-align: center;
-        }
+    .links a:hover {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
 
-        /* 响应式：手机适配 */
-        @media (max-width: 600px) {
-            body {
-                padding: 1.5rem;
-                justify-content: flex-start;
-                padding-top: 3rem;
-            }
+    /* 底部名言 */
+    footer {
+      margin-top: 4rem;
+      color: var(--text-muted);
+      font-style: italic;
+      border-top: 1px solid var(--border-light);
+      padding-top: 2rem;
+      text-align: center;
+    }
 
-            h1 {
-                font-size: 2rem;
-            }
+    /* 响应式：手机适配 */
+    @media (max-width: 600px) {
+      body {
+        padding: 1.5rem;
+        justify-content: flex-start;
+        padding-top: 3rem;
+      }
 
-            .tag-list li {
-                font-size: 1.1rem;
-            }
+      h1 {
+        font-size: 2rem;
+      }
 
-            .links {
-                gap: 1.5rem;
-                flex-direction: column;
-                align-items: flex-start;
-            }
-        }
-    </style>
+      .tag-list li {
+        font-size: 1.1rem;
+      }
+
+      .links {
+        gap: 1.5rem;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .divider {
+        width: 4rem;           /* 小屏适当缩小 */
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>👋 Hi, I'm szlinux-btc</h1>
-        </header>
+  <main class="container">
+    <header>
+      <h1>👋 Hi, I'm szlinux-btc</h1>
+    </header>
 
-        <!-- 橙色分隔线 -->
-        <div class="divider"></div>
+    <div class="divider" aria-hidden="true"></div>
 
-        <!-- 三个核心标签 -->
-        <ul class="tag-list">
-            <li>🪙 大饼爱好者</li>
-            <li>🐧 Linux 狂热份子</li>
-            <li>🤖 AI 学习者</li>
-        </ul>
+    <ul class="tag-list">
+      <li>🪙 大饼爱好者</li>
+      <li>🐧 Linux 狂热份子</li>
+      <li>🤖 AI 学习者</li>
+    </ul>
 
-        <!-- 可点击的链接 (GitHub和Contact) -->
-        <div class="links">
-            <a href="#" target="_blank" rel="noopener noreferrer">GitHub</a>
-            <a href="#">Contact</a>
-            <!-- 注意：上面的href="#"，只是占位。后期你可以替换为真实链接，例如：
-                 GitHub: https://github.com/szlinux-btc
-                 Contact: mailto:your.email@example.com
-            -->
-        </div>
-
-        <!-- 橙色分隔线 (第二个，增加设计感) -->
-        <div class="divider"></div>
-
-        <!-- 底部名言 -->
-        <footer>
-            “Talk is cheap. Show me the code.” —— Linus Torvalds
-        </footer>
+    <div class="links">
+      <!-- 请替换为你的真实链接 -->
+      <a href="https://github.com/szlinux-btc" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="mailto:your.email@example.com">Contact</a>
     </div>
+
+    <div class="divider" aria-hidden="true"></div>
+
+    <footer>
+      “Talk is cheap. Show me the code.” —— Linus Torvalds
+    </footer>
+  </main>
 </body>
 </html>
