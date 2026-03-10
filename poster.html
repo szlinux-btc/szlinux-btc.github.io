@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>szlinux-btc 路 涓汉娴锋姤</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+        .poster {
+            width: 100%;
+            max-width: 800px;
+            background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 24px;
+            padding: 60px 40px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        .poster::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #f7931a 0%, #ffb347 50%, #f7931a 100%);
+        }
+        .avatar {
+            width: 150px; height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f7931a 0%, #ffb347 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 4rem;
+            box-shadow: 0 10px 40px rgba(247,147,26,0.4);
+        }
+        .name {
+            text-align: center;
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+            letter-spacing: -0.03em;
+        }
+        .tagline {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 40px;
+        }
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .card {
+            background: #ffffff;
+            border: 2px solid #e0e0e0;
+            border-radius: 16px;
+            padding: 25px 20px;
+            text-align: center;
+        }
+        .card-icon { font-size: 3rem; display: block; margin-bottom: 15px; }
+        .card-title { font-size: 1.1rem; font-weight: 700; color: #1a1a1a; margin-bottom: 10px; }
+        .card-desc { font-size: 0.85rem; color: #666; line-height: 1.6; }
+        .highlight {
+            background: linear-gradient(135deg, #f7931a 0%, #ffb347 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 30px 0;
+            border-top: 2px solid #e0e0e0;
+            border-bottom: 2px solid #e0e0e0;
+            margin-bottom: 30px;
+        }
+        .stat { text-align: center; }
+        .stat-value { font-size: 2rem; font-weight: 800; color: #f7931a; display: block; }
+        .stat-label { font-size: 0.85rem; color: #666; margin-top: 5px; display: block; }
+        .contact {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        .contact-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            background: #1a1a1a;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .contact-btn:hover {
+            background: #f7931a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(247,147,26,0.4);
+        }
+        .quote {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+            font-size: 0.95rem;
+            color: #888;
+            font-style: italic;
+        }
+        @media (max-width: 600px) {
+            .poster { padding: 40px 25px; }
+            .name { font-size: 2rem; }
+            .cards { grid-template-columns: 1fr; }
+            .stats { flex-direction: column; gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="poster">
+        <div class="avatar">馃</div>
+        <h1 class="name">szlinux-btc</h1>
+        <p class="tagline">鍖哄潡閾句俊浠拌€?路 Linux 鏋佸 路 AI 鎺㈢储鑰?/p>
+        
+        <div class="stats">
+            <div class="stat">
+                <span class="stat-value">20+</span>
+                <span class="stat-label">骞?Linux 缁忛獙</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value">95.2%</span>
+                <span class="stat-label">BTC 宸叉祦閫?/span>
+            </div>
+            <div class="stat">
+                <span class="stat-value">7脳24</span>
+                <span class="stat-label">AI 鍦ㄧ嚎</span>
+            </div>
+        </div>
+        
+        <div class="cards">
+            <div class="card">
+                <span class="card-icon">鈧?/span>
+                <div class="card-title">澶чゼ鐖卞ソ鑰?/div>
+                <div class="card-desc">闀挎湡鎸佹湁鑰?br>瑙佽瘉<span class="highlight">2000 涓囨灇</span>璇炵敓</div>
+            </div>
+            <div class="card">
+                <span class="card-icon">馃惂</span>
+                <div class="card-title">Linux 鐙傜儹浠藉瓙</div>
+                <div class="card-desc"><span class="highlight">SuSE/Debian</span>鍙屼慨<br>缁堢灏辨槸瀹?/div>
+            </div>
+            <div class="card">
+                <span class="card-icon">馃</span>
+                <div class="card-title">AI 瀛︿範鑰?/div>
+                <div class="card-desc">榫欒櫨 Agent<br>7脳24 鑷姩鎵ц</div>
+            </div>
+        </div>
+        
+        <div class="contact">
+            <a href="https://github.com/szlinux-btc" class="contact-btn" target="_blank">馃捈 GitHub</a>
+            <a href="mailto:hbszhblinux@gmail.com" class="contact-btn">馃摟 鑱旂郴鎴?/a>
+            <a href="https://www.138138100.xyz" class="contact-btn" target="_blank">馃寪 涓汉缃戠珯</a>
+        </div>
+        
+        <p class="quote">"Talk is cheap. Show me the code." 鈥?Linus Torvalds</p>
+    </div>
+</body>
+</html>
