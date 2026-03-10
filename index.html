@@ -117,6 +117,23 @@
             padding: 20px;
             border-top: 1px solid #eaeaea;
         }
+        .counter {
+            text-align: center;
+            margin-top: 25px;
+            padding: 15px;
+            font-size: 0.85rem;
+            color: #888;
+        }
+        .counter-badge {
+            display: inline-block;
+            background: #f0f0f0;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: #555;
+            border: 1px solid #e0e0e0;
+        }
         @media (max-width: 480px) {
             body { padding: 30px 16px; }
             h1 { font-size: 2rem; margin-bottom: 35px; }
@@ -126,6 +143,7 @@
             .card-desc { font-size: 0.9rem; }
             .link { padding: 12px 24px; font-size: 0.9rem; }
             .quote { font-size: 0.85rem; padding: 15px; }
+            .counter { font-size: 0.8rem; }
         }
         @media (hover: none) {
             .card:active { transform: translateY(-2px); }
@@ -166,6 +184,10 @@
             <a href="mailto:hbszhblinux@gmail.com" class="link">📧 Contact</a>
         </div>
         <p class="quote">"Talk is cheap. Show me the code." — Linus Torvalds</p>
+        <div class="counter">
+            <span>👁️ 访问量：</span>
+            <img src="https://api.countapi.xyz/hit/szlinux-btc.github.io/visits" alt="visitor count" class="counter-badge" style="vertical-align: middle; height: 24px;">
+        </div>
     </div>
 </body>
 </html>
