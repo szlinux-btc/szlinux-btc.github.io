@@ -189,6 +189,68 @@
             transform: translateY(-3px);
             box-shadow: 0 6px 20px rgba(26,26,26,0.25);
         }
+        .social-links {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        .social-link {
+            color: #1a1a1a;
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            background: #ffffff;
+        }
+        .social-link:hover {
+            background: #f7931a;
+            border-color: #f7931a;
+            color: white;
+            transform: translateY(-2px);
+        }
+        .article-nav {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 15px;
+        }
+        .article-nav-title {
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+        .article-nav-list {
+            display: grid;
+            gap: 8px;
+        }
+        .article-nav-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #1a1a1a;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+        .article-nav-item:hover {
+            background: #f7931a;
+            color: white;
+            border-left-color: #1a1a1a;
+            transform: translateX(5px);
+        }
+        .article-nav-item::before {
+            content: "📄";
+            margin-right: 8px;
+        }
         .quote {
             text-align: center;
             font-size: 0.95rem;
@@ -330,6 +392,15 @@
                 探索 AGI 边界 · 让 AI 为人类服务<br>
                 每天学习新模型/新工具
             </div>
+            <div class="article-nav">
+                <div class="article-nav-title">📚 快速导航（4 篇文章）</div>
+                <div class="article-nav-list">
+                    <a href="claw-variants-comparison.html" class="article-nav-item">🦞 龙虾大战！OpenClaw 5 个变种版本深度对比</a>
+                    <a href="openclaw-security-alert.html" class="article-nav-item">⚠️ 安全警报：OpenClaw ClawHub 恶意投毒事件</a>
+                    <span class="article-nav-item" style="cursor: default;">🦞 我的第一只龙虾：小饼（本页）</span>
+                    <span class="article-nav-item" style="cursor: default;">📌 ChatGPT 和龙虾有什么区别？（本页）</span>
+                </div>
+            </div>
             <div class="log-box">
                 <strong>📌 ChatGPT 和龙虾有什么区别？</strong>
                 <span class="log-date">📅 2026 年 3 月 10 日</span>
@@ -394,13 +465,18 @@
                 <br>
                 <span style="color: #555;">ClawHub 插件市场遭遇大规模恶意 skills 攻击，可能导致代码注入、钱包窃取、AI 身份接管。</span>
                 <br><br>
-                <a href="openclaw-security-alert.html" target="_blank" style="color: #dc3545; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #dc3545;">📖 查看详情 →</a>
+                <a href="openclaw-security-alert.html" style="color: #dc3545; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #dc3545;">📖 查看详情 →</a>
             </div>
         </div>
         <div class="divider"></div>
         <div class="links">
             <a href="https://github.com/szlinux-btc" class="link" target="_blank">💼 GitHub</a>
             <a href="mailto:hbszhblinux@gmail.com" class="link">📧 Contact</a>
+        </div>
+        <div class="social-links">
+            <a href="https://twitter.com/szlinux_btc" class="social-link" target="_blank">🐦 Twitter/X</a>
+            <a href="https://t.me/szlinux_btc" class="social-link" target="_blank">✈️ Telegram</a>
+            <a href="https://www.youtube.com/@szlinux-btc" class="social-link" target="_blank">📺 YouTube</a>
         </div>
         <p class="quote">"Talk is cheap. Show me the code." — Linus Torvalds</p>
         <div class="counter">
@@ -410,5 +486,15 @@
         </div>
     </div>
     <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <script>
+        // 不蒜子计数器修复：页面加载时重新触发
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                var script = document.createElement('script');
+                script.src = '//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js';
+                document.body.appendChild(script);
+            }, 1000);
+        });
+    </script>
 </body>
 </html>
