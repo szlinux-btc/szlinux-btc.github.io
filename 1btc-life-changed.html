@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>₿ 1 BTC = 人生不同 - 比特币入门指南 - szlinux-btc</title>
+    <meta name="description" content="为什么只需要拥有 1 个比特币，你的人生可以不同">
+    <meta name="author" content="szlinux-btc">
+    <style>
+        :root {
+            --btc-orange: #f7931a;
+            --dark: #1a1a1a;
+            --light: #f8f9fa;
+            --success: #27ae60;
+            --warning: #f39c12;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2c3e50 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #f7931a, #ffb347);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .header .subtitle {
+            font-size: 1.5rem;
+            opacity: 0.9;
+        }
+        
+        .card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--btc-orange);
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, var(--btc-orange), #ffb347);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .highlight-box h2 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .highlight-box p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .stat-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--btc-orange);
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 8px;
+            display: block;
+        }
+        
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+        
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            border-left: 4px solid var(--btc-orange);
+        }
+        
+        .timeline-year {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--btc-orange);
+            min-width: 80px;
+        }
+        
+        .timeline-content {
+            flex: 1;
+            padding-left: 15px;
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .benefit-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 12px;
+            border-top: 3px solid var(--success);
+        }
+        
+        .benefit-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .benefit-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .benefit-desc {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .quote {
+            text-align: center;
+            font-style: italic;
+            padding: 30px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            margin-top: 40px;
+            opacity: 0.8;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--btc-orange), #ffb347);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-top: 20px;
+            transition: transform 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+        }
+        
+        .back-link {
+            display: inline-block;
+            color: var(--btc-orange);
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 600px) {
+            .header h1 { font-size: 2rem; }
+            .header .subtitle { font-size: 1.2rem; }
+            .highlight-box h2 { font-size: 2rem; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .timeline-item { flex-direction: column; align-items: flex-start; }
+            .timeline-year { margin-bottom: 5px; }
+            .timeline-content { padding-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← 返回首页</a>
+        
+        <div class="header">
+            <h1>₿ 1 BTC = 人生不同</h1>
+            <p class="subtitle">为什么只需要拥有 1 个比特币</p>
+        </div>
+        
+        <div class="highlight-box">
+            <h2>2000 万枚</h2>
+            <p>第 2000 万枚比特币于 2026 年 3 月 9 日诞生</p>
+            <p style="margin-top: 15px; font-size: 1rem;">区块高度：939,999</p>
+        </div>
+        
+        <div class="card">
+            <h3 class="card-title">📊 核心数据</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-value">2100 万</span>
+                    <span class="stat-label">总量上限</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">95.2%</span>
+                    <span class="stat-label">已挖出比例</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">100 万</span>
+                    <span class="stat-label">剩余枚数</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">114 年</span>
+                    <span class="stat-label">挖完所需时间</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h3 class="card-title">⏰ 绝版倒计时</h3>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <span class="timeline-year">2009</span>
+                    <div class="timeline-content">创世区块诞生，比特币网络启动</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">2026</span>
+                    <div class="timeline-content">2000 万枚挖出，绝版倒计时开启</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">2028</span>
+                    <div class="timeline-content">下一次减半，挖矿奖励再减少</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">2140</span>
+                    <div class="timeline-content">最后一枚比特币挖出</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h3 class="card-title">💎 为什么 1 BTC 改变人生</h3>
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <div class="benefit-icon">🔐</div>
+                    <div class="benefit-title">财务主权</div>
+                    <div class="benefit-desc">不受通胀侵蚀，自己掌握财富</div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🌍</div>
+                    <div class="benefit-title">全球共识</div>
+                    <div class="benefit-desc">去中心化，抗审查，无国界</div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">⏰</div>
+                    <div class="benefit-title">时间价值</div>
+                    <div class="benefit-desc">早期采用者的远见与耐心</div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">💎</div>
+                    <div class="benefit-title">稀缺信仰</div>
+                    <div class="benefit-desc">见证人类货币史的转折点</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h3 class="card-title">🎯 永恒特性</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px; text-align: center;">
+                <div style="padding: 15px; background: rgba(247,147,26,0.2); border-radius: 10px;">
+                    <div style="font-size: 1.5rem; margin-bottom: 5px;"></div>
+                    <div>固定供应</div>
+                </div>
+                <div style="padding: 15px; background: rgba(247,147,26,0.2); border-radius: 10px;">
+                    <div style="font-size: 1.5rem; margin-bottom: 5px;">🚫</div>
+                    <div>不可增发</div>
+                </div>
+                <div style="padding: 15px; background: rgba(247,147,26,0.2); border-radius: 10px;">
+                    <div style="font-size: 1.5rem; margin-bottom: 5px;">🌐</div>
+                    <div>去中心化</div>
+                </div>
+                <div style="padding: 15px; background: rgba(247,147,26,0.2); border-radius: 10px;">
+                    <div style="font-size: 1.5rem; margin-bottom: 5px;">🛡️</div>
+                    <div>抗审查</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="highlight-box" style="margin-top: 30px;">
+            <h2 style="font-size: 1.8rem;">📈 有效流通量</h2>
+            <p style="margin-top: 15px;">约 <strong>1500-1800 万枚</strong></p>
+            <p style="font-size: 0.9rem; margin-top: 10px;">（200-370 万枚永久丢失）</p>
+        </div>
+        
+        <div class="quote">
+            <p>"相信去中心化改变世界"</p>
+            <p style="margin-top: 15px; font-size: 0.9rem;">— szlinux-btc</p>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="https://www.138138100.xyz/" class="cta-button">🏠 返回首页</a>
+        </div>
+    </div>
+</body>
+</html>
+

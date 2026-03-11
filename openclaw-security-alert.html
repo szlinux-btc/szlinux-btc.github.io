@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚠️ OpenClaw 技能市场遭遇大规模恶意投毒 - AI 学习者 - szlinux-btc</title>
+    <meta name="description" content="OpenClaw 的 ClawHub 插件市场中恶意 skills 激增，攻击者通过恶意插件实现任意代码注入、加密货币钱包窃取等攻击">
+    <meta name="keywords" content="OpenClaw, ClawHub, 安全警报，恶意插件，AI Agent, 网络安全">
+    <meta name="author" content="szlinux-btc">
+    <meta name="generator" content="hb250 AI Assistant">
+    <style>
+        :root {
+            --primary-color: #e74c3c;
+            --secondary-color: #2c3e50;
+            --accent-color: #3498db;
+            --bg-color: #f8f9fa;
+            --text-color: #333;
+            --border-color: #e1e4e8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.8;
+            color: var(--text-color);
+            background: var(--bg-color);
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--secondary-color), #1a252f);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        header .subtitle {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        nav {
+            background: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        nav a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            margin-right: 20px;
+            font-weight: 500;
+        }
+        
+        nav a:hover {
+            color: var(--accent-color);
+        }
+        
+        .article {
+            background: white;
+            margin: 30px auto;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .article-header {
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .article-title {
+            font-size: 1.8em;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .article-meta {
+            color: #666;
+            font-size: 0.95em;
+        }
+        
+        .article-meta span {
+            margin-right: 20px;
+        }
+        
+        .alert-banner {
+            background: linear-gradient(135deg, #fee, #fcc);
+            border-left: 5px solid var(--primary-color);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .alert-banner strong {
+            color: var(--primary-color);
+        }
+        
+        h2 {
+            color: var(--secondary-color);
+            border-left: 4px solid var(--accent-color);
+            padding-left: 15px;
+            margin: 30px 0 15px 0;
+            font-size: 1.4em;
+        }
+        
+        h3 {
+            color: var(--secondary-color);
+            margin: 25px 0 10px 0;
+            font-size: 1.2em;
+        }
+        
+        p {
+            margin: 15px 0;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+        }
+        
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px 15px;
+            text-align: left;
+        }
+        
+        th {
+            background: var(--secondary-color);
+            color: white;
+            font-weight: 600;
+        }
+        
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        tr:hover {
+            background: #e8f4f8;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 20px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .success-box {
+            background: #d4edda;
+            border: 1px solid #28a745;
+            padding: 20px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+        
+        .success-box h4 {
+            color: #155724;
+            margin-bottom: 10px;
+        }
+        
+        code {
+            background: #f4f4f4;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-family: "Consolas", "Monaco", monospace;
+            color: #e83e8c;
+        }
+        
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        
+        pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+        
+        .checklist {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .checklist li {
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .checklist li::before {
+            content: "☐";
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        footer {
+            background: var(--secondary-color);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 40px;
+        }
+        
+        footer a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin: 20px 0;
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .article {
+                padding: 20px;
+                margin: 15px;
+            }
+            
+            .article-title {
+                font-size: 1.4em;
+            }
+            
+            table {
+                font-size: 0.9em;
+            }
+            
+            th, td {
+                padding: 8px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🦞 AI 学习者</h1>
+        <p class="subtitle">探索 AGI 边界 · 让 AI 为人类服务</p>
+    </header>
+    
+    <nav>
+        <a href="/">← 返回首页</a>
+        <a href="/ai-learner/">AI 学习者</a>
+        <a href="https://github.com/szlinux-btc" target="_blank">GitHub</a>
+    </nav>
+    
+    <div class="container">
+        <a href="/" class="back-link">← 返回首页</a>
+        
+        <article class="article">
+            <div class="article-header">
+                <h1 class="article-title">⚠️ OpenClaw 技能市场遭遇大规模恶意投毒</h1>
+                <div class="article-meta">
+                    <span>📅 发布日期：2026 年 3 月</span>
+                    <span>🔴 严重级别：高危</span>
+                    <span>👤 作者：szlinux-btc</span>
+                </div>
+            </div>
+            
+            <div class="alert-banner">
+                <strong>🚨 安全警报：</strong>自 2026 年以来，OpenClaw 的插件市场（ClawHub）中恶意 skills 数量激增。攻击者通过恶意插件实现任意代码注入、加密货币钱包窃取、AI Agent 身份接管等攻击。请所有用户立即采取防护措施！
+            </div>
+            
+            <h2>📋 事件概述</h2>
+            <p>自 2026 年以来，OpenClaw 的插件市场（<strong>ClawHub</strong>）中恶意 skills 数量激增。由于 ClawHub 允许任意用户注册发布 skills（<strong>无需身份验证/代码审查</strong>），仅依赖 <code>skill.json</code> 中的 <code>author</code> 字段进行标识，攻击者得以批量注册账号发布带恶意代码的插件。</p>
+            
+            <p>攻击者主要实现以下恶意目的：</p>
+            <ul>
+                <li>🖥️ 任意代码注入</li>
+                <li>💰 加密货币钱包窃取</li>
+                <li>🔑 API 密钥与敏感文件盗取</li>
+                <li>🤖 AI Agent 身份接管</li>
+            </ul>
+            
+            <h2>🎯 典型攻击手法与活动</h2>
+            
+            <h3>1. ClawHavoc 攻击系列</h3>
+            <table>
+                <tr>
+                    <th>项目</th>
+                    <th>详情</th>
+                </tr>
+                <tr>
+                    <td><strong>攻击者 ID</strong></td>
+                    <td><code>hightower6eu</code> 等</td>
+                </tr>
+                <tr>
+                    <td><strong>伪装形式</strong></td>
+                    <td>"加密货币交易助手"、"PDF 总结工具"等实用插件</td>
+                </tr>
+                <tr>
+                    <td><strong>攻击手法</strong></td>
+                    <td>利用 <code>SKILL.md</code> 文档伪造"环境依赖缺失"假象</td>
+                </tr>
+                <tr>
+                    <td><strong>诱导行为</strong></td>
+                    <td>要求用户复制粘贴 Base64 编码的恶意脚本或下载加密压缩包</td>
+                </tr>
+                <tr>
+                    <td><strong>恶意载荷</strong></td>
+                    <td>Atomic macOS Stealer (AMOS) 木马</td>
+                </tr>
+                <tr>
+                    <td><strong>窃取目标</strong></td>
+                    <td>钥匙串、浏览器密码、Telegram 会话</td>
+                </tr>
+            </table>
+            
+            <h3>2. Vidar 及其变种</h3>
+            <table>
+                <tr>
+                    <th>项目</th>
+                    <th>详情</th>
+                </tr>
+                <tr>
+                    <td><strong>攻击方式</strong></td>
+                    <td>恶意脚本静默执行</td>
+                </tr>
+                <tr>
+                    <td><strong>窃取文件</strong></td>
+                    <td><code>openclaw.json</code>、<code>device.json</code>、<code>soul.md</code>、<code>memory.md</code></td>
+                </tr>
+                <tr>
+                    <td><strong>攻击目的</strong></td>
+                    <td>获取 AI Agent 的身份标识、记忆上下文及关联的 API 密钥</td>
+                </tr>
+                <tr>
+                    <td><strong>危害程度</strong></td>
+                    <td>受害者 AI 身份被完全接管</td>
+                </tr>
+            </table>
+            
+            <h3>3. ClawJacked 远程代码执行</h3>
+            <table>
+                <tr>
+                    <th>项目</th>
+                    <th>详情</th>
+                </tr>
+                <tr>
+                    <td><strong>攻击向量</strong></td>
+                    <td>恶意网站 + 本地 WebSocket 连接</td>
+                </tr>
+                <tr>
+                    <td><strong>利用方式</strong></td>
+                    <td>暴力破解本地 WebSocket 密码 / GNU 长选项缩写绕过 <code>safeBins</code> 限制</td>
+                </tr>
+                <tr>
+                    <td><strong>触发条件</strong></td>
+                    <td>用户仅需访问恶意网页（无需主动安装插件）</td>
+                </tr>
+                <tr>
+                    <td><strong>突破限制</strong></td>
+                    <td>localhost 隔离限制</td>
+                </tr>
+                <tr>
+                    <td><strong>最终危害</strong></td>
+                    <td>远程代码执行（RCE），攻击者获得系统最高控制权</td>
+                </tr>
+            </table>
+            
+            <h2>🛡️ 安全建议</h2>
+            
+            <h3>1. 谨慎执行终端命令 ⚠️</h3>
+            <div class="warning-box">
+                <h4>🚫 高危信号（一律视为危险）：</h4>
+                <ul>
+                    <li><code>curl</code> / <code>wget</code> 下载命令</li>
+                    <li><code>bash</code> 执行脚本命令</li>
+                    <li>Base64 编码字符串解码</li>
+                    <li>"修复环境依赖"的复杂命令</li>
+                </ul>
+                <p><strong>原则：</strong>合法的插件不应要求用户手动执行此类复杂命令来"修复环境"。</p>
+            </div>
+            
+            <h3>2. 严格管控第三方插件 🔒</h3>
+            <table>
+                <tr>
+                    <th>建议</th>
+                    <th>说明</th>
+                </tr>
+                <tr>
+                    <td>✅ 优先使用官方内置 skills</td>
+                    <td>OpenClaw 官方内置的 skills 经过安全校验</td>
+                </tr>
+                <tr>
+                    <td>✅ 确认第三方来源</td>
+                    <td>使用前验证作者身份和项目信誉</td>
+                </tr>
+                <tr>
+                    <td>✅ 人工审计代码</td>
+                    <td>重点检查是否存在异常网络请求和敏感文件读取操作</td>
+                </tr>
+                <tr>
+                    <td>✅ 最小权限原则</td>
+                    <td>仅授予必要的系统访问权限</td>
+                </tr>
+            </table>
+            
+            <h3>3. 定期检查敏感文件 👀</h3>
+            <p>建议定期检查以下文件是否有异常修改或外传迹象：</p>
+            <pre><code>~/.easyclaw/workspace/openclaw.json
+~/.easyclaw/workspace/device.json
+~/.easyclaw/workspace/soul.md
+~/.easyclaw/workspace/memory.md
+~/.easyclaw/workspace/USER.md</code></pre>
+            
+            <h3>4. 启用安全配置 🛠️</h3>
+            <pre><code>// 在配置文件中启用安全限制
+{
+  "security": {
+    "safeBins": true,
+    "allowlist": ["git", "python", "node"],
+    "blockExternalRequests": false
+  }
+}</code></pre>
+            
+            <h2>🚨 疑似感染迹象</h2>
+            <div class="warning-box">
+                <h4>如出现以下情况，可能已遭受攻击：</h4>
+                <ul class="checklist">
+                    <li>未知的网络外连请求</li>
+                    <li>敏感文件被修改或读取</li>
+                    <li>加密货币钱包异常</li>
+                    <li>Telegram 等应用会话异常</li>
+                    <li>系统出现未知进程</li>
+                    <li>API 密钥泄露迹象</li>
+                </ul>
+            </div>
+            
+            <h2>📞 报告与反馈</h2>
+            <div class="success-box">
+                <h4>如发现可疑 skills 或安全漏洞，请：</h4>
+                <ol>
+                    <li>立即停止使用相关插件</li>
+                    <li>断开网络连接</li>
+                    <li>向 OpenClaw 官方报告</li>
+                    <li>更改相关 API 密钥和密码</li>
+                </ol>
+            </div>
+            
+            <h2>📚 参考资料</h2>
+            <ul>
+                <li><a href="https://github.com/openclaw/openclaw/security" target="_blank">OpenClaw 官方安全文档</a></li>
+                <li><a href="https://github.com/openclaw/clawhub" target="_blank">ClawHub 插件审核指南</a></li>
+                <li><a href="https://github.com/openclaw/security-best-practices" target="_blank">AI Agent 安全最佳实践</a></li>
+            </ul>
+        </article>
+    </div>
+    
+    <footer>
+        <p>© 2026 szlinux-btc · 大饼爱好者 · Linux 狂热份子 · AI 学习者</p>
+        <p>"Talk is cheap. Show me the code." — Linus Torvalds</p>
+        <p>
+            <a href="https://github.com/szlinux-btc" target="_blank">GitHub</a> · 
+            <a href="/">返回首页</a>
+        </p>
+    </footer>
+</body>
+</html>
+
