@@ -385,6 +385,18 @@
                 </ul>
                 <a href="https://ssl-config.mozilla.org/" target="_blank" style="color: #3498db; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #3498db;">🔗 立即使用 →</a>
             </div>
+            <div class="log-box" style="margin-top: 15px; border-left-color: #e74c3c;">
+                <strong style="color: #e74c3c;">🐧 UFW 与 libvirt 桥接网络冲突解决方案</strong>
+                <span class="log-date">📅 2026 年 3 月 13 日</span>
+                <br>
+                <span style="color: #555;">18 年 Linux 架构师复盘：生产环境虚拟机网络中断的根因分析与修复。</span>
+                <ul style="margin: 8px 0; padding-left: 18px; font-size: 0.8rem; color: #555;">
+                    <li><strong>🔍 根因：</strong>UFW 启动过早，bridge 模块未加载导致参数设置失败</li>
+                    <li><strong>🛠️ 修复：</strong>修改 IPT_MODULES 强制加载 bridge 模块</li>
+                    <li><strong>✅ 效果：</strong>虚拟机网络恢复，宿主机防火墙依然有效</li>
+                </ul>
+                <a href="ufw-libvirt-bridge-fix.html" style="color: #e74c3c; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #e74c3c;">📖 阅读全文 →</a>
+            </div>
         </div>
         <div class="card">
             <span class="card-icon">🦞</span>
