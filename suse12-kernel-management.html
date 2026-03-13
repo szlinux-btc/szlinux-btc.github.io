@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SUSE 12 SP5 内核管理指南：保留当前和最新内核，安全清理旧版本">
+    <meta name="keywords" content="SUSE, SLES, 内核管理，zypper, purge-kernels, Linux">
+    <meta name="author" content="szlinux-btc">
+    <meta property="og:title" content="SUSE 12 内核管理：保留当前和最新内核的正確方法">
+    <meta property="og:description" content="18 年 Linux 架构师总结：SUSE 12 SP5 内核清理最佳实践">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://www.138138100.xyz/suse12-kernel-management.html">
+    <title>SUSE 12 内核管理指南 - szlinux-btc</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
+            color: #1a1a1a;
+            min-height: 100vh;
+            padding: 40px 20px;
+            line-height: 1.8;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 30px;
+            color: #005288;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px 20px;
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid #005288;
+            transition: all 0.3s ease;
+        }
+        .back-link:hover {
+            background: #005288;
+            color: #fff;
+        }
+        .article {
+            background: #ffffff;
+            border: 2px solid #e0e0e0;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .article-header {
+            border-bottom: 2px solid #005288;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        h1 {
+            font-size: 2rem;
+            color: #005288;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+        .meta {
+            font-size: 0.9rem;
+            color: #666;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .meta span {
+            background: #f0f4f8;
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+        .meta .tag {
+            background: #005288;
+            color: #fff;
+        }
+        h2 {
+            font-size: 1.5rem;
+            color: #005288;
+            margin: 35px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        h3 {
+            font-size: 1.2rem;
+            color: #333;
+            margin: 25px 0 12px 0;
+        }
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: "Consolas", "Monaco", monospace;
+            font-size: 0.9em;
+            color: #c7254e;
+        }
+        pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: "Consolas", "Monaco", monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background: #f5f7fa;
+            font-weight: 600;
+            color: #005288;
+        }
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        .highlight {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .danger {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .info {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        blockquote {
+            border-left: 4px solid #005288;
+            padding: 15px 20px;
+            margin: 20px 0;
+            background: #f5f7fa;
+            font-style: italic;
+        }
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .footer a {
+            color: #005288;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        .cmd-group {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .cmd-group .label {
+            font-weight: 600;
+            color: #005288;
+            margin-bottom: 10px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← 返回首页</a>
+        
+        <article class="article">
+            <header class="article-header">
+                <h1> SUSE 12 内核管理：保留当前和最新内核的正確方法</h1>
+                <div class="meta">
+                    <span>📅 2026 年 3 月 13 日</span>
+                    <span>👤 szlinux-btc</span>
+                    <span class="tag">#SUSE</span>
+                    <span class="tag">#SLES</span>
+                    <span class="tag">#内核管理</span>
+                    <span class="tag">#zypper</span>
+                </div>
+            </header>
+
+            <div class="info">
+                <strong>📋 适用环境</strong><br>
+                <strong>系统：</strong>SUSE Linux Enterprise Server 12 SP5 | 
+                <strong>场景：</strong>内核升级后清理旧版本 | 
+                <strong>目标：</strong>保留当前运行 + 最新两个内核
+            </div>
+
+            <h2>一、问题背景</h2>
+            <p>SUSE 12 系统长期使用后，<code>/boot</code> 分区会积累多个内核版本，导致空间不足。但清理内核需要谨慎操作，必须保留：</p>
+            <ul>
+                <li><strong>当前运行的内核</strong> - 避免系统无法启动</li>
+                <li><strong>最新内核</strong> - 作为备用引导选项</li>
+            </ul>
+            <div class="highlight">
+                <strong>💡 最佳实践</strong>：始终保留至少 2 个内核版本，防止单点故障。
+            </div>
+
+            <h2>二、确认当前内核状态</h2>
+            <h3>2.1 查看当前运行的内核</h3>
+            <pre><code># 当前运行的内核版本
+uname -r
+# 输出示例：4.12.14-122.231-default</code></pre>
+
+            <h3>2.2 列出所有已安装的内核</h3>
+            <pre><code># 列出所有内核包（按版本排序）
+rpm -qa | grep kernel-default | sort -V
+
+# 输出示例（版本号由低到高）：
+kernel-default-4.12.14-122.124.3.x86_64
+kernel-default-4.12.14-122.231.1.x86_64  ← 当前运行
+kernel-default-4.12.14-122.266.1.x86_64
+kernel-default-4.12.14-122.269.1.x86_64
+kernel-default-4.12.14-122.275.1.x86_64
+kernel-default-4.12.14-122.283.1.x86_64
+kernel-default-4.12.14-122.293.1.x86_64  ← 最新版本</code></pre>
+
+            <h3>2.3 检查 /boot 目录</h3>
+            <pre><code># 查看 /boot 空间使用情况
+df -h /boot
+
+# 查看内核相关文件
+ls -lh /boot/vmlinuz* /boot/initrd*
+# 输出示例：
+# -rw-r--r-- 1 root root  11M Mar 10 10:00 /boot/vmlinuz-4.12.14-122.231-default
+# -rw-r--r-- 1 root root  52M Mar 10 10:00 /boot/initrd-4.12.14-122.231-default
+# -rw-r--r-- 1 root root  11M Mar 12 14:30 /boot/vmlinuz-4.12.14-122.293-default
+# -rw-r--r-- 1 root root  52M Mar 12 14:30 /boot/initrd-4.12.14-122.293-default</code></pre>
+
+            <h2>三、清理方案（两种方法）</h2>
+            
+            <h3>方法一：使用 purge-kernels 服务（推荐⭐⭐⭐⭐⭐）</h3>
+            <div class="success">
+                <strong>✅ 推荐理由</strong>：自动化、安全、可配置，SUSE 官方工具
+            </div>
+
+            <h4>步骤 1：配置保留策略</h4>
+            <pre><code># 编辑 zypp 配置文件
+sudo vim /etc/zypp/zypp.conf
+
+# 找到或添加以下配置：
+multiversion = provides:multiversion(kernel)
+multiversion.kernels = latest,running</code></pre>
+            
+            <p><strong>配置说明</strong>：</p>
+            <table>
+                <tr>
+                    <th>配置值</th>
+                    <th>含义</th>
+                    <th>保留数量</th>
+                </tr>
+                <tr>
+                    <td><code>latest,running</code></td>
+                    <td>最新内核 + 当前运行内核</td>
+                    <td>2 个（可能重复）</td>
+                </tr>
+                <tr>
+                    <td><code>latest,latest-1,running</code></td>
+                    <td>最新 + 次新 + 当前运行</td>
+                    <td>3 个（推荐）</td>
+                </tr>
+                <tr>
+                    <td><code>latest,latest-1,latest-2,running</code></td>
+                    <td>最新 3 个 + 当前运行</td>
+                    <td>4 个</td>
+                </tr>
+            </table>
+
+            <h4>步骤 2：执行清理</h4>
+            <pre><code># 手动触发清理
+sudo purge-kernels
+
+# 输出示例：
+# Purging old kernels...
+# Removing: kernel-default-4.12.14-122.124.3
+# Removing: kernel-default-4.12.14-122.266.1
+# Removing: kernel-default-4.12.14-122.269.1
+# Removing: kernel-default-4.12.14-122.275.1
+# Removing: kernel-default-4.12.14-122.283.1
+# Done. 2 kernels retained.</code></pre>
+
+            <h4>步骤 3：验证结果</h4>
+            <pre><code># 确认只剩 2 个内核
+rpm -qa | grep kernel-default
+
+# 检查 /boot 空间
+df -h /boot
+# 输出示例：
+# Filesystem      Size  Used Avail Use% Mounted on
+# /dev/sda1       500M  280M  220M  56% /boot</code></pre>
+
+            <hr style="margin: 30px 0; border: none; border-top: 1px dashed #ccc;">
+
+            <h3>方法二：使用 zypper 手动删除</h3>
+            <div class="warning">
+                <strong>⚠️ 注意事项</strong>：手动操作风险较高，务必先确认当前运行内核
+            </div>
+
+            <h4>步骤 1：确认不能删除的内核</h4>
+            <pre><code># 当前运行内核（绝对不能删）
+uname -r
+# 输出：4.12.14-122.231-default
+
+# 最新内核（建议保留）
+rpm -qa | grep kernel-default | sort -V | tail -1
+# 输出：kernel-default-4.12.14-122.293.1.x86_64</code></pre>
+
+            <h4>步骤 2：删除旧内核</h4>
+            <pre><code># 逐一删除不需要的内核（示例）
+sudo zypper remove kernel-default-4.12.14-122.124.3
+sudo zypper remove kernel-default-4.12.14-122.266.1
+sudo zypper remove kernel-default-4.12.14-122.269.1
+sudo zypper remove kernel-default-4.12.14-122.275.1
+sudo zypper remove kernel-default-4.12.14-122.283.1</code></pre>
+
+            <h4>步骤 3：验证删除结果</h4>
+            <pre><code># 确认剩余内核
+rpm -qa | grep kernel-default
+
+# 预期输出（只剩 2 个）：
+kernel-default-4.12.14-122.231.1.x86_64
+kernel-default-4.12.14-122.293.1.x86_64</code></pre>
+
+            <h2>四、一键清理脚本</h2>
+            <div class="cmd-group">
+                <span class="label">📜 自动化脚本（生产环境慎用，先测试）</span>
+                <pre><code>#!/bin/bash
+# 脚本名称：cleanup-kernels.sh
+# 功能：SUSE 12 内核清理，保留当前和最新版本
+# 作者：szlinux-btc
+# 日期：2026-03-13
+
+echo "=== SUSE 12 内核清理脚本 ==="
+echo ""
+
+# 获取当前运行内核
+CURRENT_KERNEL=$(uname -r | sed 's/-default$//')
+echo "当前运行内核：$CURRENT_KERNEL"
+
+# 获取最新版本
+LATEST_KERNEL=$(rpm -qa | grep kernel-default | sort -V | tail -1 | sed 's/kernel-default-//' | sed 's/.x86_64//')
+echo "最新版本内核：$LATEST_KERNEL"
+
+echo ""
+echo "将保留以下内核："
+echo "  1. $CURRENT_KERNEL (当前运行)"
+echo "  2. $LATEST_KERNEL (最新版本)"
+echo ""
+
+# 获取要删除的内核列表
+TO_REMOVE=$(rpm -qa | grep kernel-default | sort -V | head -n -2 | grep -v "$CURRENT_KERNEL" | grep -v "$LATEST_KERNEL")
+
+if [ -z "$TO_REMOVE" ]; then
+    echo "✅ 无需清理，当前内核数量符合要求"
+    exit 0
+fi
+
+echo "将删除以下内核："
+echo "$TO_REMOVE"
+echo ""
+read -p "确认继续？(y/N): " confirm
+if [ "$confirm" != "y" ] && [ "$confirm" != "Y" ]; then
+    echo "已取消"
+    exit 0
+fi
+
+# 执行删除
+for kernel in $TO_REMOVE; do
+    echo "正在删除：$kernel"
+    sudo zypper remove -y $kernel
+done
+
+echo ""
+echo "✅ 清理完成"
+echo ""
+echo "剩余内核："
+rpm -qa | grep kernel-default | sort -V</code></pre>
+            </div>
+
+            <h2>五、常见问题</h2>
+            
+            <h3>Q1: purge-kernels 命令不存在？</h3>
+            <pre><code># 安装 purge-kernels 工具
+sudo zypper install purge-kernels</code></pre>
+
+            <h3>Q2: /boot 空间仍然不足？</h3>
+            <pre><code># 清理旧内核的残留文件
+sudo find /boot -name "*old*" -delete
+
+# 清理 grub 配置
+sudo grub2-mkconfig -o /boot/grub2/grub.cfg</code></pre>
+
+            <h3>Q3: 误删内核后无法启动？</h3>
+            <div class="danger">
+                <strong>🚨 紧急恢复</strong>：使用安装介质进入救援模式，重新安装内核
+            </div>
+            <pre><code># 救援模式下挂载根分区
+mount /dev/sda2 /mnt
+mount /dev/sda1 /mnt/boot
+chroot /mnt
+
+# 重新安装内核
+zypper install kernel-default
+
+# 更新引导
+grub2-mkconfig -o /boot/grub2/grub.cfg</code></pre>
+
+            <h2>六、最佳实践建议</h2>
+            <table>
+                <tr>
+                    <th>建议</th>
+                    <th>说明</th>
+                    <th>优先级</th>
+                </tr>
+                <tr>
+                    <td>保留 3 个内核</td>
+                    <td>最新 + 次新 + 当前运行，更安全</td>
+                    <td>⭐⭐⭐⭐⭐</td>
+                </tr>
+                <tr>
+                    <td>使用 purge-kernels</td>
+                    <td>自动化工具比手动更安全</td>
+                    <td>⭐⭐⭐⭐⭐</td>
+                </tr>
+                <tr>
+                    <td>定期清理</td>
+                    <td>每月检查一次 /boot 空间</td>
+                    <td>⭐⭐⭐⭐</td>
+                </tr>
+                <tr>
+                    <td>清理前备份</td>
+                    <td>重要系统先做快照备份</td>
+                    <td>⭐⭐⭐⭐⭐</td>
+                </tr>
+                <tr>
+                    <td>监控告警</td>
+                    <td>/boot 使用率超过 80% 时告警</td>
+                    <td>⭐⭐⭐⭐</td>
+                </tr>
+            </table>
+
+            <h2>七、扩展阅读</h2>
+            <ul>
+                <li><a href="https://documentation.suse.com/sles/12-SP5/html/SLES-all/cha-tasks-kernel.html" target="_blank">SUSE 12 SP5 官方文档 - 内核管理</a></li>
+                <li><a href="https://www.suse.com/support/kb/doc/?id=000019674" target="_blank">SUSE KB - 如何清理旧内核</a></li>
+                <li><a href="https://en.opensuse.org/SDB:Install_only_latest_kernel" target="_blank">openSUSE Wiki - 只安装最新内核</a></li>
+            </ul>
+
+            <footer class="footer">
+                <p>
+                    <strong>作者</strong>：szlinux-btc（18 年 Linux 架构师）<br>
+                    <strong>整理时间</strong>：2026 年 3 月 13 日<br>
+                    <strong>适用系统</strong>：SUSE Linux Enterprise Server 12 SP5
+                </p>
+                <p>
+                    <a href="index.html">← 返回首页</a>
+                </p>
+            </footer>
+        </article>
+    </div>
+</body>
+</html>
