@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Oracle Linux 故障诊断神器 sos report 完全指南 - 从基础使用到高级定制，帮助运维人员快速收集系统诊断信息">
+    <meta name="keywords" content="Oracle Linux, sos report, 系统诊断，故障排查，运维，Linux">
+    <meta name="author" content="小饼">
+    <meta property="og:title" content="Oracle Linux 故障诊断神器：sos report 完全指南">
+    <meta property="og:description" content="深入解析 Oracle Linux 中的 sos report 工具，从基础使用到高级定制，帮助运维人员高效定位故障根源。">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://www.138138100.xyz/sos-report.html">
+    <title>Oracle Linux 故障诊断神器：sos report 完全指南 - Linux 狂热份子</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
+            color: #1a1a1a;
+            min-height: 100vh;
+            padding: 40px 20px;
+            line-height: 1.8;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 30px;
+            color: #1a1a1a;
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 2px solid #1a1a1a;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .back-link:hover {
+            background: #1a1a1a;
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+        .article {
+            background: #ffffff;
+            border: 2px solid #e0e0e0;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .article-header {
+            border-bottom: 3px solid #f7931a;
+            padding-bottom: 25px;
+            margin-bottom: 30px;
+        }
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .meta {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .meta span {
+            margin-right: 20px;
+        }
+        .abstract {
+            background: #fff8f0;
+            border-left: 4px solid #f7931a;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+        }
+        h2 {
+            font-size: 1.6rem;
+            margin: 35px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+            color: #1a1a1a;
+        }
+        h3 {
+            font-size: 1.25rem;
+            margin: 25px 0 15px;
+            color: #333;
+        }
+        p {
+            margin: 15px 0;
+            text-align: justify;
+        }
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: "SF Mono", Monaco, Consolas, monospace;
+            font-size: 0.9em;
+            color: #e83e8c;
+        }
+        pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: "SF Mono", Monaco, Consolas, monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: #ffffff;
+        }
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 12px 15px;
+            text-align: left;
+        }
+        th {
+            background: #f7931a;
+            color: #ffffff;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        tr:hover {
+            background: #fff8f0;
+        }
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .tip {
+            background: #e8f4fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .article-footer {
+            margin-top: 40px;
+            padding-top: 25px;
+            border-top: 2px solid #eee;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .tag {
+            display: inline-block;
+            background: #f7931a;
+            color: #ffffff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        @media (max-width: 768px) {
+            body { padding: 20px 15px; }
+            .article { padding: 25px; }
+            h1 { font-size: 1.7rem; }
+            h2 { font-size: 1.4rem; }
+            pre { padding: 15px; font-size: 0.85rem; }
+            table { font-size: 0.9rem; }
+            th, td { padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← 返回首页</a>
+        
+        <article class="article">
+            <header class="article-header">
+                <h1>🐧 Oracle Linux 故障诊断神器：sos report 完全指南</h1>
+                <div class="meta">
+                    <span>📅 2026 年 3 月 21 日</span>
+                    <span>✍️ 作者：小饼</span>
+                    <span>📂 分类：Linux 运维</span>
+                </div>
+                <div style="margin-top: 15px;">
+                    <span class="tag">Oracle Linux</span>
+                    <span class="tag">系统诊断</span>
+                    <span class="tag">sos report</span>
+                    <span class="tag">故障排查</span>
+                    <span class="tag">运维</span>
+                </div>
+            </header>
+
+            <div class="abstract">
+                <strong>📌 摘要：</strong>在 Linux 系统运维中，快速准确地收集系统诊断信息是故障排查的关键。本文深入解析 Oracle Linux 中的 sos report 工具，从基础使用到高级定制，帮助运维人员高效定位故障根源。
+            </div>
+
+            <h2>一、什么是 sos report？</h2>
+            <p><strong>sos report</strong>（原名 sosreport）是 Red Hat 生态 Linux 发行版（包括 Oracle Linux、RHEL、CentOS）中内置的系统诊断信息收集工具。它能够自动收集系统配置、日志、硬件信息等关键诊断数据，并打包成压缩文件供分析使用。</p>
+
+            <h3>🎯 核心特性</h3>
+            <table>
+                <tr>
+                    <th>特性</th>
+                    <th>说明</th>
+                </tr>
+                <tr>
+                    <td><strong>自动化</strong></td>
+                    <td>一键收集数百项系统信息</td>
+                </tr>
+                <tr>
+                    <td><strong>模块化</strong></td>
+                    <td>支持按组件选择性收集</td>
+                </tr>
+                <tr>
+                    <td><strong>可扩展</strong></td>
+                    <td>可自定义插件收集特定信息</td>
+                </tr>
+                <tr>
+                    <td><strong>标准化</strong></td>
+                    <td>输出格式统一，便于分析和共享</td>
+                </tr>
+                <tr>
+                    <td><strong>安全性</strong></td>
+                    <td>支持敏感信息脱敏处理</td>
+                </tr>
+            </table>
+
+            <h3>📋 适用场景</h3>
+            <ul>
+                <li>🖥️ <strong>系统故障排查</strong>（内核崩溃、服务异常等）</li>
+                <li>🔍 <strong>性能问题分析</strong>（CPU、内存、磁盘 I/O 等）</li>
+                <li>📋 <strong>技术支持工单附件</strong>（提交给 Oracle 支持团队）</li>
+                <li>📊 <strong>系统健康检查与审计</strong></li>
+                <li>🔄 <strong>系统迁移前的配置备份</strong></li>
+            </ul>
+
+            <h2>二、快速开始</h2>
+
+            <h3>2.1 安装 sos</h3>
+            <p>在 Oracle Linux 上，sos 通常预装。如未安装，可使用 yum 安装：</p>
+            <pre><code># 检查是否已安装
+rpm -qa | grep sos
+
+# 安装 sos
+sudo yum install sos -y</code></pre>
+
+            <h3>2.2 生成基础报告</h3>
+            <pre><code># 生成诊断报告（默认输出到 /var/tmp）
+sudo sos report
+
+# 指定报告保存路径
+sudo sos report --batch --tmp-dir=/home/admin/reports</code></pre>
+            <p>运行后会生成类似以下的文件：</p>
+            <pre><code>/var/tmp/sosreport-hostname-2026-03-21-qwertyu.tar.xz</code></pre>
+
+            <h3>2.3 查看报告内容</h3>
+            <pre><code># 列出报告中包含的文件
+sosreport --list-plugins
+
+# 查看特定插件的信息
+sos report --list-plugins | grep -i network</code></pre>
+
+            <h2>三、高级用法</h2>
+
+            <h3>3.1 选择性收集（推荐）</h3>
+            <div class="tip">
+                <strong>💡 提示：</strong>默认情况下，sos report 会收集大量信息。在生产环境中，建议只收集相关模块以提高效率。
+            </div>
+            <pre><code># 仅收集网络和系统信息
+sudo sos report -o network,system
+
+# 排除特定模块（如排除大型日志）
+sudo sos report --skip-plugins=logs
+
+# 查看可用模块列表
+sos report --list-plugins</code></pre>
+
+            <h3>3.2 常用模块组合</h3>
+            <table>
+                <tr>
+                    <th>场景</th>
+                    <th>推荐模块</th>
+                </tr>
+                <tr>
+                    <td><strong>网络故障</strong></td>
+                    <td><code>network,networking,firewalld</code></td>
+                </tr>
+                <tr>
+                    <td><strong>存储问题</strong></td>
+                    <td><code>storage,lvm,mdadm,filesystems</code></td>
+                </tr>
+                <tr>
+                    <td><strong>性能分析</strong></td>
+                    <td><code>system,cpu,memory,proc</code></td>
+                </tr>
+                <tr>
+                    <td><strong>服务异常</strong></td>
+                    <td><code>systemd,services,rpm</code></td>
+                </tr>
+                <tr>
+                    <td><strong>安全审计</strong></td>
+                    <td><code>security,ssh,sudo</code></td>
+                </tr>
+            </table>
+
+            <h3>3.3 设置超时和大小限制</h3>
+            <pre><code># 设置插件超时时间（秒）
+sudo sos report --plugin-timeout=300
+
+# 设置报告最大大小（MB）
+sudo sos report --max-size=1024</code></pre>
+
+            <h3>3.4 敏感信息处理</h3>
+            <pre><code># 自动脱敏（默认启用）
+sudo sos report --clean
+
+# 自定义脱敏规则
+sudo sos report --clean --patterns-file=/etc/sos/clean.conf</code></pre>
+
+            <h2>四、实战案例</h2>
+
+            <h3>案例 1：数据库服务器性能问题</h3>
+            <pre><code># 收集与性能相关的信息
+sudo sos report -o cpu,memory,proc,systemd \
+    --plugin-timeout=600 \
+    --tmp-dir=/data/reports</code></pre>
+            <div class="success">
+                <strong>✅ 分析重点：</strong>
+                <ul>
+                    <li><code>/proc/meminfo</code> - 内存使用情况</li>
+                    <li><code>/proc/vmstat</code> - 虚拟内存统计</li>
+                    <li><code>iostat</code> 输出 - 磁盘 I/O 性能</li>
+                    <li><code>top</code>/<code>ps</code> 输出 - 进程资源占用</li>
+                </ul>
+            </div>
+
+            <h3>案例 2：网络连接故障</h3>
+            <pre><code># 收集网络和防火墙信息
+sudo sos report -o network,networking,firewalld,hosts \
+    --plugin-timeout=300</code></pre>
+            <div class="success">
+                <strong>✅ 分析重点：</strong>
+                <ul>
+                    <li><code>ip addr</code>/<code>ip route</code> - 网络配置</li>
+                    <li><code>iptables</code>/<code>firewalld</code> 规则 - 防火墙配置</li>
+                    <li><code>/etc/hosts</code> - 主机名解析</li>
+                    <li><code>ss</code>/<code>netstat</code> - 连接状态</li>
+                </ul>
+            </div>
+
+            <h3>案例 3：系统启动失败</h3>
+            <pre><code># 收集启动相关日志
+sudo sos report -o bootloader,systemd,logs \
+    --plugin-timeout=600</code></pre>
+            <div class="success">
+                <strong>✅ 分析重点：</strong>
+                <ul>
+                    <li><code>journalctl</code> 输出 - 系统日志</li>
+                    <li><code>dmesg</code> - 内核消息</li>
+                    <li>GRUB 配置 - 启动参数</li>
+                </ul>
+            </div>
+
+            <h2>五、自动化与集成</h2>
+
+            <h3>5.1 定时收集（用于趋势分析）</h3>
+            <pre><code># 创建定时任务，每周收集一次
+sudo crontab -e
+
+# 添加以下行（每周日凌晨 2 点）
+0 2 * * 0 /usr/bin/sos report --batch --tmp-dir=/var/log/sos-archive</code></pre>
+
+            <h3>5.2 远程收集（通过 SSH）</h3>
+            <pre><code># 在本地收集远程主机信息
+sudo sos collect -H 192.168.1.100 -u admin</code></pre>
+
+            <h3>5.3 与监控系统集成</h3>
+            <p>可将 sos report 与 Zabbix、Nagios 等监控系统集成，在告警触发时自动收集诊断信息。</p>
+
+            <h2>六、常见问题</h2>
+
+            <h3>Q1: 报告生成时间过长？</h3>
+            <div class="warning">
+                <strong>⚠️ 解决方案：</strong>
+                <ol>
+                    <li>减少收集的模块：<code>sos report -o network,system</code></li>
+                    <li>降低日志收集量：<code>sos report --no-post</code></li>
+                    <li>设置超时限制：<code>sos report --plugin-timeout=300</code></li>
+                </ol>
+            </div>
+
+            <h3>Q2: 报告文件过大？</h3>
+            <div class="warning">
+                <strong>⚠️ 解决方案：</strong>
+                <ol>
+                    <li>排除大型日志文件：<code>sos report --skip-plugins=logs</code></li>
+                    <li>限制报告大小：<code>sos report --max-size=512</code></li>
+                    <li>使用压缩率更高的格式：<code>sos report --compression-method=xz</code></li>
+                </ol>
+            </div>
+
+            <h3>Q3: 如何查看报告内容而不解压？</h3>
+            <pre><code># 使用 tar 命令预览
+tar -tJf sosreport-*.tar.xz | head -50
+
+# 直接提取特定文件
+tar -xJf sosreport-*.tar.xz --wildcards '*/var/log/messages'</code></pre>
+
+            <h2>七、最佳实践</h2>
+
+            <div class="success">
+                <strong>✅ 推荐做法</strong>
+                <ol>
+                    <li><strong>定期收集</strong>：在系统正常时定期收集基准报告，便于故障时对比</li>
+                    <li><strong>变更前后收集</strong>：系统变更前后的报告对比可快速定位问题</li>
+                    <li><strong>使用选择性收集</strong>：根据故障类型选择相关模块，提高效率</li>
+                    <li><strong>安全存储</strong>：报告包含敏感信息，应加密存储并限制访问</li>
+                    <li><strong>版本记录</strong>：记录 sos 工具版本，便于复现分析</li>
+                </ol>
+            </div>
+
+            <div class="warning">
+                <strong>❌ 避免做法</strong>
+                <ol>
+                    <li>在生产高峰期运行完整报告</li>
+                    <li>将报告发送给未经授权的第三方</li>
+                    <li>忽略报告中的敏感信息脱敏</li>
+                    <li>仅依赖报告，不进行实时诊断</li>
+                </ol>
+            </div>
+
+            <h2>八、总结</h2>
+            <p>sos report 是 Oracle Linux 运维人员的必备工具，掌握其使用方法可以大幅提升故障排查效率。</p>
+
+            <table>
+                <tr>
+                    <th>要点</th>
+                    <th>说明</th>
+                </tr>
+                <tr>
+                    <td><strong>基础使用</strong></td>
+                    <td><code>sudo sos report</code> 一键生成</td>
+                </tr>
+                <tr>
+                    <td><strong>高效收集</strong></td>
+                    <td>使用 <code>-o</code> 参数选择性收集</td>
+                </tr>
+                <tr>
+                    <td><strong>安全处理</strong></td>
+                    <td>启用 <code>--clean</code> 脱敏敏感信息</td>
+                </tr>
+                <tr>
+                    <td><strong>自动化</strong></td>
+                    <td>结合 cron 实现定期收集</td>
+                </tr>
+                <tr>
+                    <td><strong>最佳实践</strong></td>
+                    <td>变更前后的报告对比分析</td>
+                </tr>
+            </table>
+
+            <footer class="article-footer">
+                <p><strong>📚 参考资源：</strong></p>
+                <ul>
+                    <li><a href="https://docs.oracle.com/en/operating-systems/oracle-linux/" target="_blank">Oracle Linux 官方文档</a></li>
+                    <li><a href="https://github.com/sosreport/sos" target="_blank">sos 项目 GitHub</a></li>
+                    <li><a href="https://access.redhat.com/solutions/3592" target="_blank">Red Hat sosreport 指南</a></li>
+                </ul>
+                <p style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee;">
+                    <em>本文首发于 <a href="https://www.138138100.xyz/" style="color: #f7931a;">Linux 狂热份子</a></em><br>
+                    <em>作者：小饼 | 发布日期：2026-03-21</em>
+                </p>
+            </footer>
+        </article>
+
+        <div style="text-align: center; margin-top: 30px; color: #888; font-size: 0.85rem;">
+            <span>👁️ 本文阅读量：<span id="busuanzi_value_page_pv">0</span> 次</span>
+        </div>
+    </div>
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</body>
+</html>
