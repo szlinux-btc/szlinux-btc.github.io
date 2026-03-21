@@ -189,6 +189,39 @@
             transform: translateY(-3px);
             box-shadow: 0 6px 20px rgba(26,26,26,0.25);
         }
+        .social-links {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 25px 0 35px 0;
+            padding-top: 20px;
+            border-top: 1px solid #eaeaea;
+        }
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #555;
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            background: #ffffff;
+        }
+        .social-link:hover {
+            background: #f8f9fa;
+            border-color: #f7931a;
+            color: #f7931a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(247,147,26,0.2);
+        }
+        .social-icon {
+            font-size: 1.2rem;
+        }
         .quote {
             text-align: center;
             font-size: 0.95rem;
@@ -414,10 +447,37 @@
                 <a href="openclaw-security-alert.html" style="color: #dc3545; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #dc3545;">📖 查看详情 →</a>
             </div>
         </div>
+        <div class="card">
+            <span class="card-icon">🛠️</span>
+            <div class="card-title">工具 & 速查表</div>
+            <div class="card-desc">
+                实用工具、速查表和技术参考<br>
+                让工作效率翻倍
+            </div>
+            <div class="log-box" style="border-left-color: #dc3545; margin-top: 15px;">
+                <strong>📺 2026 年 315 晚会：CCTV 曝光 AI 乱象</strong>
+                <span class="log-date">📅 2026 年 3 月 15 日</span>
+                <br>
+                <span style="color: #555;">CCTV 315 晚会曝光 AI 行业乱象，涉及数据造假、虚假宣传等问题</span>
+                <br>
+                <a href="cctv315-2026.html" style="color: #dc3545; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #dc3545; margin-top: 8px;">📖 查看详情 →</a>
+            </div>
+        </div>
         <div class="divider"></div>
         <div class="links">
             <a href="https://github.com/szlinux-btc" class="link" target="_blank">💼 GitHub</a>
             <a href="mailto:hbszhblinux@gmail.com" class="link">📧 Contact</a>
+        </div>
+        <div class="social-links">
+            <a href="https://twitter.com/szlinux-btc" class="social-link" target="_blank">
+                <span class="social-icon">🐦</span> Twitter/X
+            </a>
+            <a href="https://t.me/szlinux-btc" class="social-link" target="_blank">
+                <span class="social-icon">✈️</span> Telegram
+            </a>
+            <a href="https://youtube.com/@szlinux-btc" class="social-link" target="_blank">
+                <span class="social-icon">📺</span> YouTube
+            </a>
         </div>
         <p class="quote">"Talk is cheap. Show me the code." — Linus Torvalds</p>
         <div class="counter">
