@@ -194,15 +194,10 @@
             gap: 12px;
             justify-content: center;
             flex-wrap: wrap;
-            margin: 25px 0 35px 0;
-            padding-top: 20px;
-            border-top: 1px solid #eaeaea;
+            margin: 20px 0;
         }
         .social-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: #555;
+            color: #1a1a1a;
             text-decoration: none;
             padding: 10px 20px;
             border: 1px solid #e0e0e0;
@@ -213,14 +208,48 @@
             background: #ffffff;
         }
         .social-link:hover {
-            background: #f8f9fa;
+            background: #f7931a;
             border-color: #f7931a;
-            color: #f7931a;
+            color: white;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(247,147,26,0.2);
         }
-        .social-icon {
-            font-size: 1.2rem;
+        .article-nav {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 15px;
+        }
+        .article-nav-title {
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+        .article-nav-list {
+            display: grid;
+            gap: 8px;
+        }
+        .article-nav-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #1a1a1a;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+        .article-nav-item:hover {
+            background: #f7931a;
+            color: white;
+            border-left-color: #1a1a1a;
+            transform: translateX(5px);
+        }
+        .article-nav-item::before {
+            content: "📄";
+            margin-right: 8px;
         }
         .quote {
             text-align: center;
@@ -278,6 +307,12 @@
                 相信去中心化改变世界
             </div>
             <div class="log-box" style="border-left-color: #f7931a;">
+                <strong>📊 每日币圈简报</strong>
+                <span class="log-date">每天 8:00 自动更新</span>
+                <br>
+                <span style="color: #555;">BTC、ETH 每日行情数据、市场走势分析与操作建议，数据来源 CoinGlass。</span>
+            </div>
+            <div class="log-box" style="margin-top: 15px; border-left-color: #f7931a;">
                 <strong>₿ 见证永恒稀缺：第 2000 万枚比特币诞生</strong>
                 <span class="log-date">📅 2026 年 3 月 9 日</span>
                 <br>
@@ -309,68 +344,100 @@
                     <strong>💎 永恒特性：</strong>固定供应 2100 万 · 不可增发 · 去中心化 · 抗审查<br>
                     <strong>📈 有效流通：</strong>约 1500-1800 万枚（200-370 万枚永久丢失）
                 </div>
-            </div>
-            <div class="log-box" style="border-left-color: #f7931a; margin-top: 15px;">
-                <strong>₿ 1 BTC = 人生不同 - 比特币入门指南</strong>
-                <span class="log-date">📅 2026 年 3 月 9 日</span>
-                <br>
-                <span style="color: #555;">为什么只需要拥有 1 个比特币，你的人生可以不同</span>
-                <br>
-                <a href="1btc-life-changed.html" style="color: #f7931a; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #f7931a; margin-top: 8px;">📖 查看详情 →</a>
-            </div>
-            <div class="log-box" style="border-left-color: #6c757d; margin-top: 15px;">
-                <strong>📊 ETH 行情日志：涨如便秘，跌如拉稀</strong>
-                <span class="log-date">📅 2026 年 3 月 12 日</span>
-                <br>
-                <span style="color: #555;">一个关于 ETH 行情的幽默观察日志</span>
-                <br>
-                <a href="eth-constipation-log.html" style="color: #6c757d; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #6c757d; margin-top: 8px;">📖 查看详情 →</a>
-            </div>
-            <div class="log-box" style="border-left-color: #f7931a; margin-top: 15px;">
-                <strong>₿ 中本聪传奇故事 - 比特币创世者的神秘之旅</strong>
-                <span class="log-date">📅 2026 年 3 月 21 日</span>
-                <br>
-                <span style="color: #555;">从白皮书到消失的传奇，持有 100 万 BTC 却从未花费</span>
-                <br>
-                <a href="satoshi-legend.html" style="color: #f7931a; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #f7931a; margin-top: 8px;">📖 查看详情 →</a>
+                <div style="margin-top: 15px; border-left: 3px solid #f7931a; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                    <strong style="color: #f7931a; font-size: 1.1rem;">₿ 1 BTC = 人生不同</strong>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; font-size: 0.85rem; color: #555;">
+                        <div><strong>总量：</strong>2100 万枚</div>
+                        <div><strong>已挖出：</strong>95.2%</div>
+                        <div><strong>剩余：</strong>100 万枚</div>
+                        <div><strong>挖完：</strong>114 年</div>
+                    </div>
+                    <div style="margin-top: 10px; text-align: center; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                        <a href="1btc-life-changed.html" style="display: inline-block; padding: 8px 20px; background: linear-gradient(135deg, #f7931a, #ffb347); color: white; text-decoration: none; border-radius: 20px; font-weight: 600; font-size: 0.85rem;">₿ 1 BTC = 人生不同</a>
+                        <a href="eth-constipation-log.html" style="display: inline-block; padding: 8px 20px; background: linear-gradient(135deg, #3498db, #5dade2); color: white; text-decoration: none; border-radius: 20px; font-weight: 600; font-size: 0.85rem;">📊 今日 ETH 日志</a>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="card">
             <span class="card-icon">🐧</span>
-            <div class="card-title">Linux Fans</div>
+            <div class="card-title">Linux 狂热份子</div>
             <div class="card-desc">
-                GNU/Linux 20+ · 命令行驱动<br>
-                专注于 Debian 与 SuSE 生态
+                20 年 + Linux 经验 · 开源贡献者<br>
+                SuSE/Debian 双修 · 终端就是我的家
             </div>
-            <div class="log-box" style="border-left-color: #f7931a; margin-top: 15px;">
-                <strong>📋 SUSE Linux Enterprise Server (SLES) 生命周期参考</strong>
+            <div class="log-box" style="margin-top: 15px; border-left-color: #005288;">
+                <strong style="color: #005288;">🦎 SUSE Multi-Linux Support</strong>
+                <span class="log-date">📅 2026 年 3 月 11 日</span>
+                <br>
+                <span style="color: #555;">原 SUSE Liberty Linux，RHEL/CentOS 企业支援最佳替代方案。</span>
+                <ul style="margin: 8px 0; padding-left: 18px; font-size: 0.8rem; color: #555;">
+                    <li><strong>✅ 零迁移：</strong>保留现有 Linux，确保应用稳定安全</li>
+                    <li><strong>🔒 安全补丁：</strong>及时 CVE 修复，保障系统安全</li>
+                    <li><strong>🔄 持续支持：</strong>RHEL/CentOS 7 继续维护</li>
+                    <li><strong>💰 降低成本：</strong>30 年开源专业，减少供应商锁定</li>
+                </ul>
+                <a href="https://www.suse.com/products/multi-linux-support/" target="_blank" style="color: #005288; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #005288;">🔗 了解更多 →</a>
+            </div>
+            <div class="log-box" style="margin-top: 15px; border-left-color: #3498db;">
+                <strong style="color: #3498db;">🔒 Mozilla SSL Configuration Generator</strong>
+                <span class="log-date">📅 2026 年 3 月 11 日</span>
+                <br>
+                <span style="color: #555;">服务器 SSL/TLS 配置最佳实践生成器，支持 Nginx、Apache、OpenSSL 等。</span>
+                <ul style="margin: 8px 0; padding-left: 18px; font-size: 0.8rem; color: #555;">
+                    <li><strong>Modern:</strong> TLS 1.3，适合现代服务</li>
+                    <li><strong>Intermediate:</strong> 通用推荐，兼容大多数客户端</li>
+                    <li><strong>Old:</strong> 兼容老旧客户端（最后手段）</li>
+                </ul>
+                <a href="https://ssl-config.mozilla.org/" target="_blank" style="color: #3498db; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #3498db;">🔗 立即使用 →</a>
+            </div>
+            <div class="log-box" style="margin-top: 15px; border-left-color: #27ae60;">
+                <strong style="color: #27ae60;">🐧 UFW 与 libvirt 桥接网络冲突解决方案</strong>
+                <span class="log-date">📅 2026 年 3 月 13 日</span>
+                <br>
+                <span style="color: #555;">生产环境虚拟机网络中断的根因分析与修复。</span>
+                <ul style="margin: 8px 0; padding-left: 18px; font-size: 0.8rem; color: #555;">
+                    <li><strong>🔍 根因：</strong>UFW 启动过早，bridge 模块未加载导致参数设置失败</li>
+                    <li><strong>🛠️ 修复：</strong>修改 IPT_MODULES 强制加载 bridge 模块</li>
+                    <li><strong>✅ 效果：</strong>虚拟机网络恢复，宿主机防火墙依然有效</li>
+                </ul>
+                <a href="ufw-libvirt-bridge-fix.html" style="color: #27ae60; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #27ae60;">📖 阅读全文 →</a>
+            </div>
+            <div class="log-box" style="margin-top: 15px; border-left-color: #8e44ad;">
+                <strong style="color: #8e44ad;">🔐 Debian LUKS 远程 SSH 解锁</strong>
                 <span class="log-date">📅 2026 年 3 月 14 日</span>
                 <br>
-                <a href="sles-lifecycle.html" style="color: #f7931a; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #f7931a; margin-top: 8px;">📖 查看详情 →</a>
+                <span style="color: #555;">服务器重启后无需人在现场，通过 SSH 远程输入 LUKS 密钥解密磁盘。</span>
+                <ul style="margin: 8px 0; padding-left: 18px; font-size: 0.8rem; color: #555;">
+                    <li><strong>🔧 方案：</strong>initramfs 内嵌 Dropbear SSH，重启后先进入微型 SSH 服务</li>
+                    <li><strong>🔑 安全：</strong>SSH 密钥认证 + 禁用密码登录 + 安全组白名单</li>
+                    <li><strong>✅ 效果：</strong>全盘加密服务器可远程解锁，无需 KVM 或物理操作</li>
+                </ul>
+                <a href="debian-luks-unlock.html" style="color: #8e44ad; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #8e44ad;">📖 阅读全文 →</a>
             </div>
-            <div class="log-box" style="border-left-color: #28a745; margin-top: 15px;">
-                <strong>🔧 UFW 与 Libvirt Bridge 冲突修复指南</strong>
+            <div class="log-box" style="margin-top: 15px; border-left-color: #e67e22;">
+                <strong style="color: #e67e22;">📜 SUSE 12 内核管理：保留当前和最新内核的正確方法</strong>
                 <span class="log-date">📅 2026 年 3 月 13 日</span>
                 <br>
-                <span style="color: #555;">解决 UFW 防火墙导致 Libvirt 虚拟机网络不通的问题</span>
-                <br>
-                <a href="ufw-libvirt-bridge-fix.html" style="color: #28a745; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #28a745; margin-top: 8px;">📖 查看详情 →</a>
+                <span style="color: #555;">SUSE 12 SP5 内核清理最佳实践，自动化安全清理旧版本。</span>
+                <ul style="margin: 8px 0; padding-left: 18px; font-size: 0.8rem; color: #555;">
+                    <li><strong>🔧 工具：</strong>purge-kernels 自动清理 / zypper 手动删除</li>
+                    <li><strong>📋 配置：</strong>multiversion.kernels = latest,running</li>
+                    <li><strong>✅ 效果：</strong>保留 2 个内核，/boot 空间释放 70%+</li>
+                </ul>
+                <a href="suse12-kernel-management.html" style="color: #e67e22; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #e67e22;">📖 阅读全文 →</a>
             </div>
-            <div class="log-box" style="border-left-color: #17a2b8; margin-top: 15px;">
-                <strong>📊 SUSE 12 内核管理实践</strong>
-                <span class="log-date">📅 2026 年 3 月 13 日</span>
+            <div class="log-box" style="margin-top: 15px; border-left-color: #2980b9;">
+                <strong style="color: #2980b9;">📬 Postfix TLS 证书验证失败（untrusted issuer）修复</strong>
+                <span class="log-date">📅 2026 年 3 月 16 日</span>
                 <br>
-                <span style="color: #555;">SLES 12 系统内核升级、回滚和多内核并行管理</span>
-                <br>
-                <a href="suse12-kernel-management.html" style="color: #17a2b8; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #17a2b8; margin-top: 8px;">📖 查看详情 →</a>
-            </div>
-            <div class="log-box" style="border-left-color: #6f42c1; margin-top: 15px;">
-                <strong>📁 SOS Report 系统诊断报告生成</strong>
-                <span class="log-date">📅 2026 年 3 月 21 日</span>
-                <br>
-                <span style="color: #555;">使用 sosreport 工具快速收集系统日志和配置信息</span>
-                <br>
-                <a href="sos-report.html" style="color: #6f42c1; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #6f42c1; margin-top: 8px;">📖 查看详情 →</a>
+                <span style="color: #555;">SLES 11 SP2 环境下，自定义 CA 文件缺失根证书导致 TLS 握手警告的完整修复记录。</span>
+                <ul style="margin: 8px 0; padding-left: 18px; font-size: 0.8rem; color: #555;">
+                    <li><strong>🔍 根因：</strong>smtp_tls_CAfile 指定的文件缺少 DigiCert 根证书</li>
+                    <li><strong>🛠️ 修复：</strong>将根证书追加到自定义 CA 文件末尾，重启 Postfix</li>
+                    <li><strong>✅ 效果：</strong>TLS 链完整验证，日志警告消除，邮件正常发送</li>
+                </ul>
+                <a href="postfix-tls-cert-fix.html" style="color: #2980b9; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #2980b9;">📖 阅读全文 →</a>
             </div>
         </div>
         <div class="card">
@@ -379,6 +446,26 @@
             <div class="card-desc">
                 探索 AGI 边界 · 让 AI 为人类服务<br>
                 每天学习新模型/新工具
+            </div>
+            <div class="log-box" style="margin-top: 15px; border-left-color: #9b59b6;">
+                <strong style="color: #9b59b6;">⚡ 20 个最靠谱 神级 Skill 推荐榜</strong>
+                <span class="log-date" style="color: #9b59b6;">ClawHub 精选 · 评分 &gt;3.4</span>
+                <br>
+                <span style="color: #555;">整理了 ClawHub 里系统评分 &gt;3.4 的 20 个神级 Skill，按功能分四类，可以直接抄作业用。</span>
+                <br><br>
+                <a href="https://claw.138138100.xyz/skill-top20.html" target="_blank" style="color: #9b59b6; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #9b59b6;">📖 查看完整榜单 →</a>
+            </div>
+            <div class="article-nav">
+                <div class="article-nav-title">📚 快速导航（10 篇文章）</div>
+                <div class="article-nav-list">
+                    <a href="ai-poisoning-vs-dns.html" class="article-nav-item">🤖 AI 投毒 vs DNS 投毒：为什么不能用"坏多少倍"来衡量？</a>
+                    <a href="cctv315-2026.html" class="article-nav-item">📺 2026 央视 3·15 晚会：7 大消费乱象速览</a>
+                    <a href="openclaw-essence.html" class="article-nav-item">🦞 OpenClaw 本质是什么？AI Agent 的哲学思考</a>
+                    <a href="claw-variants-comparison.html" class="article-nav-item">🦞 龙虾大战！OpenClaw 5 个变种版本深度对比</a>
+                    <a href="openclaw-security-alert.html" class="article-nav-item">⚠️ 安全警报：OpenClaw ClawHub 恶意投毒事件</a>
+                    <span class="article-nav-item" style="cursor: default;">🦞 我的第一只龙虾：小饼（本页）</span>
+                    <span class="article-nav-item" style="cursor: default;">📌 ChatGPT 和龙虾有什么区别？（本页）</span>
+                </div>
             </div>
             <div class="log-box">
                 <strong>📌 ChatGPT 和龙虾有什么区别？</strong>
@@ -404,7 +491,7 @@
                 </div>
             </div>
             <div class="log-box" style="margin-top: 15px; border-left-color: #28a745;">
-                <strong>🦞 我的第一只龙虾：hb250</strong>
+                <strong>🦞 我的第一只龙虾：小饼</strong>
                 <span class="log-date">📅 2026 年 3 月 10 日</span>
                 <br>
                 <div class="stats-grid">
@@ -430,21 +517,13 @@
                     <strong>🎯 工作状态：</strong>随时待命 · 永不休息 · 越用越聪明
                 </div>
             </div>
-            <div class="log-box" style="margin-top: 15px; border-left-color: #3498db;">
-                <strong>🦞 OpenClaw 本质是什么？AI Agent 的哲学思考</strong>
-                <span class="log-date">📅 2026 年 3 月 12 日</span>
+            <div class="log-box" style="margin-top: 15px; border-left-color: #9b59b6;">
+                <strong style="color: #9b59b6;">🦞 龙虾大战！OpenClaw 5 个变种版本深度对比</strong>
+                <span class="log-date" style="color: #9b59b6;">📅 2026 年 3 月 11 日</span>
                 <br>
-                <span style="color: #555;">OpenClaw 是一个「通过 IM 指挥 AI」的框架，把聊天软件变成你的个人命令行终端</span>
-                <br>
-                <a href="openclaw-essence.html" style="color: #3498db; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #3498db; margin-top: 8px;">📖 查看详情 →</a>
-            </div>
-            <div class="log-box" style="margin-top: 15px; border-left-color: #e74c3c;">
-                <strong>🦞 龙虾大战！OpenClaw 这 5 个变种版本已卷疯</strong>
-                <span class="log-date">📅 2026 年 3 月 11 日</span>
-                <br>
-                <span style="color: #555;">ZeroClaw、PicoClaw、NanoClaw、MemU Bot、MaxClaw 深度对比</span>
-                <br>
-                <a href="claw-variants-comparison.html" style="color: #e74c3c; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #e74c3c; margin-top: 8px;">📖 查看详情 →</a>
+                <span style="color: #555;">ZeroClaw/PicoClaw/NanoClaw/MemU Bot/MaxClaw/OpenClaw 六大变种横向评测，帮你选择最适合的 AI Agent。</span>
+                <br><br>
+                <a href="claw-variants-comparison.html" style="color: #9b59b6; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #9b59b6;">📖 阅读全文 →</a>
             </div>
             <div class="log-box" style="margin-top: 15px; border-left-color: #dc3545;">
                 <strong style="color: #dc3545;">⚠️ 安全警报：OpenClaw ClawHub 恶意投毒事件</strong>
@@ -454,21 +533,51 @@
                 <br><br>
                 <a href="openclaw-security-alert.html" style="color: #dc3545; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #dc3545;">📖 查看详情 →</a>
             </div>
+            <div class="log-box" style="margin-top: 15px; border-left-color: #e74c3c;">
+                <strong style="color: #e74c3c;">🤖 AI 投毒 vs DNS 投毒：为什么不能用"坏多少倍"来衡量？</strong>
+                <span class="log-date" style="color: #e74c3c;">📅 2026 年 3 月 16 日</span>
+                <br>
+                <span style="color: #555;">由 3·15 GEO 投毒事件引发的深度思考：两者攻击维度、影响深度完全不同，AI 投毒的危害是指数级且代际传递的。</span>
+                <ul style="margin: 8px 0; padding-left: 18px; font-size: 0.8rem; color: #555;">
+                    <li><strong>🪧 DNS 投毒：</strong>骗眼睛，改路牌，线性可控，清缓存即愈</li>
+                    <li><strong>🧠 AI 投毒：</strong>骗大脑，改认知，指数级，危害随模型迭代自我放大</li>
+                    <li><strong>☣️ 代际污染：</strong>污染数据 → 有缺陷的模型 → 有缺陷的生成内容 → 下一代模型继承放大</li>
+                </ul>
+                <a href="ai-poisoning-vs-dns.html" style="color: #e74c3c; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #e74c3c;">📖 阅读全文 →</a>
+            </div>
+            <div class="log-box" style="margin-top: 15px; border-left-color: #c0392b;">
+                <strong style="color: #c0392b;">📺 2026 央视 3·15 晚会：7 大消费乱象速览</strong>
+                <span class="log-date" style="color: #c0392b;">📅 2026 年 3 月 15 日</span>
+                <br>
+                <span style="color: #555;">第 36 届 · 主题：放心消费 品质生活。从工业双氧水漂白鸡爪到 AI 被投毒，附快速避坑速查表。</span>
+                <ul style="margin: 8px 0; padding-left: 18px; font-size: 0.8rem; color: #555;">
+                    <li><strong>🍗 食品：</strong>工业双氧水漂白鸡爪，流向外卖平台</li>
+                    <li><strong>🤖 AI：</strong>GEO 优化黑产向大模型投毒，推荐答案变广告</li>
+                    <li><strong>📈 金融：</strong>荐股分成骗局 + 私域围猎老年人（5 倍暴利）</li>
+                    <li><strong>🛵 唯一整改：</strong>哈啰当晚完成共享电动车限速处理</li>
+                </ul>
+                <a href="cctv315-2026.html" style="color: #c0392b; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #c0392b;">📖 查看完整报告 →</a>
+            </div>
         </div>
         <div class="card">
-            <span class="card-icon">🛠️</span>
-            <div class="card-title">工具 & 速查表</div>
+            <span class="card-icon">🪟</span>
+            <div class="card-title">工具 &amp; 速查表</div>
             <div class="card-desc">
-                实用工具、速查表和技术参考<br>
-                让工作效率翻倍
+                实用工具收藏 · 快速查阅参考<br>
+                把常用的知识沉淀成一张表
             </div>
-            <div class="log-box" style="border-left-color: #dc3545; margin-top: 15px;">
-                <strong>📺 2026 年 315 晚会：CCTV 曝光 AI 乱象</strong>
-                <span class="log-date">📅 2026 年 3 月 15 日</span>
+            <div class="log-box" style="margin-top: 15px; border-left-color: #0078d4;">
+                <strong style="color: #0078d4;">🪟 Windows 10 各版本生命周期全览</strong>
+                <span class="log-date">📅 2026 年 3 月 14 日</span>
                 <br>
-                <span style="color: #555;">CCTV 315 晚会曝光 AI 行业乱象，涉及数据造假、虚假宣传等问题</span>
-                <br>
-                <a href="cctv315-2026.html" style="color: #dc3545; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #dc3545; margin-top: 8px;">📖 查看详情 →</a>
+                <span style="color: #555;">主流版本已于 2025 年 10 月 14 日终止支持，各 LTSC/LTSB 版本结束日期一览，数据来源微软官方。</span>
+                <ul style="margin: 8px 0; padding-left: 18px; font-size: 0.8rem; color: #555;">
+                    <li><strong>Home/Pro：</strong>已于 2025 年 10 月 14 日停止支持</li>
+                    <li><strong>LTSC 2019：</strong>2029 年 1 月 9 日</li>
+                    <li><strong>LTSC 2021：</strong>2027 年 1 月 12 日</li>
+                    <li><strong>ESU 延展：</strong>企业付费方案，最长至 2028 年 10 月</li>
+                </ul>
+                <a href="win10-lifecycle.html" style="color: #0078d4; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #0078d4;">📖 查看完整版本表 →</a>
             </div>
         </div>
         <div class="divider"></div>
@@ -477,15 +586,9 @@
             <a href="mailto:hbszhblinux@gmail.com" class="link">📧 Contact</a>
         </div>
         <div class="social-links">
-            <a href="https://twitter.com/szlinux-btc" class="social-link" target="_blank">
-                <span class="social-icon">🐦</span> Twitter/X
-            </a>
-            <a href="https://t.me/szlinux-btc" class="social-link" target="_blank">
-                <span class="social-icon">✈️</span> Telegram
-            </a>
-            <a href="https://youtube.com/@szlinux-btc" class="social-link" target="_blank">
-                <span class="social-icon">📺</span> YouTube
-            </a>
+            <a href="https://twitter.com/szlinux_btc" class="social-link" target="_blank">🐦 Twitter/X</a>
+            <a href="https://t.me/szlinux_btc" class="social-link" target="_blank">✈️ Telegram</a>
+            <a href="https://www.youtube.com/@szlinux-btc" class="social-link" target="_blank">📺 YouTube</a>
         </div>
         <p class="quote">"Talk is cheap. Show me the code." — Linus Torvalds</p>
         <div class="counter">
@@ -495,5 +598,15 @@
         </div>
     </div>
     <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <script>
+        // 不蒜子计数器修复：页面加载时重新触发
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                var script = document.createElement('script');
+                script.src = '//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js';
+                document.body.appendChild(script);
+            }, 1000);
+        });
+    </script>
 </body>
 </html>
