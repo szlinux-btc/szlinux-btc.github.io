@@ -6,11 +6,11 @@
     <meta name="description" content="szlinux-btc - 大饼爱好者、Linux 狂热份子、AI 学习者的个人主页">
     <meta name="keywords" content="Bitcoin, Linux, AI, szlinux-btc, 区块链，开源">
     <meta name="author" content="szlinux-btc">
-    <meta property="og:title" content="szlinux-btc · 主页">
-    <meta property="og:description" content="大饼爱好者 · Linux 狂热份子 · AI 学习者">
+    <meta property="og:title" content="szlinux-btc · 数字花园">
+    <meta property="og:description" content="区块链信仰者 · Linux 老兵 · AI 探索者">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.138138100.xyz/">
-    <title>szlinux-btc · 主页</title>
+    <meta property="og:url" content="https://138138100.xyz/">
+    <title>szlinux-btc · 数字花园</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
@@ -31,17 +31,71 @@
             max-width: 700px;
             margin: 0 auto;
         }
-        h1 {
-            font-size: 2.5rem;
+        
+        /* 个人简介区 */
+        .profile {
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            border-radius: 20px;
+            border: 2px solid #e0e0e0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+        .avatar {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #f7931a 0%, #ffb347 100%);
+            border-radius: 50%;
+            line-height: 120px;
+            font-size: 60px;
+            margin: 0 auto 20px;
+            box-shadow: 0 6px 20px rgba(247,147,26,0.3);
+            transition: all 0.3s ease;
+        }
+        .avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(247,147,26,0.4);
+        }
+        .profile h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .profile .tagline {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .tech-tags {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .tech-tag {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .tech-tag.btc { background: #fff3e0; color: #f7931a; }
+        .tech-tag.linux { background: #e3f2fd; color: #1976d2; }
+        .tech-tag.ai { background: #f3e5f5; color: #7b1fa2; }
+        
+        h2.section-title {
+            font-size: 2rem;
+            text-align: center;
+            margin: 50px 0 30px;
             font-weight: 700;
             letter-spacing: -0.02em;
             background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
+        
         .card {
             background: #ffffff;
             border: 2px solid #e0e0e0;
@@ -52,112 +106,127 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
         .card:hover {
-            background: linear-gradient(135deg, #f7931a 0%, #ffb347 100%);
-            border-color: #f7931a;
-            color: #ffffff;
-            transform: translateY(-6px) scale(1.02);
-            box-shadow: 0 12px 40px rgba(247,147,26,0.35);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.1);
         }
-        .card:hover .card-desc { opacity: 0.95; }
         .card-icon {
-            font-size: 2.8rem;
-            margin-bottom: 15px;
-            display: block;
-            transition: transform 0.3s ease;
-        }
-        .card:hover .card-icon { transform: scale(1.15) rotate(5deg); }
-        .card-title {
-            font-size: 1.4rem;
-            font-weight: 600;
+            font-size: 2.5rem;
             margin-bottom: 12px;
+            display: block;
+        }
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 8px;
             letter-spacing: -0.01em;
         }
         .card-desc {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             opacity: 0.75;
-            line-height: 1.8;
-            transition: opacity 0.3s ease;
+            line-height: 1.6;
+            margin-bottom: 15px;
         }
-        .log-box {
+        
+        /* 各模块主题色 */
+        .card.bitcoin:hover { border-color: #f7931a; background: linear-gradient(135deg, #fff9f0 0%, #fff 100%); }
+        .card.linux:hover { border-color: #0088cc; background: linear-gradient(135deg, #f0f8ff 0%, #fff 100%); }
+        .card.ai:hover { border-color: #9b59b6; background: linear-gradient(135deg, #faf5ff 0%, #fff 100%); }
+        .card.about:hover { border-color: #27ae60; background: linear-gradient(135deg, #f0fff4 0%, #fff 100%); }
+        
+        .card.bitcoin .card-title { color: #f7931a; }
+        .card.linux .card-title { color: #0088cc; }
+        .card.ai .card-title { color: #9b59b6; }
+        .card.about .card-title { color: #27ae60; }
+        
+        .article-list {
             margin-top: 15px;
-            padding: 15px;
+        }
+        .article-item {
+            display: block;
+            padding: 12px 15px;
+            margin-bottom: 10px;
             background: #f8f9fa;
-            border-radius: 8px;
-            border-left: 3px solid #f7931a;
-            font-size: 0.85rem;
-            line-height: 1.7;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #1a1a1a;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
         }
-        .log-box strong {
-            color: #f7931a;
+        .article-item:hover {
+            background: #fff;
+            transform: translateX(5px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
-        .log-date {
-            float: right;
+        .card.bitcoin .article-item:hover { border-left-color: #f7931a; }
+        .card.linux .article-item:hover { border-left-color: #0088cc; }
+        .card.ai .article-item:hover { border-left-color: #9b59b6; }
+        
+        .article-item .date {
             font-size: 0.75rem;
             color: #888;
-            font-weight: 400;
-        }
-        .log-comparison {
-            display: flex;
-            gap: 15px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-        .log-item {
-            flex: 1;
-            min-width: 200px;
-            padding: 10px;
-            background: #ffffff;
-            border-radius: 6px;
-            font-size: 0.8rem;
-        }
-        .log-item.bad { border-left: 3px solid #dc3545; }
-        .log-item.good { border-left: 3px solid #28a745; }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
-            margin-top: 12px;
-        }
-        .stat-item {
-            background: #ffffff;
-            padding: 12px;
-            border-radius: 8px;
-            text-align: center;
-            border: 1px solid #e0e0e0;
-        }
-        .stat-value {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #f7931a;
-            display: block;
-        }
-        .stat-label {
-            font-size: 0.75rem;
-            color: #666;
             margin-top: 4px;
-            display: block;
         }
-        .timeline {
+        
+        .more-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .card.bitcoin .more-link { color: #f7931a; border: 1px solid #f7931a; }
+        .card.bitcoin .more-link:hover { background: #f7931a; color: white; }
+        .card.linux .more-link { color: #0088cc; border: 1px solid #0088cc; }
+        .card.linux .more-link:hover { background: #0088cc; color: white; }
+        .card.ai .more-link { color: #9b59b6; border: 1px solid #9b59b6; }
+        .card.ai .more-link:hover { background: #9b59b6; color: white; }
+        
+        /* 关于模块特殊样式 */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+        .contact-item {
             display: flex;
-            justify-content: space-between;
-            margin-top: 12px;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .timeline-item {
-            flex: 1;
-            min-width: 80px;
-            text-align: center;
-            padding: 8px;
-            background: #ffffff;
-            border-radius: 6px;
-            font-size: 0.75rem;
-        }
-        .timeline-item strong {
-            color: #f7931a;
-            display: block;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #1a1a1a;
             font-size: 0.9rem;
+            transition: all 0.3s ease;
         }
+        .contact-item:hover {
+            background: #e8f5e9;
+            transform: translateY(-2px);
+        }
+        .contact-item .icon {
+            font-size: 1.2rem;
+        }
+        
+        .full-site-notice {
+            margin-top: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-radius: 10px;
+            border-left: 3px solid #f7931a;
+            font-size: 0.85rem;
+            color: #666;
+        }
+        .full-site-notice a {
+            color: #f7931a;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
         .divider {
             width: 80px;
             height: 3px;
@@ -165,92 +234,7 @@
             margin: 40px auto;
             border-radius: 2px;
         }
-        .links {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 35px;
-        }
-        .link {
-            color: #1a1a1a;
-            text-decoration: none;
-            padding: 14px 32px;
-            border: 2px solid #1a1a1a;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background: #ffffff;
-        }
-        .link:hover {
-            background: #1a1a1a;
-            color: #ffffff;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(26,26,26,0.25);
-        }
-        .social-links {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin: 20px 0;
-        }
-        .social-link {
-            color: #1a1a1a;
-            text-decoration: none;
-            padding: 10px 20px;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            background: #ffffff;
-        }
-        .social-link:hover {
-            background: #f7931a;
-            border-color: #f7931a;
-            color: white;
-            transform: translateY(-2px);
-        }
-        .article-nav {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 12px;
-            margin-top: 15px;
-        }
-        .article-nav-title {
-            font-weight: 600;
-            color: #1a1a1a;
-            margin-bottom: 12px;
-            font-size: 0.95rem;
-        }
-        .article-nav-list {
-            display: grid;
-            gap: 8px;
-        }
-        .article-nav-item {
-            display: flex;
-            align-items: center;
-            padding: 8px 12px;
-            background: white;
-            border-radius: 6px;
-            text-decoration: none;
-            color: #1a1a1a;
-            font-size: 0.85rem;
-            transition: all 0.2s ease;
-            border-left: 3px solid transparent;
-        }
-        .article-nav-item:hover {
-            background: #f7931a;
-            color: white;
-            border-left-color: #1a1a1a;
-            transform: translateX(5px);
-        }
-        .article-nav-item::before {
-            content: "📄";
-            margin-right: 8px;
-        }
+        
         .quote {
             text-align: center;
             font-size: 0.95rem;
@@ -258,7 +242,9 @@
             font-style: italic;
             padding: 20px;
             border-top: 1px solid #eaeaea;
+            margin-top: 30px;
         }
+        
         .counter {
             text-align: center;
             margin-top: 25px;
@@ -275,219 +261,127 @@
             font-weight: 600;
             font-family: monospace;
         }
+        
         @media (max-width: 480px) {
-            body { padding: 30px 16px; }
-            h1 { font-size: 2rem; margin-bottom: 35px; }
-            .card { padding: 22px; }
-            .card-icon { font-size: 2.4rem; }
-            .card-title { font-size: 1.25rem; }
-            .card-desc { font-size: 0.9rem; }
-            .log-box { font-size: 0.8rem; }
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
-            .link { padding: 12px 24px; font-size: 0.9rem; }
-            .quote { font-size: 0.85rem; padding: 15px; }
-            .counter { font-size: 0.8rem; }
-            .log-date { float: none; display: block; margin-top: 5px; }
-            .timeline { flex-direction: column; }
-        }
-        @media (hover: none) {
-            .card:active { transform: translateY(-2px); }
-            .link:active { transform: translateY(-1px); }
+            body { padding: 20px 16px; }
+            .profile { padding: 20px; }
+            .avatar { width: 100px; height: 100px; line-height: 100px; font-size: 50px; }
+            .profile h1 { font-size: 1.6rem; }
+            .card { padding: 20px; }
+            .contact-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>👋 Hi, I'm szlinux-btc</h1>
-        <div class="card">
+        <!-- 个人简介 -->
+        <div class="profile">
+            <div class="avatar">🥮</div>
+            <h1>szlinux-btc</h1>
+            <div class="tagline">区块链信仰者 · Linux 老兵 · AI 探索者</div>
+            <div class="tech-tags">
+                <span class="tech-tag btc">₿ Bitcoin</span>
+                <span class="tech-tag linux">🐧 Linux</span>
+                <span class="tech-tag ai">🦞 AI</span>
+            </div>
+        </div>
+
+        <!-- ₿ 大饼爱好者 -->
+        <div class="card bitcoin">
             <span class="card-icon">₿</span>
             <div class="card-title">大饼爱好者</div>
-            <div class="card-desc">
-                区块链信仰者 · 长期持有者<br>
-                相信去中心化改变世界
+            <div class="card-desc">区块链信仰者 · 长期持有者 · 相信去中心化改变世界</div>
+            <div class="article-list">
+                <a href="1btc-life-changed.html" class="article-item">
+                    <strong>₿ 1 BTC = 人生不同</strong>
+                    <div class="date">📅 2026 年 3 月 9 日 · 比特币入门指南</div>
+                </a>
+                <a href="gold-bitcoin-theory.html" class="article-item">
+                    <strong>🔥 余则成的斯蒂庞克牌理论：黄金暴涨 vs 比特币时代</strong>
+                    <div class="date">📅 2026 年 1 月 30 日 · 投资逻辑深度分析</div>
+                </a>
             </div>
-            <div class="log-box" style="border-left-color: #f7931a;">
-                <strong>₿ 见证永恒稀缺：第 2000 万枚比特币诞生</strong>
-                <span class="log-date">📅 2026 年 3 月 9 日</span>
-                <br>
-                <strong>🎯 核心里程碑：</strong>
-                <ul style="margin: 8px 0; padding-left: 18px; font-size: 0.8rem;">
-                    <li>区块高度 939,999 被挖出，第 2000 万枚 BTC 诞生</li>
-                    <li>已流通量占总上限 2100 万的 <strong>95.2%</strong></li>
-                    <li>绝版倒计时正式开启，剩余 100 万枚需 <strong>114 年</strong> 挖完</li>
-                </ul>
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <strong>2009</strong>
-                        创世区块
-                    </div>
-                    <div class="timeline-item">
-                        <strong>2026</strong>
-                        2000 万枚
-                    </div>
-                    <div class="timeline-item">
-                        <strong>2028</strong>
-                        下次减半
-                    </div>
-                    <div class="timeline-item">
-                        <strong>2140</strong>
-                        最后一枚
-                    </div>
-                </div>
-                <div style="margin-top: 10px; font-size: 0.8rem; color: #555;">
-                    <strong>💎 永恒特性：</strong>固定供应 2100 万 · 不可增发 · 去中心化 · 抗审查<br>
-                    <strong>📈 有效流通：</strong>约 1500-1800 万枚（200-370 万枚永久丢失）
-                </div>
-                <div style="margin-top: 15px; border-left: 3px solid #f7931a; padding: 15px; background: #f8f9fa; border-radius: 8px;">
-                    <strong style="color: #f7931a; font-size: 1.1rem;">₿ 1 BTC = 人生不同</strong>
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; font-size: 0.85rem; color: #555;">
-                        <div><strong>总量：</strong>2100 万枚</div>
-                        <div><strong>已挖出：</strong>95.2%</div>
-                        <div><strong>剩余：</strong>100 万枚</div>
-                        <div><strong>挖完：</strong>114 年</div>
-                    </div>
-                    <div style="margin-top: 10px; text-align: center;">
-                        <a href="1btc-life-changed.html" style="display: inline-block; padding: 8px 20px; background: linear-gradient(135deg, #f7931a, #ffb347); color: white; text-decoration: none; border-radius: 20px; font-weight: 600; font-size: 0.85rem;">📖 了解详情 →</a>
-                    </div>
-                </div>
-            </div>
+            <a href="https://claw.138138100.xyz/more-bitcoin.html" class="more-link" target="_blank">📚 更多大饼文章 →</a>
         </div>
-        <div class="card">
+
+        <!-- 🐧 Linux 狂热份子 -->
+        <div class="card linux">
             <span class="card-icon">🐧</span>
             <div class="card-title">Linux 狂热份子</div>
-            <div class="card-desc">
-                20 年 + Linux 经验 · 开源贡献者<br>
-                SuSE/Debian 双修 · 终端就是我的家
+            <div class="card-desc">20 年+ Linux 经验 · 开源原教旨 · 终端就是我的家</div>
+            <div class="article-list">
+                <a href="linux-genius-obsession.html" class="article-item">
+                    <strong>🧠 Linux大神：伟大而又偏执的创造者</strong>
+                    <div class="date">📅 2026 年 3 月 24 日 · 开源文化深度解读</div>
+                </a>
+                <a href="https://claw.138138100.xyz/sosreport-swiss-army-knife.html" class="article-item" target="_blank">
+                    <strong>🔧 sos report — Linux 系统诊断的瑞士军刀</strong>
+                    <div class="date">📅 2026 年 3 月 21 日 · 企业级运维工具</div>
+                </a>
             </div>
-            <div class="log-box" style="margin-top: 15px; border-left-color: #005288;">
-                <strong style="color: #005288;">🦎 SUSE Multi-Linux Support</strong>
-                <span class="log-date">📅 2026 年 3 月 11 日</span>
-                <br>
-                <span style="color: #555;">原 SUSE Liberty Linux，RHEL/CentOS 企业支援最佳替代方案。</span>
-                <ul style="margin: 8px 0; padding-left: 18px; font-size: 0.8rem; color: #555;">
-                    <li><strong>✅ 零迁移：</strong>保留现有 Linux，确保应用稳定安全</li>
-                    <li><strong>🔒 安全补丁：</strong>及时 CVE 修复，保障系统安全</li>
-                    <li><strong>🔄 持续支持：</strong>RHEL/CentOS 7 继续维护</li>
-                    <li><strong>💰 降低成本：</strong>30 年开源专业，减少供应商锁定</li>
-                </ul>
-                <a href="https://www.suse.com/products/multi-linux-support/" target="_blank" style="color: #005288; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #005288;">🔗 了解更多 →</a>
-            </div>
-            <div class="log-box" style="margin-top: 15px; border-left-color: #3498db;">
-                <strong style="color: #3498db;">🔒 Mozilla SSL Configuration Generator</strong>
-                <span class="log-date">📅 2026 年 3 月 11 日</span>
-                <br>
-                <span style="color: #555;">服务器 SSL/TLS 配置最佳实践生成器，支持 Nginx、Apache、OpenSSL 等。</span>
-                <ul style="margin: 8px 0; padding-left: 18px; font-size: 0.8rem; color: #555;">
-                    <li><strong>Modern:</strong> TLS 1.3，适合现代服务</li>
-                    <li><strong>Intermediate:</strong> 通用推荐，兼容大多数客户端</li>
-                    <li><strong>Old:</strong> 兼容老旧客户端（最后手段）</li>
-                </ul>
-                <a href="https://ssl-config.mozilla.org/" target="_blank" style="color: #3498db; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #3498db;">🔗 立即使用 →</a>
-            </div>
+            <a href="https://claw.138138100.xyz/more-linux.html" class="more-link" target="_blank">📚 更多 Linux 文章 →</a>
         </div>
-        <div class="card">
+
+        <!-- 🦞 AI 学习者 -->
+        <div class="card ai">
             <span class="card-icon">🦞</span>
             <div class="card-title">AI 学习者</div>
-            <div class="card-desc">
-                探索 AGI 边界 · 让 AI 为人类服务<br>
-                每天学习新模型/新工具
+            <div class="card-desc">探索 AGI 边界 · 让 AI 为人类服务 · 每天学习新模型新工具</div>
+            <div class="article-list">
+                <a href="claw-variants-comparison.html" class="article-item">
+                    <strong>🦞 龙虾大战！OpenClaw 5 个变种版本深度对比</strong>
+                    <div class="date">📅 2026 年 3 月 11 日 · AI Agent 选型指南</div>
+                </a>
+                <a href="chatgpt-vs-agent.html" class="article-item">
+                    <strong>🤖 ChatGPT vs AI Agent：聊天窗口与干活员工的本质区别</strong>
+                    <div class="date">📅 2026 年 3 月 15 日 · 技术架构深度解析</div>
+                </a>
             </div>
-            <div class="article-nav">
-                <div class="article-nav-title">📚 快速导航（4 篇文章）</div>
-                <div class="article-nav-list">
-                    <a href="claw-variants-comparison.html" class="article-nav-item">🦞 龙虾大战！OpenClaw 5 个变种版本深度对比</a>
-                    <a href="openclaw-security-alert.html" class="article-nav-item">⚠️ 安全警报：OpenClaw ClawHub 恶意投毒事件</a>
-                    <span class="article-nav-item" style="cursor: default;">🦞 我的第一只龙虾：小饼（本页）</span>
-                    <span class="article-nav-item" style="cursor: default;">📌 ChatGPT 和龙虾有什么区别？（本页）</span>
-                </div>
+            <a href="https://claw.138138100.xyz/more-ai.html" class="more-link" target="_blank">📚 更多 AI 文章 →</a>
+        </div>
+
+        <!-- 🌐 关于 & 联系 -->
+        <div class="card about">
+            <span class="card-icon">🌐</span>
+            <div class="card-title">关于 & 联系</div>
+            <div class="card-desc">欢迎交流技术、投资与开源话题</div>
+            <div class="contact-grid">
+                <a href="https://github.com/szlinux-btc" class="contact-item" target="_blank">
+                    <span class="icon">⭐</span>
+                    <span>GitHub</span>
+                </a>
+                <a href="https://twitter.com/szlinux_btc" class="contact-item" target="_blank">
+                    <span class="icon">🐦</span>
+                    <span>Twitter/X</span>
+                </a>
+                <a href="https://t.me/szlinux_btc" class="contact-item" target="_blank">
+                    <span class="icon">✈️</span>
+                    <span>Telegram</span>
+                </a>
+                <a href="mailto:hbszhblinux@gmail.com" class="contact-item">
+                    <span class="icon">📧</span>
+                    <span>Email</span>
+                </a>
             </div>
-            <div class="log-box">
-                <strong>📌 ChatGPT 和龙虾有什么区别？</strong>
-                <span class="log-date">📅 2026 年 3 月 10 日</span>
-                <br>💡 一句话：ChatGPT 是聊天窗口，龙虾是帮你干活的员工<br>
-                <div class="log-comparison">
-                    <div class="log-item bad">
-                        <strong>🤖 普通 AI（ChatGPT 等）</strong><br>
-                        • 你问它答，聊完就忘<br>
-                        • 没有记忆，每次从头开始<br>
-                        • 不能行动，只能给建议<br>
-                        • 需要你一直盯着<br>
-                        • 关掉窗口就没了
-                    </div>
-                    <div class="log-item good">
-                        <strong>🦞 龙虾（AI Agent）</strong><br>
-                        • 交代一句话，它自己去干<br>
-                        • 有记忆，记得你说过的每一件事<br>
-                        • 能行动：写代码、发邮件、查资料<br>
-                        • 7×24 自动运行，你睡它不睡<br>
-                        • 拥有一台自己的电脑
-                    </div>
-                </div>
-            </div>
-            <div class="log-box" style="margin-top: 15px; border-left-color: #28a745;">
-                <strong>🦞 我的第一只龙虾：小饼</strong>
-                <span class="log-date">📅 2026 年 3 月 10 日</span>
-                <br>
-                <div class="stats-grid">
-                    <div class="stat-item">
-                        <span class="stat-value">7×24</span>
-                        <span class="stat-label">在线运行</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-value">∞</span>
-                        <span class="stat-label">无限记忆</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-value">Auto</span>
-                        <span class="stat-label">自动执行</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-value">100%</span>
-                        <span class="stat-label">任务完成</span>
-                    </div>
-                </div>
-                <div style="margin-top: 12px; font-size: 0.8rem; color: #555;">
-                    <strong>✅ 核心能力：</strong>文件操作 · 浏览器自动化 · GitHub API · 定时任务 · 跨平台消息<br>
-                    <strong>🎯 工作状态：</strong>随时待命 · 永不休息 · 越用越聪明
-                </div>
-            </div>
-            <div class="log-box" style="margin-top: 15px; border-left-color: #9b59b6;">
-                <strong style="color: #9b59b6;">🦞 龙虾大战！OpenClaw 5 个变种版本深度对比</strong>
-                <span class="log-date" style="color: #9b59b6;">📅 2026 年 3 月 11 日</span>
-                <br>
-                <span style="color: #555;">ZeroClaw/PicoClaw/NanoClaw/MemU Bot/MaxClaw/OpenClaw 六大变种横向评测，帮你选择最适合的 AI Agent。</span>
-                <br><br>
-                <a href="claw-variants-comparison.html" style="color: #9b59b6; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #9b59b6;">📖 阅读全文 →</a>
-            </div>
-            <div class="log-box" style="margin-top: 15px; border-left-color: #dc3545;">
-                <strong style="color: #dc3545;">⚠️ 安全警报：OpenClaw ClawHub 恶意投毒事件</strong>
-                <span class="log-date" style="color: #dc3545;">📅 2026 年 3 月 11 日</span>
-                <br>
-                <span style="color: #555;">ClawHub 插件市场遭遇大规模恶意 skills 攻击，可能导致代码注入、钱包窃取、AI 身份接管。</span>
-                <br><br>
-                <a href="openclaw-security-alert.html" style="color: #dc3545; font-weight: 600; text-decoration: none; display: inline-block; padding: 8px 16px; background: #fff; border-radius: 6px; border: 1px solid #dc3545;">📖 查看详情 →</a>
+            <div class="full-site-notice">
+                💡 <strong>提示：</strong>这里展示的是精选内容，完整文章和每日更新请访问 
+                <a href="https://claw.138138100.xyz/" target="_blank">claw.138138100.xyz</a>
             </div>
         </div>
+
         <div class="divider"></div>
-        <div class="links">
-            <a href="https://github.com/szlinux-btc" class="link" target="_blank">💼 GitHub</a>
-            <a href="mailto:hbszhblinux@gmail.com" class="link">📧 Contact</a>
-        </div>
-        <div class="social-links">
-            <a href="https://twitter.com/szlinux_btc" class="social-link" target="_blank">🐦 Twitter/X</a>
-            <a href="https://t.me/szlinux_btc" class="social-link" target="_blank">✈️ Telegram</a>
-            <a href="https://www.youtube.com/@szlinux-btc" class="social-link" target="_blank">📺 YouTube</a>
-        </div>
+        
         <p class="quote">"Talk is cheap. Show me the code." — Linus Torvalds</p>
+        
         <div class="counter">
-            <span>👁️ 总访问量：<span id="busuanzi_value_site_pv">0</span> 次</span>
+            <span>👀 总访问量：<span id="busuanzi_value_site_pv">0</span> 次</span>
             <span style="color:#ddd">|</span>
-            <span>👤 访客数：<span id="busuanzi_value_site_uv">0</span> 人</span>
+            <span>🧑 访客数：<span id="busuanzi_value_site_uv">0</span> 人</span>
         </div>
     </div>
+    
     <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
     <script>
-        // 不蒜子计数器修复：页面加载时重新触发
         window.addEventListener('load', function() {
             setTimeout(function() {
                 var script = document.createElement('script');
@@ -498,4 +392,3 @@
     </script>
 </body>
 </html>
-
