@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Postfix TLS 证书验证失败修复 - SLES 11 SP2 环境下自定义 CA 文件缺失根证书的完整修复记录">
+    <meta name="author" content="szlinux-btc">
+    <title>Postfix TLS 证书验证失败修复 · szlinux-btc</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
+            color: #1a1a1a;
+            line-height: 1.8;
+            padding: 40px 20px;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        .article {
+            background: #ffffff;
+            border: 2px solid #e0e0e0;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        h1 { font-size: 2rem; margin-bottom: 10px; color: #1a1a1a; }
+        .meta { color: #666; font-size: 0.9rem; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #eaeaea; }
+        .meta span { margin-right: 15px; }
+        h2 { font-size: 1.5rem; margin: 35px 0 15px; color: #1a1a1a; border-left: 4px solid #007bff; padding-left: 15px; }
+        h3 { font-size: 1.2rem; margin: 25px 0 12px; color: #2c3e50; }
+        p { margin-bottom: 15px; }
+        ul, ol { margin: 15px 0 15px 30px; }
+        li { margin-bottom: 8px; }
+        code {
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: "JetBrains Mono", "Fira Code", monospace;
+            font-size: 0.9em;
+            color: #e83e8c;
+        }
+        pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: "JetBrains Mono", "Fira Code", monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        pre code { background: none; padding: 0; color: inherit; }
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .warning {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 12px;
+            text-align: left;
+        }
+        th { background: #f8f9fa; font-weight: 600; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            color: #007bff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 1px solid #007bff;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .back-link:hover {
+            background: #007bff;
+            color: white;
+        }
+        @media (max-width: 600px) {
+            .article { padding: 25px; }
+            h1 { font-size: 1.6rem; }
+            h2 { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <article class="article">
+            <h1>📬 Postfix TLS 证书验证失败（untrusted issuer）修复</h1>
+            <div class="meta">
+                <span>📅 2026-03-16</span>
+                <span>👤 szlinux-btc</span>
+                <span>#Linux #Postfix #TLS #SLES</span>
+            </div>
+
+            <div class="note">
+                <strong>问题概述</strong><br>
+                SLES 11 SP2 环境下，自定义 CA 文件缺失根证书导致 TLS 握手警告的完整修复记录。
+            </div>
+
+            <h2>1. 问题现象</h2>
+            <p>在生产环境 SLES 11 SP2 上，Postfix 发送邮件后 <code>/var/log/mail</code> 出现如下警告。邮件最终发出（status=sent），但 TLS 加密连接实际上未被验证，存在安全风险。</p>
+            <pre><code># /var/log/mail 中的错误片段（域名已脱敏）
+postfix/smtp[XXXX]: certificate verification failed for
+ smtp.example.com[x.x.x.x]:587:
+ untrusted issuer /C=US/O=DigiCert Inc/OU=www.digicert.com/CN=DigiCert Global Root CA</code></pre>
+            <div class="warning">
+                <strong>⚠️ 虽然邮件能发出，但 TLS 处于"降级验证"状态——中间人攻击风险敞口未关闭。</strong>
+            </div>
+
+            <h2>2. 环境信息</h2>
+            <table>
+                <tr><th>项目</th><th>值</th></tr>
+                <tr><td>操作系统</td><td>SLES 11 SP2</td></tr>
+                <tr><td>MTA</td><td>Postfix 2.5.13</td></tr>
+                <tr><td>SMTP 中继</td><td>smtp.example.com:587（STARTTLS，域名已脱敏）</td></tr>
+                <tr><td>服务器证书 CA</td><td>DigiCert Global Root CA（DigiCert 签发）</td></tr>
+            </table>
+
+            <h2>3. 根本原因分析</h2>
+            <p>Postfix 的 TLS 证书验证路径由配置决定，本案有两条路径：</p>
+            
+            <div class="warning">
+                <strong>❌ 实际生效（有问题）</strong><br>
+                <code>smtp_tls_CAfile = /etc/postfix/server.pem</code><br>
+                该文件 <strong>未包含 DigiCert Global Root CA</strong>，Postfix 优先使用 CAfile，忽略系统 CA 目录。
+            </div>
+
+            <div class="success">
+                <strong>✅ 系统 CA 目录（未被使用）</strong><br>
+                <code>/etc/ssl/certs/</code> 已有完整根证书，但因 CAfile 优先级更高而未被 Postfix 读取。
+            </div>
+
+            <div class="note">
+                <strong>💡 Postfix 规则</strong><br>
+                同时配置 <code>smtp_tls_CAfile</code> 和 <code>smtp_tls_CApath</code> 时，CAfile 优先，CApath 被忽略。
+            </div>
+
+            <h2>4. 修复步骤</h2>
+
+            <h3>4.1 确认系统已存在正确的根证书</h3>
+            <pre><code># 检查根证书文件是否存在
+ls /etc/ssl/certs/DigiCert_Global_Root_CA.pem
+
+# 验证证书主题
+openssl x509 -in /etc/ssl/certs/DigiCert_Global_Root_CA.pem -subject -noout
+# 预期输出：
+# subject=C = US, O = DigiCert Inc, OU = www.digicert.com, CN = DigiCert Global Root CA</code></pre>
+
+            <h3>4.2 备份现有 CA 文件</h3>
+            <pre><code>cp /etc/postfix/server.pem /etc/postfix/server.pem.bak</code></pre>
+            <div class="note">
+                <strong>📌 备份是关键</strong><br>
+                server.pem 可能还包含其他中间证书，备份后可随时回滚。
+            </div>
+
+            <h3>4.3 将根证书追加到 CA 文件</h3>
+            <pre><code># 追加，不覆盖原有内容
+cat /etc/ssl/certs/DigiCert_Global_Root_CA.pem >> /etc/postfix/server.pem</code></pre>
+
+            <h3>4.4 重启 Postfix</h3>
+            <pre><code># SLES 11 使用 rcapostfix（注意：不是 systemctl）
+rcapostfix restart</code></pre>
+
+            <h2>5. 验证方法</h2>
+
+            <h3>5.1 发送测试邮件</h3>
+            <pre><code>echo "Test email body" | mail -s "TLS Verify Test" recipient@example.com</code></pre>
+
+            <h3>5.2 监控日志，确认警告消失</h3>
+            <pre><code>tail -f /var/log/mail</code></pre>
+            <div class="success">
+                <strong>✅ 修复成功标志</strong><br>
+                日志中不再出现 <code>certificate verification failed</code>，且邮件状态仍为 <code>status=sent</code>。
+            </div>
+
+            <h3>5.3 可选：用 openssl 手动验证服务器证书</h3>
+            <pre><code># 用系统 CA 路径直接测试（smtp.example.com 已脱敏）
+openssl s_client -connect smtp.example.com:587 -starttls smtp -CApath /etc/ssl/certs
+# 最后一行应显示：
+# Verify return code: 0 (ok)</code></pre>
+
+            <h2>6. 延伸方案：直接使用系统 CA 路径</h2>
+            <p>如果希望 Postfix 始终跟随系统 CA 目录（推荐长期维护的做法），可修改 <code>/etc/postfix/main.cf</code>：</p>
+            <pre><code># 注释掉自定义 CAfile
+#smtp_tls_CAfile = /etc/postfix/server.pem
+
+# 改用系统 CA 目录
+smtp_tls_CApath = /etc/ssl/certs</code></pre>
+            <pre><code>rcapostfix restart</code></pre>
+            <div class="warning">
+                <strong>⚠️ 使用 CApath 方案需确保系统 CA 目录定期更新</strong>（如通过 ca-certificates 软件包），否则同样可能出现新 CA 缺失的问题。
+            </div>
+
+            <h2>7. 注意事项</h2>
+            <ul>
+                <li><strong>避免自定义 CAfile 碎片化</strong>：若多个服务共用一个自定义 CA 文件，后续新增 CA 时易遗漏，建议统一管理或切换为 CApath。</li>
+                <li><strong>SLES 11 证书更新</strong>：SLES 11 SP2 已 EOL，系统 CA 库可能陈旧，建议手动同步 <a href="https://curl.se/docs/caextract.html" target="_blank">Mozilla CA bundle</a>。</li>
+                <li><strong>变更影响评估</strong>：追加根证书前确认 server.pem 中是否还有其他中间证书，追加不会影响已有条目。</li>
+                <li><strong>日志监控</strong>：修复后建议观察 1～2 天的邮件日志，确保无新的 TLS 警告。</li>
+            </ul>
+
+            <h2>8. 总结</h2>
+            <div class="success">
+                <p>根因是 Postfix 自定义 CA 文件（<code>/etc/postfix/server.pem</code>）缺失了 DigiCert Global Root CA 根证书，导致 TLS 握手验证链断裂。</p>
+                <p>修复方式简单直接：将缺失的根证书追加到该文件末尾，重启 Postfix 即可。</p>
+                <p>如需彻底规避此类问题，建议长期切换为 <code>smtp_tls_CApath</code> 方案，依赖系统维护的 CA 目录，减少手动管理成本。</p>
+                <p><strong>✅ 修复后：日志无警告 · TLS 加密连接完整验证 · 邮件正常发送</strong></p>
+            </div>
+
+            <a href="index.html" class="back-link">← 返回首页</a>
+        </article>
+    </div>
+</body>
+</html>

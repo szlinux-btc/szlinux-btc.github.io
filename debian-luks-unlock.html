@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Debian LUKS 远程 SSH 解锁 - 服务器重启后无需人在现场，通过 SSH 远程输入 LUKS 密钥解密磁盘">
+    <meta name="author" content="szlinux-btc">
+    <title>Debian LUKS 远程 SSH 解锁 · szlinux-btc</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
+            color: #1a1a1a;
+            line-height: 1.8;
+            padding: 40px 20px;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        .article {
+            background: #ffffff;
+            border: 2px solid #e0e0e0;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        h1 { font-size: 2rem; margin-bottom: 10px; color: #1a1a1a; }
+        .meta { color: #666; font-size: 0.9rem; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #eaeaea; }
+        .meta span { margin-right: 15px; }
+        h2 { font-size: 1.5rem; margin: 35px 0 15px; color: #1a1a1a; border-left: 4px solid #007bff; padding-left: 15px; }
+        h3 { font-size: 1.2rem; margin: 25px 0 12px; color: #2c3e50; }
+        p { margin-bottom: 15px; }
+        ul, ol { margin: 15px 0 15px 30px; }
+        li { margin-bottom: 8px; }
+        code {
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: "JetBrains Mono", "Fira Code", monospace;
+            font-size: 0.9em;
+            color: #e83e8c;
+        }
+        pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: "JetBrains Mono", "Fira Code", monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        pre code { background: none; padding: 0; color: inherit; }
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .warning {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 12px;
+            text-align: left;
+        }
+        th { background: #f8f9fa; font-weight: 600; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            color: #007bff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 1px solid #007bff;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .back-link:hover {
+            background: #007bff;
+            color: white;
+        }
+        @media (max-width: 600px) {
+            .article { padding: 25px; }
+            h1 { font-size: 1.6rem; }
+            h2 { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <article class="article">
+            <h1>🔐 Debian LUKS 远程 SSH 解锁</h1>
+            <div class="meta">
+                <span>📅 2026 年 3 月 14 日</span>
+                <span>👤 szlinux-btc</span>
+                <span>#Linux #LUKS #Debian #dropbear-initramfs #远程 SSH 解锁</span>
+            </div>
+
+            <div class="note">
+                <strong>🤔 为什么需要这个方案？</strong><br>
+                服务器装了 LUKS 全盘加密很安全，但有个致命问题：每次重启都要有人在控制台输密码，否则系统卡在 initramfs 阶段动弹不得。<br><br>
+                对于无人机房的远程服务器，这意味着：断电、意外重启、内核升级后重启 → 服务彻底失联，只能跑机房救火。<br><br>
+                本方案的核心思路：在 initramfs 阶段启动一个极轻量的 SSH 服务（Dropbear），让你通过网络远程连进来输入 LUKS 密码，系统随即继续引导。
+            </div>
+
+            <div class="warning">
+                <strong>⚠️ 安全权衡</strong><br>
+                此方案在系统完全引导前就暴露了一个 SSH 端口。务必使用 SSH 密钥认证，并在防火墙层面限制可访问该端口的 IP 白名单。
+            </div>
+
+            <div class="note">
+                <strong>ℹ️ 适用版本</strong><br>
+                Debian 9 / 10 / 11 / 12 / 13。Debian 12+ 路径有变更，本文以 Debian 12+ 为主，兼顾旧版差异说明。
+            </div>
+
+            <h2>🗺️ 工作原理</h2>
+            <pre><code>BIOS/UEFI → GRUB → Kernel → init → 系统服务 → 登录
+
+BIOS/UEFI → GRUB → Kernel → initramfs
+                      ↓
+            Dropbear SSH 服务启动 ← 你从这里远程连入
+                      ↓
+            cryptroot-unlock（输入 LUKS 密码）
+                      ↓
+            LUKS 解密根分区 → LVM（可选）
+                      ↓
+            正常 init → 系统服务 → 登录</code></pre>
+
+            <h2>1️⃣ 安装必要软件包</h2>
+            <pre><code>apt install -yy dropbear-initramfs cryptsetup-initramfs lvm2</code></pre>
+            <div class="note">
+                <strong>📦 软件包说明</strong>
+                <ul>
+                    <li><strong>dropbear-initramfs</strong>：在 initramfs 阶段提供极轻量的 SSH 服务器（Dropbear）。比 OpenSSH 小得多，专为嵌入式 / initramfs 场景设计。</li>
+                    <li><strong>cryptsetup-initramfs</strong>：确保 cryptsetup 工具和 cryptroot-unlock 脚本被打包进 initramfs 镜像中。</li>
+                    <li><strong>lvm2</strong>（按需）：若加密分区上层还有 LVM 卷组（常见于 Debian 自动分区），则必须安装。否则解密后找不到逻辑卷。</li>
+                </ul>
+            </div>
+
+            <h2>2️⃣ 配置 SSH 公钥认证</h2>
+            <div class="note">
+                <strong>ℹ️ Debian 版本差异</strong>
+                <table>
+                    <tr><th>Debian 版本</th><th>authorized_keys 路径</th><th>配置文件路径</th></tr>
+                    <tr><td>Debian 12 / 13</td><td>/etc/dropbear/initramfs/authorized_keys</td><td>/etc/dropbear/initramfs/dropbear.conf</td></tr>
+                    <tr><td>Debian 9–11</td><td>/etc/dropbear-initramfs/authorized_keys</td><td>/etc/dropbear-initramfs/config</td></tr>
+                </table>
+            </div>
+            <pre><code># 生成专用密钥（本地执行）
+ssh-keygen -t ed25519 -C "luks-unlock-key" -f ~/.ssh/id_luks_unlock
+
+# 在服务器上配置
+mkdir -p /etc/dropbear/initramfs
+nano /etc/dropbear/initramfs/authorized_keys
+# 粘贴公钥内容
+chmod 600 /etc/dropbear/initramfs/authorized_keys</code></pre>
+            <div class="warning">
+                <strong>🚨 关键安全点</strong><br>
+                authorized_keys 里的公钥直接决定谁能在系统完全启动前获得访问权。请确保只放入你完全信任的密钥，并定期审查。
+            </div>
+
+            <h2>3️⃣ 配置 Dropbear 自动触发解锁</h2>
+            <pre><code>nano /etc/dropbear/initramfs/dropbear.conf
+
+DROPBEAR_OPTIONS="-RFEsjk -c /bin/cryptroot-unlock"</code></pre>
+            <div class="note">
+                <strong>参数含义</strong>
+                <ul>
+                    <li><code>-R</code> 自动生成 Dropbear 的 host key（initramfs 中无持久存储时使用）</li>
+                    <li><code>-F</code> 前台运行（不 daemonize），适合 initramfs 环境</li>
+                    <li><code>-E</code> 错误输出到 stderr，方便排查</li>
+                    <li><code>-s</code> 禁用密码登录，只允许公钥认证</li>
+                    <li><code>-j</code> 禁用本地端口转发</li>
+                    <li><code>-k</code> 禁用远程端口转发</li>
+                    <li><code>-c /bin/cryptroot-unlock</code> 登录后强制执行此命令，引导用户输入 LUKS 密码</li>
+                </ul>
+            </div>
+
+            <h2>4️⃣ 配置 initramfs 静态网络</h2>
+            <pre><code>nano /etc/initramfs-tools/initramfs.conf
+
+DEVICE=eth0
+IP=192.168.1.100::192.168.1.1:255.255.255.0:srv-luks:eth0:off</code></pre>
+            <div class="note">
+                <strong>IP 字段格式说明（冒号分隔）</strong>
+                <ul>
+                    <li><code>192.168.1.100</code> initramfs 阶段的临时 IP（建议与系统 IP 不同，见故障排查）</li>
+                    <li><code>（空）</code> NFS 服务器 IP，此处留空</li>
+                    <li><code>192.168.1.1</code> 网关地址</li>
+                    <li><code>255.255.255.0</code> 子网掩码</li>
+                    <li><code>srv-luks</code> initramfs 阶段临时主机名（随意）</li>
+                    <li><code>eth0</code> 网卡设备名（用 <code>ip a</code> 确认，可能是 ens3、enp3s0 等）</li>
+                    <li><code>off</code> 不使用自动配置（DHCP/BOOTP），固定为 off</li>
+                </ul>
+            </div>
+            <div class="note">
+                <strong>💡 网卡名称</strong><br>
+                现代 Debian 默认使用 predictable 命名（如 ens3、enp2s0）而非 eth0。务必先用 <code>ip a</code> 确认你的网卡名，填错了 initramfs 里拿不到网络。
+            </div>
+
+            <h2>5️⃣ 处理特殊网卡驱动（按需）</h2>
+            <pre><code># 查看网卡驱动
+ethtool -i eth0 | grep driver
+# 或
+lspci -k | grep -A3 "Ethernet"
+
+# 将驱动加入 initramfs
+nano /etc/initramfs-tools/modules
+# 添加驱动名称，例如：
+vmxnet3
+e1000e
+virtio_net</code></pre>
+
+            <h2>6️⃣ 重新生成 initramfs</h2>
+            <pre><code>update-initramfs -k all -u</code></pre>
+            <div class="note">
+                <strong>正常输出示例</strong>（看到 dropbear 字样说明已打包进去）：
+                <pre><code>update-initramfs: Generating /boot/initrd.img-6.1.0-28-amd64
+dropbear: Generating 3072 bit rsa key.
+dropbear: Generating 521 bit ecdsa key.
+dropbear: Generating 256 bit ed25519 key.
+W: dropbear: WARNING: authorized_keys not set, access will be limited</code></pre>
+            </div>
+
+            <h2>7️⃣ 验证 & 使用方法</h2>
+            <pre><code># 重启后，在本地机器等待约 30–60 秒（等 initramfs 网络初始化完成），然后：
+ssh -i ~/.ssh/id_luks_unlock \
+ -o StrictHostKeyChecking=no \
+ root@192.168.1.100
+
+# 可以写成 alias，方便下次使用：
+alias unlock-srv='ssh -i ~/.ssh/id_luks_unlock -o StrictHostKeyChecking=no root@192.168.1.100'</code></pre>
+            <div class="note">
+                <strong>💡 StrictHostKeyChecking=no 的原因</strong><br>
+                每次 Dropbear 用 -R 参数动态生成 host key，指纹与系统正式 SSH 不同，known_hosts 会报冲突。加上此参数跳过检查，或为 initramfs IP 单独维护一条 known_hosts 记录。
+            </div>
+
+            <h2>🔧 常见故障排查</h2>
+            
+            <h3>❌ SSH 连不上 / 连接超时</h3>
+            <ol>
+                <li>检查 initramfs.conf 中的 IP 和网卡名是否正确</li>
+                <li>网卡驱动是否已加入 /etc/initramfs-tools/modules</li>
+                <li>服务器防火墙是否在 initramfs 阶段生效（一般不会，但部分云服务商安全组规则除外）</li>
+                <li>确认已执行 <code>update-initramfs -k all -u</code> 并重启</li>
+            </ol>
+
+            <h3>❌ 连上后报 "Permission denied (publickey)"</h3>
+            <p>公钥未正确写入 authorized_keys，或文件权限不是 600。重新检查步骤 2，重新 update-initramfs。</p>
+
+            <h3>❌ 系统升级后网络失联（IP 冲突）</h3>
+            <p>已知问题：系统升级后若 Dropbear IP 与系统 IP 相同，会产生冲突。解决方案：给 Dropbear 分配一个不同的 IP，例如系统用 .10，Dropbear 用 .11，两者在同一子网但地址不同。</p>
+
+            <h3>❌ LUKS 密码输对了但系统没继续引导</h3>
+            <p>可能是 LVM 没加载。确认安装了 lvm2 包，重新 update-initramfs。也可能是 LUKS header 损坏，此时需要从备份恢复。</p>
+
+            <h3>❌ known_hosts 冲突警告（Host key verification failed）</h3>
+            <p>Dropbear 的 host key 每次重新生成，与系统正式 SSH 不同。临时处理：<code>ssh -o StrictHostKeyChecking=no</code>。永久处理：为 initramfs IP 在 known_hosts 中单独维护一条，或使用不同 IP 区分两阶段。</p>
+
+            <h2>🛡️ 部署前安全检查清单</h2>
+            <ul>
+                <li>✅ 使用 SSH 密钥认证，未在 authorized_keys 中放入任何他人公钥</li>
+                <li>✅ Dropbear 配置中已加入 -s 参数，禁用密码登录</li>
+                <li>✅ initramfs IP 与系统正式 IP 不同，避免升级后冲突</li>
+                <li>✅ 在云服务商安全组 / 防火墙中限制可访问 22 端口的 IP 白名单</li>
+                <li>✅ LUKS header 已备份至安全位置（<code>cryptsetup luksHeaderBackup</code>）</li>
+                <li>✅ 已在测试环境验证完整流程，再用于生产服务器</li>
+                <li>✅ 知悉 LUKS 密钥短语的人员列表，并定期审查访问权限</li>
+            </ul>
+
+            <a href="index.html" class="back-link">← 返回首页</a>
+        </article>
+    </div>
+</body>
+</html>

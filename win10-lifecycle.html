@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Windows 10 各版本生命周期全览 - 主流版本、LTSC 版本支持结束日期一览">
+    <meta name="keywords" content="Windows 10, 生命周期，LTSC, 支持结束日期，微软官方">
+    <meta name="author" content="szlinux-btc">
+    <meta property="og:title" content="Windows 10 各版本生命周期全览">
+    <meta property="og:description" content="主流版本已于 2025 年 10 月 14 日终止支持，各 LTSC/LTSB 版本结束日期一览">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://www.138138100.xyz/win10-lifecycle.html">
+    <title>🪟 Windows 10 各版本生命周期全览</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
+            color: #1a1a1a;
+            min-height: 100vh;
+            padding: 40px 20px;
+            line-height: 1.6;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .meta {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .card {
+            background: #ffffff;
+            border: 2px solid #e0e0e0;
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 25px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #0078d4;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card-desc {
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.8;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.9rem;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+        tr:hover {
+            background: #f8f9fa;
+        }
+        .status-end {
+            color: #dc3545;
+            font-weight: 600;
+        }
+        .status-active {
+            color: #28a745;
+            font-weight: 600;
+        }
+        .status-esu {
+            color: #ffc107;
+            font-weight: 600;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .back-link:hover {
+            background: #1a1a1a;
+            color: #ffffff;
+            border-color: #1a1a1a;
+        }
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 0.9rem;
+            color: #856404;
+        }
+        .source {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            font-size: 0.85rem;
+            color: #888;
+        }
+        @media (max-width: 600px) {
+            body { padding: 20px 16px; }
+            h1 { font-size: 1.8rem; }
+            .card { padding: 20px; }
+            table { font-size: 0.8rem; }
+            th, td { padding: 8px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← 返回首页</a>
+        
+        <h1>🪟 Windows 10 各版本生命周期全览</h1>
+        <div class="meta">
+            📅 2026 年 3 月 14 日 · 数据来源：微软官方
+        </div>
+
+        <div class="card">
+            <div class="card-title">📋 主流版本（已结束支持）</div>
+            <div class="card-desc">
+                Windows 10 主流版本（Home/Pro）已于 2025 年 10 月 14 日终止支持。建议升级至 Windows 11 或迁移至 LTSC 版本。
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>版本</th>
+                        <th>结束支持日期</th>
+                        <th>状态</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Windows 10 Home</td>
+                        <td>2025-10-14</td>
+                        <td class="status-end">已结束</td>
+                    </tr>
+                    <tr>
+                        <td>Windows 10 Pro</td>
+                        <td>2025-10-14</td>
+                        <td class="status-end">已结束</td>
+                    </tr>
+                    <tr>
+                        <td>Windows 10 Pro Education</td>
+                        <td>2025-10-14</td>
+                        <td class="status-end">已结束</td>
+                    </tr>
+                    <tr>
+                        <td>Windows 10 Enterprise</td>
+                        <td>2025-10-14</td>
+                        <td class="status-end">已结束</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <div class="card-title">🔧 LTSC/LTSB 版本（长期支持）</div>
+            <div class="card-desc">
+                LTSC（Long-Term Servicing Channel）版本提供长期支持，适合企业关键业务系统。
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>版本</th>
+                        <th>主流支持结束</th>
+                        <th>扩展支持结束</th>
+                        <th>状态</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Windows 10 LTSC 2021</td>
+                        <td>-</td>
+                        <td>2027-01-12</td>
+                        <td class="status-active">支持中</td>
+                    </tr>
+                    <tr>
+                        <td>Windows 10 LTSC 2019</td>
+                        <td>-</td>
+                        <td>2029-01-09</td>
+                        <td class="status-active">支持中</td>
+                    </tr>
+                    <tr>
+                        <td>Windows 10 LTSB 2016</td>
+                        <td>-</td>
+                        <td>2026-10-14</td>
+                        <td class="status-active">支持中</td>
+                    </tr>
+                    <tr>
+                        <td>Windows 10 LTSB 2015</td>
+                        <td>-</td>
+                        <td>2025-10-14</td>
+                        <td class="status-end">已结束</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <div class="card-title">💼 ESU 扩展安全更新（企业付费）</div>
+            <div class="card-desc">
+                对于无法及时升级的企业，微软提供 ESU（Extended Security Updates）付费扩展支持。
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>版本</th>
+                        <th>ESU 结束日期</th>
+                        <th>说明</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Windows 10 Enterprise</td>
+                        <td>2028-10-10</td>
+                        <td class="status-esu">付费扩展</td>
+                    </tr>
+                    <tr>
+                        <td>Windows 10 Pro</td>
+                        <td>2028-10-10</td>
+                        <td class="status-esu">付费扩展</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="note">
+                <strong>⚠️ 注意：</strong>ESU 需按设备/年付费，价格逐年递增。仅作为过渡方案，建议尽快规划升级。
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">💡 迁移建议</div>
+            <div class="card-desc">
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li style="margin-bottom: 8px;"><strong>个人用户：</strong>升级至 Windows 11（免费）</li>
+                    <li style="margin-bottom: 8px;"><strong>企业用户：</strong>迁移至 Windows 10/11 LTSC 或 Windows 11 Enterprise</li>
+                    <li style="margin-bottom: 8px;"><strong>关键系统：</strong>考虑 ESU 扩展支持，同时规划长期迁移方案</li>
+                    <li style="margin-bottom: 8px;"><strong>替代方案：</strong>评估 Linux 桌面替代方案（如 Ubuntu、SUSE）</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="source">
+            <strong>数据来源：</strong>微软官方生命周期政策文档<br>
+            <strong>最后更新：</strong>2026 年 3 月 14 日
+        </div>
+    </div>
+</body>
+</html>
