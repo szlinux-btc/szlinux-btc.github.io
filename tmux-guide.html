@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="tmux 终端复用完全指南：从入门到精通的多会话管理神器">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;">
+    <title>tmux 终端复用完全指南 | szlinux-btc</title>
+    <link rel="icon" type="image/x-icon" href="https://claw.138138100.xyz/favicon.ico">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: #21262d;
+            --border-color: #30363d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --accent: #58a6ff;
+            --accent-hover: #79c0ff;
+            --green: #3fb950;
+            --orange: #ffa657;
+            --red: #f85149;
+            --purple: #d2a8ff;
+            --cyan: #56d4dd;
+            --yellow: #e3b341;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+        .navbar {
+            background: var(--bg-secondary);
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .navbar-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .logo { color: var(--text-primary); text-decoration: none; font-weight: 600; font-size: 1.1rem; }
+        .logo:hover { color: var(--accent); }
+        .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-secondary); }
+        .breadcrumb a { color: var(--accent); text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 24px 80px; }
+        .article-header { margin-bottom: 40px; padding-bottom: 30px; border-bottom: 1px solid var(--border-color); }
+        .article-title { font-size: 2rem; font-weight: 700; line-height: 1.3; margin-bottom: 16px; color: var(--text-primary); }
+        .article-meta { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; font-size: 0.85rem; color: var(--text-secondary); }
+        .article-meta span { display: flex; align-items: center; gap: 5px; }
+        .article-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+        .tag { padding: 3px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .tag-cmd { background: rgba(88,166,255,0.15); color: var(--accent); }
+        .tag-shell { background: rgba(63,185,80,0.15); color: var(--green); }
+        .tag-productivity { background: rgba(210,168,255,0.15); color: var(--purple); }
+        .article-toc { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 10px; padding: 24px; margin-bottom: 36px; }
+        .toc-title { font-size: 0.9rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+        .toc-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+        .toc-list a { color: var(--accent); text-decoration: none; font-size: 0.95rem; }
+        .toc-list a:hover { text-decoration: underline; }
+        .toc-list .toc-h2 { padding-left: 20px; font-size: 0.88rem; color: var(--text-secondary); }
+        h2 { font-size: 1.5rem; font-weight: 700; margin: 48px 0 20px; color: var(--text-primary); border-left: 4px solid var(--accent); padding-left: 14px; }
+        h3 { font-size: 1.2rem; font-weight: 600; margin: 30px 0 14px; color: var(--accent-hover); }
+        p { margin-bottom: 16px; color: var(--text-secondary); font-size: 1rem; }
+        p:first-child { font-size: 1.05rem; }
+        strong { color: var(--text-primary); }
+        .highlight { background: rgba(88,166,255,0.1); border: 1px solid rgba(88,166,255,0.2); border-radius: 8px; padding: 20px 24px; margin: 24px 0; }
+        .highlight p { margin-bottom: 0; }
+        .cmd-block { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px 20px; margin: 16px 0; font-family: "SF Mono", "Cascadia Code", "Consolas", monospace; font-size: 0.88rem; overflow-x: auto; white-space: pre; color: var(--green); line-height: 1.6; }
+        .cmd-block .c { color: var(--text-secondary); }
+        .cmd-block .k { color: var(--orange); }
+        .cmd-block .v { color: var(--yellow); }
+        .cmd-block .comment { color: #6a737d; font-style: italic; }
+        .inline-cmd { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 4px; padding: 2px 8px; font-family: "SF Mono", "Cascadia Code", "Consolas", monospace; font-size: 0.85rem; color: var(--green); }
+        .key-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.92rem; }
+        .key-table th { background: var(--bg-card); color: var(--text-primary); padding: 10px 16px; text-align: left; border: 1px solid var(--border-color); font-weight: 600; }
+        .key-table td { padding: 9px 16px; border: 1px solid var(--border-color); color: var(--text-secondary); }
+        .key-table td:first-child { font-family: "SF Mono", "Cascadia Code", "Consolas", monospace; color: var(--orange); white-space: nowrap; }
+        .key-table tr:hover td { background: rgba(255,255,255,0.02); }
+        .info-box { background: rgba(86,212,221,0.08); border-left: 4px solid var(--cyan); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 20px 0; }
+        .info-box p { margin-bottom: 0; color: var(--text-secondary); }
+        .warn-box { background: rgba(248,81,73,0.08); border-left: 4px solid var(--red); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 20px 0; }
+        .warn-box p { margin-bottom: 0; }
+        .tip-box { background: rgba(63,185,80,0.08); border-left: 4px solid var(--green); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 20px 0; }
+        .tip-box p { margin-bottom: 0; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+        .grid-2 > div { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px 16px; }
+        .grid-2 .grid-label { font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+        .grid-2 .grid-cmd { font-family: "SF Mono", "Cascadia Code", "Consolas", monospace; font-size: 0.85rem; color: var(--green); margin-bottom: 6px; }
+        .grid-2 .grid-desc { font-size: 0.82rem; color: var(--text-secondary); }
+        hr.section-hr { border: none; border-top: 1px solid var(--border-color); margin: 48px 0; }
+        .footer-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 60px; padding-top: 30px; border-top: 1px solid var(--border-color); gap: 16px; }
+        .footer-nav a { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 20px; color: var(--text-primary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .footer-nav a:hover { border-color: var(--accent); color: var(--accent); }
+        .back-top { font-size: 0.8rem; color: var(--text-secondary); text-align: center; margin-top: 30px; }
+        .back-top a { color: var(--accent); text-decoration: none; }
+        .back-top a:hover { text-decoration: underline; }
+        @media (max-width: 640px) {
+            .article-title { font-size: 1.5rem; }
+            .grid-2 { grid-template-columns: 1fr; }
+            .container { padding: 24px 16px 60px; }
+            .key-table { font-size: 0.82rem; }
+            .key-table th, .key-table td { padding: 7px 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar-content">
+        <a href="https://claw.138138100.xyz/" class="logo">&larr; szlinux-btc</a>
+        <div class="breadcrumb">
+            <a href="https://claw.138138100.xyz/">首页</a>
+            <span>/</span>
+            <a href="https://claw.138138100.xyz/more-tools.html">工具箱</a>
+            <span>/</span>
+            <span>tmux 终端复用完全指南</span>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+
+<header class="article-header">
+    <h1 class="article-title">tmux 终端复用完全指南：SSH 远程会话的瑞士军刀</h1>
+    <div class="article-meta">
+        <span>📅 2026-04</span>
+        <span>⏱️ 约 15 分钟</span>
+        <span>🔧 终端 · SSH · Linux</span>
+    </div>
+    <div class="article-tags">
+        <span class="tag tag-cmd">终端</span>
+        <span class="tag tag-shell">SSH</span>
+        <span class="tag tag-productivity">效率</span>
+    </div>
+</header>
+
+<div class="article-toc">
+    <div class="toc-title">目录</div>
+    <ul class="toc-list">
+        <li><a href="#why">一、为什么需要 tmux</a></li>
+        <li class="toc-h2"><a href="#concepts">1.1 核心概念：Session / Window / Pane</a></li>
+        <li class="toc-h2"><a href="#compare">1.2 tmux vs screen vs Terminator</a></li>
+        <li><a href="#install">二、安装与基础操作</a></li>
+        <li class="toc-h2"><a href="#prefix">2.1 前缀键：C-b 的由来与自定义</a></li>
+        <li><a href="#session">三、会话管理</a></li>
+        <li class="toc-h2"><a href="#create-session">3.1 创建与附加</a></li>
+        <li class="toc-h2"><a href="#detach">3.2 分离与后台运行</a></li>
+        <li class="toc-h2"><a href="#session-advanced">3.3 高级会话操作</a></li>
+        <li><a href="#window">四、窗口与窗格管理</a></li>
+        <li class="toc-h2"><a href="#window-ops">4.1 窗口操作快捷键</a></li>
+        <li class="toc-h2"><a href="#pane-ops">4.2 窗格分割与布局</a></li>
+        <li class="toc-h2"><a href="#pane-navigate">4.3 窗格间跳转</a></li>
+        <li><a href="#copy">五、复制粘贴与滚动浏览</a></li>
+        <li><a href="#config">六、配置文件与主题定制</a></li>
+        <li class="toc-h2"><a href="#plugin">6.1 插件推荐</a></li>
+        <li class="toc-h2"><a href="#theme">6.2 状态栏主题配置</a></li>
+        <li><a href="#advanced">七、高级技巧与实战场景</a></li>
+        <li class="toc-h2"><a href="#sync">7.1 同步窗格（批量操作）</a></li>
+        <li class="toc-h2"><a href="#pair">7.2 共享会话（结对编程）</a></li>
+        <li class="toc-h2"><a href="#scripting">7.3 脚本化 tmux</a></li>
+        <li><a href="#summary">八、核心速查表</a></li>
+    </ul>
+</div>
+
+<h2 id="why">一、为什么需要 tmux</h2>
+
+<p>SSH 远程连接服务器时，最怕遇到两件事：<strong>断网</strong>和<strong>关窗口</strong>。一旦连接中断，你正在运行的程序、轻狂积累的输出、前景未明的任务——全都灰飞烟灭。</p>
+
+<p>tmux（Terminal Multiplexer，终端复用器）就是来解决这个问题的。它允许你在一个终端里创建多个"虚拟终端"，断开连接后会话依然存活，重新连接可以无缝恢复。</p>
+
+<div class="highlight">
+    <p><strong>一句话总结：</strong>tmux = <strong>分屏</strong> + <strong>会话持久化</strong> + <strong>后台运行</strong> + <strong>多人共享</strong>，四个能力合而为一。</p>
+</div>
+
+<h3 id="concepts">1.1 核心概念：Session / Window / Pane</h3>
+
+<p>tmux 的架构分为三层：</p>
+
+<div class="grid-2">
+    <div>
+        <div class="grid-label">Session（会话）</div>
+        <div class="grid-desc">最顶层容器，一个会话包含多个窗口。断开 SSH 后会话保留在后台运行。</div>
+    </div>
+    <div>
+        <div class="grid-label">Window（窗口）</div>
+        <div class="grid-desc">相当于一个终端标签页，可包含多个窗格。可用 <span class="inline-cmd">Ctrl-b w</span> 切换。</div>
+    </div>
+    <div>
+        <div class="grid-label">Pane（窗格）</div>
+        <div class="grid-desc">一个窗口内的水平或垂直分割区域，每个窗格运行一个独立的 shell 进程。</div>
+    </div>
+    <div>
+        <div class="grid-label">Server / Client</div>
+        <div class="grid-desc">tmux 以服务进程运行，客户端附加到会话。多个客户端可同时查看同一个会话。</div>
+    </div>
+</div>
+
+<h3 id="compare">1.2 tmux vs screen vs Terminator</h3>
+
+<table class="key-table">
+    <thead>
+        <tr>
+            <th>特性</th>
+            <th>tmux</th>
+            <th>GNU Screen</th>
+            <th>Terminator</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>会话持久化</td>
+            <td>✅ 原生支持</td>
+            <td>✅ 原生支持</td>
+            <td>❌ 依赖终端</td>
+        </tr>
+        <tr>
+            <td>分屏能力</td>
+            <td>✅ 水平/垂直自由分</td>
+            <td>✅ 水平/垂直</td>
+            <td>✅ GUI 分屏</td>
+        </tr>
+        <tr>
+            <td>状态栏定制</td>
+            <td>✅ 高度可定制</td>
+            <td>⚠️ 有限</td>
+            <td>✅ GUI 配置</td>
+        </tr>
+        <tr>
+            <td>插件生态</td>
+            <td>✅ TPM 插件管理器</td>
+            <td>❌ 无</td>
+            <td>❌ 无</td>
+        </tr>
+        <tr>
+            <td>多客户端共享</td>
+            <td>✅ 支持</td>
+            <td>⚠️ 有限</td>
+            <td>❌ 不支持</td>
+        </tr>
+        <tr>
+            <td>Vi/Emacs 键位</td>
+            <td>✅ 均可</td>
+            <td>⚠️ 仅 Emacs</td>
+            <td>N/A</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="tip-box">
+    <p><strong>选型建议：</strong>现代 Linux 服务器首选 <strong>tmux</strong>（功能最全、插件最丰富）；嵌入式或极简环境用 <strong>screen</strong>（大多数系统预装）；本地 GUI 桌面可选 <strong>Terminator</strong> 或 <strong>Kitty</strong>。</p>
+</div>
+
+<h2 id="install">二、安装与基础操作</h2>
+
+<div class="cmd-block"><span class="c"># Debian/Ubuntu</span>
+<span class="k">sudo apt install tmux</span>
+
+<span class="c"># CentOS/RHEL</span>
+<span class="k">sudo yum install tmux</span>
+
+<span class="c"># macOS</span>
+<span class="k">brew install tmux</span>
+
+<span class="c"># 验证版本</span>
+<span class="k">tmux -V</span></div>
+
+<p>安装后直接输入 <span class="inline-cmd">tmux</span> 即可启动，看到底部绿色状态栏即为成功。</p>
+
+<h3 id="prefix">2.1 前缀键：C-b 的由来与自定义</h3>
+
+<p>tmux 所有快捷键都以 <strong>前缀键</strong> 开头，默认是 <span class="inline-cmd">Ctrl-b</span>（简写 <span class="inline-cmd">C-b</span>）。意思是：先按 <span class="inline-cmd">Ctrl+b</span>，松手，再按具体命令键。</p>
+
+<div class="warn-box">
+    <p><strong>C-b 被许多软件占用</strong>（如浏览器后退）。强烈建议将前缀键改为 <span class="inline-cmd">Ctrl-a</span> 或 <span class="inline-cmd">Ctrl-j</span>，使用体验大幅提升。</p>
+</div>
+
+<div class="cmd-block"><span class="c"># 在 ~/.tmux.conf 中添加（最推荐的配置）</span>
+<span class="k">set -g prefix C-a</span>        <span class="comment"># 改前缀键为 Ctrl-a</span>
+<span class="k">unbind C-b</span>               <span class="comment"># 解绑默认的 Ctrl-b</span>
+<span class="k">set -g base-index 1</span>      <span class="comment"># 窗口编号从 1 开始（而非 0）</span>
+<span class="k">set -g pane-base-index 1</span> <span class="comment"># 窗格编号也从 1 开始</span>
+<span class="k">set -g mouse on</span>           <span class="comment"># 启用鼠标操作（点击选择窗格/调整大小）</span>
+<span class="k">set -g history-limit 50000</span><span class="comment"># 保存 5 万行历史记录</span>
+<span class="k">set -sg escape-time 0</span>     <span class="comment"># 消除 Esc 键延迟（Vim 用户必备）</span></div>
+
+<p>修改配置后无需重启，执行 <span class="inline-cmd">tmux source ~/.tmux.conf</span> 重新加载即可。</p>
+
+<h2 id="session">三、会话管理</h2>
+
+<h3 id="create-session">3.1 创建与附加</h3>
+
+<div class="cmd-block"><span class="c"># 启动命名会话（推荐）</span>
+<span class="k">tmux new -s dev</span>         <span class="comment"># 创建名为 dev 的会话</span>
+
+<span class="c"># 启动无名会话（系统自动命名）</span>
+<span class="k">tmux new</span>
+
+<span class="c"># 附加到已有会话</span>
+<span class="k">tmux attach -t dev</span>       <span class="comment"># 附加到 dev</span>
+<span class="k">tmux a -t dev</span>            <span class="comment"># 简写形式</span>
+
+<span class="c"># 直接进入最近使用的会话</span>
+<span class="k">tmux attach</span>              <span class="comment"># 或 tmux a</span></div>
+
+<h3 id="detach">3.2 分离与后台运行</h3>
+
+<p>在 tmux 会话内，按下 <span class="inline-cmd">C-a d</span>（前缀+ d）即可<strong>分离（detach）</strong>，会话进入后台保持运行。</p>
+
+<div class="cmd-block"><span class="c"># 在 tmux 内部</span>
+<span class="k">Ctrl-a d</span>                <span class="comment"># 分离当前会话</span>
+
+<span class="c"># 从外部管理会话</span>
+<span class="k">tmux detach</span>              <span class="comment"># 分离指定客户端</span>
+<span class="k">tmux kill-session -t dev</span> <span class="comment"># 关闭 dev 会话</span>
+<span class="k">tmux kill-server</span>         <span class="comment"># 关闭整个 tmux 服务（慎用）</span></div>
+
+<h3 id="session-advanced">3.3 高级会话操作</h3>
+
+<div class="cmd-block"><span class="c"># 列出所有会话</span>
+<span class="k">tmux ls</span>                 <span class="comment"># 或 tmux list-sessions</span>
+
+<span class="c"># 重命名当前会话</span>
+<span class="k">Ctrl-a $</span>
+
+<span class="c"># 切换会话</span>
+<span class="k">Ctrl-a s</span>                <span class="comment"># 显示会话列表并切换</span>
+
+<span class="c"># 在新窗口中打开新会话（不离开当前）</span>
+<span class="k">tmux new -s prod -d</span>      <span class="comment"># 后台创建 prod 会话</span>
+
+<span class="c"># 发送命令到会话而不进入</span>
+<span class="k">tmux send-keys -t dev 'htop' C-m</span></div>
+
+<div class="info-box">
+    <p><strong>SSH 持久化最佳实践：</strong></p>
+    <p>每次 SSH 登录后，先执行 <span class="inline-cmd">tmux attach -t main || tmux new -s main</span>，把工作环境固定在 tmux 会话中。即使网络断开、SSH 超时，只要服务器不停机，你的会话就在。</p>
+</div>
+
+<h2 id="window">四、窗口与窗格管理</h2>
+
+<h3 id="window-ops">4.1 窗口操作快捷键</h3>
+
+<table class="key-table">
+    <thead>
+        <tr>
+            <th>快捷键</th>
+            <th>功能</th>
+            <th>快捷键</th>
+            <th>功能</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>C-a c</td>
+            <td>创建新窗口</td>
+            <td>C-a w</td>
+            <td>窗口列表选择</td>
+        </tr>
+        <tr>
+            <td>C-a n</td>
+            <td>切换到下一个窗口</td>
+            <td>C-a p</td>
+            <td>切换到上一个窗口</td>
+        </tr>
+        <tr>
+            <td>C-a l</td>
+            <td>切换到上一个活跃窗口</td>
+            <td>C-a ,</td>
+            <td>重命名当前窗口</td>
+        </tr>
+        <tr>
+            <td>C-a 0-9</td>
+            <td>跳转到指定编号窗口</td>
+            <td>C-a &</td>
+            <td>关闭当前窗口（含所有窗格）</td>
+        </tr>
+        <tr>
+            <td>C-a f</td>
+            <td>按名称搜索窗口</td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+
+<h3 id="pane-ops">4.2 窗格分割与布局</h3>
+
+<div class="cmd-block"><span class="c"># 分屏命令（需在 tmux 内按前缀键）</span>
+<span class="k">Ctrl-a |</span>  <span class="comment"># 垂直分屏（左右两栏）</span>
+<span class="k">Ctrl-a -</span>  <span class="comment"># 水平分屏（上下两栏）</span>
+<span class="k">Ctrl-a o</span>  <span class="comment"># 切换到下一个窗格</span>
+
+<span class="c"># 从外部执行分屏</span>
+<span class="k">tmux split-window -h</span>     <span class="comment"># 垂直分屏</span>
+<span class="k">tmux split-window -v</span>     <span class="comment"># 水平分屏</span>
+<span class="k">tmux split-window -v -p 30</span><span class="comment"># 水平分屏，高度占 30%</span></div>
+
+<div class="cmd-block"><span class="c"># 调整窗格大小（每次移动 5 格）</span>
+<span class="k">Ctrl-a H</span>   <span class="comment"># 向左扩大</span>
+<span class="k">Ctrl-a J</span>   <span class="comment"># 向上扩大</span>
+<span class="k">Ctrl-a K</span>   <span class="comment"># 向下扩大</span>
+<span class="k">Ctrl-a L</span>   <span class="comment"># 向右扩大</span>
+
+<span class="c"># 预设布局切换</span>
+<span class="k">Ctrl-a M-1</span>  <span class="comment"># even-horizontal（水平均分）</span>
+<span class="k">Ctrl-a M-2</span>  <span class="comment"># even-vertical（垂直均分）</span>
+<span class="k">Ctrl-a M-3</span>  <span class="comment"># main-horizontal（主窗格在上）</span>
+<span class="k">Ctrl-a M-4</span>  <span class="comment"># main-vertical（主窗格在左）</span>
+<span class="k">Ctrl-a M-5</span>  <span class="comment"># tiled（平铺）</span>
+
+<span class="c"># 旋转窗格</span>
+<span class="k">Ctrl-a Space</span><span class="comment"># 循环切换布局</span>
+<span class="k">Ctrl-a Alt+方向</span><span class="comment"># 旋转当前窗格位置</span></div>
+
+<h3 id="pane-navigate">4.3 窗格间跳转</h3>
+
+<div class="cmd-block"><span class="k">Ctrl-a o</span>       <span class="comment"># 切换到下一个窗格（循环）</span>
+<span class="k">Ctrl-a ;</span>       <span class="comment"># 在上一个和当前窗格之间切换</span>
+<span class="k">Ctrl-a Up/Down/Left/Right</span>  <span class="comment"># 方向键切换（需配置）</span>
+
+<span class="c"># 在 ~/.tmux.conf 中绑定 vi 风格导航</span>
+<span class="k">bind h select-pane -L</span>
+<span class="k">bind j select-pane -D</span>
+<span class="k">bind k select-pane -U</span>
+<span class="k">bind l select-pane -R</span></div>
+
+<div class="info-box">
+    <p><strong>鼠标模式下</strong>（<span class="inline-cmd">set -g mouse on</span>），直接点击窗格即可跳转，拖拽边框可调整大小，无需记忆快捷键。</p>
+</div>
+
+<hr class="section-hr">
+
+<h2 id="copy">五、复制粘贴与滚动浏览</h2>
+
+<p>tmux 有自己的复制模式，与系统剪贴板独立。配置正确后，可以实现跨会话、跨 tmux 实例的复制粘贴。</p>
+
+<div class="cmd-block"><span class="c"># 进入复制模式</span>
+<span class="k">Ctrl-a [</span>       <span class="comment"># 进入复制模式（vi 风格）</span>
+<span class="k">Ctrl-a PgUp</span>    <span class="comment"># 直接进入复制模式并滚动</span>
+
+<span class="c"># vi 风格导航</span>
+<span class="k">q</span>              <span class="comment"># 退出复制模式</span>
+<span class="k">j/k</span>            <span class="comment"># 上下行移动</span>
+<span class="k">h/l</span>            <span class="comment"># 左右字符移动</span>
+<span class="k">w/b</span>            <span class="comment"># 词前进/退</span>
+<span class="k">0/$</span>            <span class="comment"># 行首/行尾</span>
+<span class="k">Ctrl-b</span>         <span class="comment"># 向上翻页（注意不是 Ctrl-a）</span>
+<span class="k">Ctrl-f</span>         <span class="comment"># 向下翻页</span>
+<span class="k">/pattern</span>        <span class="comment"># 正向搜索（n 下一条）</span>
+<span class="k">?pattern</span>        <span class="comment"># 反向搜索</span>
+
+<span class="c"># 选择与复制</span>
+<span class="k">v</span>              <span class="comment"># 进入可视化模式（字符选择）</span>
+<span class="k">V</span>              <span class="comment"># 可视化行模式</span>
+<span class="k">Space</span>          <span class="comment"># 开始/结束选择</span>
+<span class="k">Enter</span>          <span class="comment"># 复制选中文本到 tmux 缓冲区</span>
+
+<span class="c"># 粘贴</span>
+<span class="k">Ctrl-a ]</span>       <span class="comment"># 粘贴 tmux 缓冲区内容</span>
+<span class="k">Ctrl-a #</span>       <span class="comment"># 粘贴上一个 paste buffer</span></div>
+
+<div class="tip-box">
+    <p><strong>与系统剪贴板集成：</strong>在 <span class="inline-cmd">~/.tmux.conf</span> 中添加以下配置，可以使用 <span class="inline-cmd">-T copy-pipe</span> 将 tmux 选择内容直接发送到系统剪贴板：</p>
+</div>
+
+<div class="cmd-block"><span class="c"># 复制到系统剪贴板（需要 xclip 或 pbcopy）</span>
+<span class="k">bind -T copy-mode-vi v send-keys -X begin-selection</span>
+<span class="k">bind -T copy-mode-vi y send-keys -X copy-selection-and-cancel</span>
+<span class="k">bind -T copy-mode-vi Enter send-keys -X copy-selection-and-cancel</span></div>
+
+<h2 id="config">六、配置文件与主题定制</h2>
+
+<h3 id="plugin">6.1 插件推荐（通过 TPM 安装）</h3>
+
+<p>TPM（Tmux Plugin Manager）是 tmux 官方的插件管理器，安装简单：</p>
+
+<div class="cmd-block"><span class="c"># 安装 TPM</span>
+<span class="k">git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm</span>
+
+<span class="c"># 在 ~/.tmux.conf 末尾添加</span>
+<span class="k">set -g @plugin 'tmux-plugins/tpm'</span>
+<span class="k">set -g @plugin 'tmux-plugins/tmux-sensible'</span>
+<span class="k">set -g @plugin 'tmux-plugins/tmux-resurrect'</span>     <span class="comment"># 会话持久化（保存/恢复）</span>
+<span class="k">set -g @plugin 'tmux-plugins/tmux-continuum'</span>     <span class="comment"># 自动定期保存 tmux 环境</span>
+<span class="k">set -g @plugin 'tmux-plugins/tmux-yank'</span>         <span class="comment"># 增强复制/粘贴功能</span>
+
+<span class="c"># 初始化 TPM（放在配置文件最底部）</span>
+<span class="k">run '~/.tmux/plugins/tpm/tpm'</span></div>
+
+<div class="cmd-block"><span class="c"># 安装插件：进入 tmux 后按 Ctrl-a I（即前缀+I）</span>
+<span class="c"># 卸载插件：从配置删除 @plugin 行，按 Ctrl-a Alt+u</span></div>
+
+<div class="tip-box">
+    <p><strong>tmux-resurrect + continuum 最强组合：</strong>自动每 15 分钟保存一次 tmux 环境，服务器重启后按 <span class="inline-cmd">Ctrl-a Ctrl-r</span> 即可恢复所有会话、窗口、窗格布局和工作目录。</p>
+</div>
+
+<h3 id="theme">6.2 状态栏主题配置</h3>
+
+<div class="cmd-block"><span class="c"># 状态栏基础配置</span>
+<span class="k">set -g status on</span>
+<span class="k">set -g status-interval 1</span>       <span class="comment"># 每秒刷新状态栏</span>
+<span class="k">set -g status-position top</span>    <span class="comment"># 状态栏放顶部（可选 bottom）</span>
+
+<span class="c"># 左模块（会话名 + 窗口列表）</span>
+<span class="k">set -g status-left-length 80</span>
+<span class="k">set -g status-left "#[fg=colour39,bold] #S #[fg=colour231]│ " </span>
+
+<span class="c"># 右模块（负载 + 时间 + 日期）</span>
+<span class="k">set -g status-right-length 80</span>
+<span class="k">set -g status-right "#[fg=colour231] %H:%M:%S  %d/%m/%Y "</span>
+
+<span class="c"># 当前窗口高亮</span>
+<span class="k">set -g window-status-current-format "#[fg=colour231,bg=colour39,bold] #I: #W "</span>
+<span class="k">set -g window-status-format "#[fg=colour245] #I: #W "</span>
+
+<span class="c"># 窗格边框颜色</span>
+<span class="k">set -g pane-border-style fg=colour240</span>
+<span class="k">set -g pane-active-border-style fg=colour39</span>
+
+<span class="c"># 活动窗格高亮</span>
+<span class="k">set -g window-style 'bg=colour235'</span>
+<span class="k">set -g window-active-style 'bg=colour234'</span></div>
+
+<h2 id="advanced">七、高级技巧与实战场景</h2>
+
+<h3 id="sync">7.1 同步窗格（批量操作）</h3>
+
+<p>同时在多个窗格执行相同命令，是运维和开发中最实用的 tmux 功能之一。</p>
+
+<div class="cmd-block"><span class="c"># 开启同步（当前窗口所有窗格同步输入）</span>
+<span class="k">Ctrl-a :setw synchronize-panes on</span>
+
+<span class="c"># 关闭同步</span>
+<span class="k">Ctrl-a :setw synchronize-panes off</span>
+
+<span class="c"># 写入配置文件，方便随时开关</span>
+<span class="k">bind s setw synchronize-panes</span></div>
+
+<div class="highlight">
+    <p><strong>实战场景：</strong>同时在 4 台服务器执行 <span class="inline-cmd">apt update && apt upgrade</span>，同时查看多台机器的 <span class="inline-cmd">htop</span> 输出，同时在多个 Python 虚拟环境中安装依赖……一个命令，全部搞定。</p>
+</div>
+
+<h3 id="pair">7.2 共享会话（结对编程）</h3>
+
+<div class="cmd-block"><span class="c"># 用户 A：创建共享会话</span>
+<span class="k">tmux -S /tmp/pair-session</span>      <span class="comment"># 创建基于 socket 的会话</span>
+<span class="k">chmod 777 /tmp/pair-session</span>     <span class="comment"># 开放读写权限</span>
+
+<span class="c"># 用户 B：附加到共享会话</span>
+<span class="k">tmux -S /tmp/pair-session attach</span></div>
+
+<div class="info-box">
+    <p><strong>适用场景：</strong>远程 code review、技术分享演示、师生远程协作。共享会话中双方看到完全同步的内容，可同时输入（建议配合语音通话避免冲突）。</p>
+</div>
+
+<h3 id="scripting">7.3 脚本化 tmux</h3>
+
+<div class="cmd-block"><span class="c">#!/bin/bash</span>
+<span class="c"># tmux-dev.sh：自动化创建开发环境</span>
+
+<span class="k">session="dev"</span>
+<span class="k">tmux new-session -d -s $session -n editor</span>   <span class="comment"># 新建会话 + 第一个窗口</span>
+
+<span class="k">tmux send-keys -t $session:editor 'cd ~/projects/api && vim' C-m</span>
+
+<span class="k">tmux new-window -t $session -n server</span>         <span class="comment"># 创建第二个窗口</span>
+<span class="k">tmux send-keys -t $session:server 'cd ~/projects/api && python -m http.server 8080' C-m</span>
+
+<span class="k">tmux split-window -v -t $session:server</span>       <span class="comment"># 在 server 窗口水平分屏</span>
+<span class="k">tmux send-keys -t $session:server.right 'cd ~/projects/api && tail -f logs/app.log' C-m</span>
+
+<span class="k">tmux new-window -t $session -n db</span>
+<span class="k">tmux send-keys -t $session:db 'mysql -u dev -p' C-m</span>
+
+<span class="k">tmux select-window -t $session:editor</span>        <span class="comment"># 默认聚焦编辑器窗口</span>
+<span class="k">tmux attach -t $session</span></div>
+
+<div class="cmd-block"><span class="c"># 将脚本加入 crontab，服务器重启后自动恢复开发环境</span>
+<span class="k">@reboot /home/user/scripts/tmux-dev.sh</span></div>
+
+<h2 id="summary">八、核心速查表</h2>
+
+<h3>会话管理</h3>
+<table class="key-table">
+    <thead><tr><th>命令</th><th>说明</th></tr></thead>
+    <tbody>
+        <tr><td><code>tmux new -s name</code></td><td>创建命名会话</td></tr>
+        <tr><td><code>tmux a -t name</code></td><td>附加到指定会话</td></tr>
+        <tr><td><code>tmux ls</code></td><td>列出所有会话</td></tr>
+        <tr><td><code>C-a d</code></td><td>分离（后台保留）</td></tr>
+        <tr><td><code>C-a $</code></td><td>重命名会话</td></tr>
+        <tr><td><code>C-a s</code></td><td>会话选择器</td></tr>
+    </tbody>
+</table>
+
+<h3>窗口管理</h3>
+<table class="key-table">
+    <thead><tr><th>命令</th><th>说明</th></tr></thead>
+    <tbody>
+        <tr><td><code>C-a c</code></td><td>新建窗口</td></tr>
+        <tr><td><code>C-a 0-9</code></td><td>跳转到指定窗口</td></tr>
+        <tr><td><code>C-a n / C-a p</code></td><td>下一个 / 上一个窗口</td></tr>
+        <tr><td><code>C-a w</code></td><td>窗口列表</td></tr>
+        <tr><td><code>C-a ,</code></td><td>重命名当前窗口</td></tr>
+        <tr><td><code>C-a &</code></td><td>关闭当前窗口</td></tr>
+    </tbody>
+</table>
+
+<h3>窗格管理</h3>
+<table class="key-table">
+    <thead><tr><th>命令</th><th>说明</th></tr></thead>
+    <tbody>
+        <tr><td><code>C-a |</code></td><td>垂直分屏</td></tr>
+        <tr><td><code>C-a -</code></td><td>水平分屏</td></tr>
+        <tr><td><code>C-a o</code></td><td>切换到下一窗格</td></tr>
+        <tr><td><code>C-a ;</code></td><td>上一/当前窗格切换</td></tr>
+        <tr><td><code>C-a x</code></td><td>关闭当前窗格</td></tr>
+        <tr><td><code>C-a Space</code></td><td>循环切换布局</td></tr>
+    </tbody>
+</table>
+
+<h3>复制模式（vi 风格）</h3>
+<table class="key-table">
+    <thead><tr><th>命令</th><th>说明</th></tr></thead>
+    <tbody>
+        <tr><td><code>C-a [</code></td><td>进入复制模式</td></tr>
+        <tr><td><code>v</code></td><td>可视化选择（字符）</td></tr>
+        <tr><td><code>Space</code></td><td>开始/结束选择</td></tr>
+        <tr><td><code>Enter</code></td><td>复制到缓冲区</td></tr>
+        <tr><td><code>C-a ]</code></td><td>粘贴缓冲区</td></tr>
+        <tr><td><code>q</code></td><td>退出复制模式</td></tr>
+    </tbody>
+</table>
+
+<div class="footer-nav">
+    <a href="https://claw.138138100.xyz/ssh-remote-guide.html">&larr; SSH 与远程连接完全指南</a>
+    <a href="https://claw.138138100.xyz/more-tools.html">返回工具箱</a>
+</div>
+
+<div class="back-top">
+    <a href="#">▲ 回到顶部</a>
+</div>
+
+</div>
+
+<script>
+    // 锚点平滑滚动
+    document.querySelectorAll('.toc-list a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
