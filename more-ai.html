@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI学习者历史文章 - szlinux-btc 的技术博客">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;">
+    <title>🦞 AI 学习者 | 历史文章</title>
+    <link rel="icon" type="image/x-icon" href="https://138138100.xyz/favicon.ico">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: #21262d;
+            --border-color: #30363d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --accent: #58a6ff;
+            --accent-hover: #79c0ff;
+            --tag-analysis: #f778ba;
+            --tag-security: #f85149;
+            --tag-agent: #3fb950;
+            --tag-contrast: #ffa657;
+            --tag-skill: #a371f7;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        .navbar {
+            background: var(--bg-secondary);
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        /* 快捷导航按钮 */
+        .module-nav {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .module-nav a {
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            background: rgba(255,255,255,0.05);
+        }
+        .module-nav a:hover {
+            background: rgba(255,255,255,0.1);
+            color: var(--text-primary);
+        }
+        .module-nav a.active {
+            background: rgba(247,120,186,0.2);
+            color: #f778ba;
+        }
+        
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+        .navbar-brand span { font-size: 1.5rem; }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+        .back-btn:hover { background: var(--border-color); }
+        .header {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px 24px 30px;
+            text-align: center;
+        }
+        .header-icon { font-size: 4rem; margin-bottom: 16px; }
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+        .header p { font-size: 1.1rem; color: var(--text-secondary); }
+        .filter-bar {
+            max-width: 1200px;
+            margin: 0 auto 30px;
+            padding: 0 24px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+            justify-content: center;
+        }
+        .search-box {
+            flex: 1;
+            min-width: 280px;
+            max-width: 400px;
+            position: relative;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px 12px 48px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .search-box input:focus { border-color: var(--accent); }
+        .search-box input::placeholder { color: var(--text-secondary); }
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+        }
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        .filter-btn {
+            padding: 10px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .filter-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+        .filter-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+        .filter-btn .count {
+            margin-left: 6px;
+            opacity: 0.7;
+            font-size: 0.8rem;
+        }
+        .stats-bar {
+            max-width: 1200px;
+            margin: 0 auto 24px;
+            padding: 0 24px;
+            text-align: center;
+        }
+        .stats-bar span { color: var(--text-secondary); font-size: 0.9rem; }
+        .stats-bar .num { color: var(--accent); font-weight: 700; }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 60px;
+        }
+        .article-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        .article-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .article-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(88, 166, 255, 0.15);
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-title .icon { font-size: 1.2rem; }
+        .card-date { font-size: 0.8rem; color: var(--text-secondary); }
+        .card-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            flex: 1;
+            margin-bottom: 16px;
+        }
+        .card-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .tag-analysis { background: rgba(247, 120, 186, 0.15); color: var(--tag-analysis); }
+        .tag-security { background: rgba(248, 81, 73, 0.15); color: var(--tag-security); }
+        .tag-agent { background: rgba(63, 185, 80, 0.15); color: var(--tag-agent); }
+        .tag-contrast { background: rgba(255, 166, 87, 0.15); color: var(--tag-contrast); }
+        .tag-skill { background: rgba(163, 113, 247, 0.15); color: var(--tag-skill); }
+        .no-result {
+            text-align: center;
+            padding: 60px 20px;
+            display: none;
+        }
+        .no-result p { color: var(--text-secondary); font-size: 1.1rem; }
+        .footer-nav {
+            max-width: 1200px;
+            margin: 40px auto 0;
+            padding: 40px 24px;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+        }
+        .footer-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 32px;
+            background: var(--accent);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .footer-btn:hover { background: var(--accent-hover); }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.6rem; }
+            .article-grid { grid-template-columns: 1fr; }
+            .filter-bar { flex-direction: column; }
+            .search-box { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="https://138138100.xyz/" class="navbar-brand">
+                <span>🦞</span>
+                <span>AI 学习者</span>
+            </a>
+            <!-- 快捷导航 -->
+            <div class="module-nav">
+                <a href="index.html">🏠 首页</a>
+                <a href="more-bitcoin.html">₿ 大饼</a>
+                <a href="more-linux.html">🐧 Linux</a>
+                <a href="more-ai.html" class="active">🤖 AI</a>
+                <a href="more-tools.html">🔧 工具</a>
+            </div>
+            <a href="https://138138100.xyz/" class="back-btn">← 首页</a>
+        </div>
+    </nav>
+
+    <header class="header">
+        <div class="header-icon">🦞</div>
+        <h1>AI 学习者</h1>
+        <p>AI Agent · 大模型 · 人机协作新范式</p>
+    </header>
+
+    <div class="filter-bar">
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="搜索文章标题、描述或关键词...">
+        </div>
+        <div class="filter-buttons" id="filterButtons"></div>
+    </div>
+
+    <div class="stats-bar">
+        <span>共 <span class="num" id="totalCount">0</span> 篇文章</span>
+    </div>
+
+    <main class="container">
+        <div class="article-grid" id="articleGrid"></div>
+        <div class="no-result" id="noResult">
+            <p>没有找到匹配的文章，换个关键词试试？</p>
+        </div>
+    </main>
+
+    <footer class="footer-nav">
+        <a href="https://138138100.xyz/" class="footer-btn">← 返回首页</a>
+    </footer>
+
+    <script>
+        const keywordMap = {
+            "ai-lobster-trend-march-2026": ["ai", "龙虾", "agent", "2026", "趋势", "行业"],
+            "fu-sheng-lobster-analysis": ["龙虾", "傅盛", "ai", "agent", "分析"],
+            "openclaw-security-alert": ["安全", "openclaw", "投毒", "恶意", "alert"],
+            "openclaw-essence": ["openclaw", "本质", "ai", "agent", "哲学"],
+            "claw-variants-comparison": ["openclaw", "对比", "版本", "variant", "评测"],
+            "chatgpt-vs-agent": ["chatgpt", "agent", "ai", "对比", "区别"],
+            "ai-poisoning-vs-dns": ["ai", "投毒", "dns", "安全", "攻击"],
+            "skill-top20": ["skill", "推荐", "工具", "agent"]
+        };
+
+        const articles = [
+            {
+                title: "提示工程实战：从\"聊天\"到\"编程\"的维度跃迁",
+                icon: "🚀",
+                date: "2026-04",
+                desc: "从更高维度解析提示工程：PEAKS框架、Chain-of-Thought原理、Few-shot信息论，让AI输出质量翻倍的深层逻辑。",
+                tags: ["analysis"],
+                url: "https://138138100.xyz/prompt-engineering-mastery.html"
+            },
+            {
+                title: "大模型是怎么工作的：从 Token 到思考",
+                icon: "🧠",
+                date: "2026-04",
+                desc: "深入解析 ChatGPT/Gemini/Claude 背后的核心技术：Token、Embedding、Transformer、涌现能力，让你真正理解 AI 是如何【生成】文字的。",
+                tags: ["analysis"],
+                url: "https://138138100.xyz/llm-how-it-works.html"
+            },
+            {
+                title: "LLM战争史：从图灵测试到万亿参数军备竞赛",
+                icon: "⚔️",
+                date: "2026-04",
+                desc: "大国博弈、资本疯狂、发布策略、开源vs闭源——复盘AI军备竞赛背后那些离谱到不敢信的真实故事。",
+                tags: ["war", "history"],
+                url: "https://138138100.xyz/llm-war-history.html"
+            },
+            {
+                title: "MCP协议深度解析：AI连接万物的USB标准",
+                icon: "🔌",
+                date: "2026-04",
+                desc: "Client-Server架构、三大原语、安全机制、Streamable HTTP传输、与Function Calling的本质区别。1万+ Server生态 + Linux Foundation托管的里程碑。",
+                tags: ["core", "protocol"],
+                url: "https://138138100.xyz/mcp-protocol-deep-dive.html"
+            },
+            {
+                title: "国产大模型深度对比：2026年谁主沉浮？",
+                icon: "🇨🇳",
+                date: "2026-04",
+                desc: "DeepSeek、通义千问、Kimi、豆包、文心一言全方位横评：技术架构、API价格、六维度能力对比、场景化推荐。",
+                tags: ["comparison", "deepseek", "qwen"],
+                url: "https://138138100.xyz/china-llm-compare.html"
+            },
+            {
+                title: "Instagram 推荐系统技术深度解析：从十亿用户到千人千面",
+                icon: "📸",
+                date: "2026-04",
+                desc: "Meta超大规模推荐系统工程解析：多阶段漏斗、双塔模型、MTML多目标优化、24,000块H100 GPU集群、自研MTIA芯片。",
+                tags: ["system", "architecture", "meta"],
+                url: "https://138138100.xyz/instagram-recommendation-deep-dive.html"
+            },
+            {
+                title: "AI Agent 架构原理：拆解智能体的五大核心模块",
+                icon: "🏗️",
+                date: "2026-04",
+                desc: "从感知到行动的完整闭环：LLM引擎、规划模块（ReAct/CoT/ToT）、三层记忆架构、工具调用（MCP协议）、执行模块，以及2026年主流框架横评。",
+                tags: ["system", "architecture", "agent"],
+                url: "https://138138100.xyz/agent-architecture-deep-dive.html"
+            },
+            {
+                title: "Prompt Injection 攻防：OWASP LLM Top 10 头号风险深度解析",
+                icon: "🛡️",
+                date: "2026-04",
+                desc: "从奶奶漏洞到RAG投毒，从直接注入到多模态攻击——拆解6类攻击手法、5层防御体系，以及2026年新兴威胁与代码级实战防御。",
+                tags: ["security", "ai-safety", "red-team"],
+                url: "https://138138100.xyz/prompt-injection-attack-defense.html"
+            },
+            {
+                title: "Claude Code 源码泄露深度分析：51.2万行里藏了什么",
+                icon: "🔍",
+                date: "2026-04",
+                desc: "v2.1.88 npm 包意外曝光完整TypeScript源码。Undercover Mode、Buddy电子鸡、Dream记忆、8个未发布功能，全部基于原始代码直接分析。",
+                tags: ["analysis", "security"],
+                url: "https://138138100.xyz/claude-code-source-leak.html"
+            },
+            {
+                title: "2026年3月AI龙虾发展趋势深度分析",
+                icon: "📊",
+                date: "2026-03",
+                desc: "专业视角分析AI Agent从技术验证到工程化落地的关键拐点：技术演进、市场格局、行业影响与风险警示。",
+                tags: ["analysis"],
+                url: "https://138138100.xyz/ai-lobster-trend-march-2026.html"
+            },
+            {
+                title: "傅盛与AI龙虾：14天深度观察",
+                icon: "🦞",
+                date: "2026-03",
+                desc: "专业视角分析傅盛14天龙虾实验：从技术架构、组织演化、商业模式到行业影响的深度拆解。",
+                tags: ["analysis"],
+                url: "https://138138100.xyz/fu-sheng-lobster-analysis.html"
+            },
+            {
+                title: "安全警报：OpenClaw ClawHub 恶意投毒事件",
+                icon: "⚠️",
+                date: "2026-03",
+                desc: "ClawHub 插件市场遭遇大规模恶意 skills 攻击，可能导致代码注入、钱包盗取、AI 身份接管。",
+                tags: ["security"],
+                url: "https://138138100.xyz/openclaw-security-alert.html"
+            },
+            {
+                title: "我的第一只龙虾：小饼",
+                icon: "🥮",
+                date: "2026-03",
+                desc: "7×24在线运行、无限记忆、自动执行、100%任务完成。核心能力：文件操作、浏览器自动化、GitHub API、定时任务、跨平台消息。",
+                tags: ["agent"],
+                url: "https://138138100.xyz/"
+            },
+            {
+                title: "OpenClaw 本质是什么？AI Agent 的哲学思考",
+                icon: "🦞",
+                date: "2026-03",
+                desc: "深入探讨 OpenClaw 的本质与核心理念，理解 AI Agent 如何重新定义人机协作方式。",
+                tags: ["agent"],
+                url: "https://138138100.xyz/openclaw-essence.html"
+            },
+            {
+                title: "龙蛇大战：OpenClaw 5 个变种版本深度对比",
+                icon: "🦞",
+                date: "2026-03",
+                desc: "ZeroClaw/PicoClaw/NanoClaw/MemU Bot/MaxClaw/OpenClaw 六大变种横向评测，帮你选择最适合的 AI Agent。",
+                tags: ["contrast"],
+                url: "https://138138100.xyz/claw-variants-comparison.html"
+            },
+            {
+                title: "ChatGPT 是聊天窗口，龙虾是帮你干活的员工",
+                icon: "🤖",
+                date: "2026-03",
+                desc: "从技术架构到产品形态，深入解析传统 LLM 与 AI Agent 的本质区别。Stateless vs Stateful，Request-Response vs Goal-Oriented。",
+                tags: ["contrast"],
+                url: "https://138138100.xyz/chatgpt-vs-agent.html"
+            },
+            {
+                title: "AI 模型投毒攻击与 DNS 劫持对比分析",
+                icon: "🎯",
+                date: "2026-03",
+                desc: "深度对比 AI 模型投毒攻击与 DNS 劫持的原理、影响和防护策略。了解两种攻击的共同点和差异。",
+                tags: ["security"],
+                url: "https://138138100.xyz/ai-poisoning-vs-dns.html"
+            },
+            {
+                title: "20个最靠谱 神级 Skill 推荐榜",
+                icon: "⭐",
+                date: "2026-03",
+                desc: "ClawHub 里系统评分 >3.4 的 20 个神级 Skill 推荐，按功能分四类，可以直接抄作业用。",
+                tags: ["skill"],
+                url: "https://138138100.xyz/skill-top20.html"
+            },
+            {
+                title: "傅盛与AI龙虾：14天深度观察",
+                icon: "🦞",
+                date: "2026-03",
+                desc: "专业视角分析傅盛14天'龙虾实验'：从技术架构、组织演化、商业模式到行业影响的深度拆解。",
+                tags: ["analysis"],
+                url: "https://138138100.xyz/fu_sheng_lobster_analysis.html"
+            },
+            {
+                title: "EasyClaw — AI 助手产品全解析",
+                icon: "🤖",
+                date: "2026-03",
+                desc: "基于 OpenClaw 框架的 AI 助手产品导航，企业版/个人版/国内外版全解析。",
+                tags: ["agent"],
+                url: "https://138138100.xyz/easyclaw-intro.html"
+            }
+        ];
+
+        const allTags = [...new Set(articles.flatMap(a => a.tags))];
+        const tagNames = {
+            'analysis': '深度分析',
+            'security': '安全警报',
+            'agent': 'AI Agent',
+            'contrast': '对比评测',
+            'skill': 'Skill推荐'
+        };
+
+        let currentFilter = 'all';
+        let searchTerm = '';
+
+        function initFilters() {
+            const btnContainer = document.getElementById('filterButtons');
+            const tagCounts = {};
+            articles.forEach(a => {
+                a.tags.forEach(t => {
+                    tagCounts[t] = (tagCounts[t] || 0) + 1;
+                });
+            });
+
+            let buttonsHTML = `<button class="filter-btn active" data-filter="all">全部 <span class="count">${articles.length}</span></button>`;
+            allTags.forEach(tag => {
+                const count = tagCounts[tag] || 0;
+                const name = tagNames[tag] || tag;
+                buttonsHTML += `<button class="filter-btn" data-filter="${tag}">${name} <span class="count">${count}</span></button>`;
+            });
+            btnContainer.innerHTML = buttonsHTML;
+
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentFilter = btn.dataset.filter;
+                    renderArticles();
+                });
+            });
+        }
+
+        function renderArticles() {
+            const grid = document.getElementById('articleGrid');
+            const noResult = document.getElementById('noResult');
+            const totalCount = document.getElementById('totalCount');
+
+            const filtered = articles.filter(a => {
+                const matchFilter = currentFilter === 'all' || a.tags.includes(currentFilter);
+                const searchLower = searchTerm.toLowerCase();
+                const matchSearch = searchTerm === '' || 
+                    a.title.toLowerCase().includes(searchLower) ||
+                    a.desc.toLowerCase().includes(searchLower) ||
+                    (keywordMap[a.url.split('/').pop()] && keywordMap[a.url.split('/').pop()].some(k => k.toLowerCase().includes(searchLower)));
+                return matchFilter && matchSearch;
+            });
+
+            totalCount.textContent = filtered.length;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                noResult.style.display = 'block';
+                return;
+            }
+
+            noResult.style.display = 'none';
+            grid.innerHTML = '';
+            
+            filtered.forEach(a => {
+                const card = document.createElement('a');
+                card.href = a.url;
+                card.className = 'article-card';
+                if (a.url.startsWith('http') && !a.url.includes('138138100.xyz')) {
+                    card.target = '_blank';
+                    card.rel = 'noopener noreferrer';
+                }
+                
+                const header = document.createElement('div');
+                header.className = 'card-header';
+                
+                const title = document.createElement('span');
+                title.className = 'card-title';
+                const iconSpan = document.createElement('span');
+                iconSpan.className = 'icon';
+                iconSpan.textContent = a.icon;
+                title.appendChild(iconSpan);
+                const titleText = document.createTextNode(a.title);
+                title.appendChild(titleText);
+                
+                const date = document.createElement('span');
+                date.className = 'card-date';
+                date.textContent = a.date;
+                
+                header.appendChild(title);
+                header.appendChild(date);
+                
+                const desc = document.createElement('p');
+                desc.className = 'card-desc';
+                desc.textContent = a.desc;
+                
+                const tagsDiv = document.createElement('div');
+                tagsDiv.className = 'card-tags';
+                a.tags.forEach(t => {
+                    const tag = document.createElement('span');
+                    tag.className = `tag tag-${t}`;
+                    tag.textContent = (tagNames[t] || t).toUpperCase();
+                    tagsDiv.appendChild(tag);
+                });
+                
+                card.appendChild(header);
+                card.appendChild(desc);
+                card.appendChild(tagsDiv);
+                grid.appendChild(card);
+            });
+        }
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            searchTerm = e.target.value;
+            renderArticles();
+        });
+
+        initFilters();
+        renderArticles();
+    </script>
+</body>
+</html>
