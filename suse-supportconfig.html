@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐧 SUSE supportconfig – 企业级系统诊断的黄金标准</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background: #1a1a1a;
+            color: #e0e0e0;
+            line-height: 1.8;
+            padding: 20px;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+
+        /* 导航 */
+        .nav { margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid #333; }
+        .nav a { color: #ff6b35; text-decoration: none; }
+        .nav a:hover { text-decoration: underline; }
+
+        /* 标题区 */
+        .header { margin-bottom: 30px; }
+        .tag {
+            display: inline-block;
+            background: #333;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-right: 8px;
+        }
+        .tag.linux { background: #2d5a27; }
+        .tag.suse { background: #0088cc; }
+        h1 {
+            font-size: 24px;
+            margin: 15px 0;
+            color: #fff;
+        }
+        .meta { color: #888; font-size: 13px; }
+
+        /* 内容区 */
+        .content { background: #222; border-radius: 8px; padding: 25px; }
+
+        h2 {
+            color: #ff6b35;
+            font-size: 18px;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #333;
+        }
+
+        h3 { color: #4a9; font-size: 15px; margin: 20px 0 10px; }
+
+        p { margin-bottom: 15px; color: #ccc; }
+
+        /* 代码块 */
+        code {
+            background: #0d0d0d;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 13px;
+            color: #4ade80;
+        }
+
+        pre {
+            background: #0d0d0d;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 15px 0;
+            border-left: 3px solid #ff6b35;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            color: #ccc;
+            display: block;
+            white-space: pre;
+        }
+
+        /* 警告框 */
+        .warning {
+            background: #2a2500;
+            border: 1px solid #665500;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .warning::before { content: "⚠️ "; }
+
+        .success {
+            background: #0a2a0a;
+            border: 1px solid #006600;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .success::before { content: "✅ "; }
+
+        .info {
+            background: #0a2020;
+            border: 1px solid #004444;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .info::before { content: "💡 "; }
+
+        ul, ol { margin: 15px 0 15px 30px; color: #ccc; }
+        li { margin-bottom: 8px; }
+
+        /* 表格 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: #1a1a1a;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        th {
+            background: #252525;
+            color: #ff6b35;
+            font-weight: bold;
+        }
+        tr:hover { background: #2a2a2a; }
+
+        /* 返回顶部 */
+        .back-to-top {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+        }
+        .back-to-top a { color: #ff6b35; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 导航 -->
+        <nav class="nav">
+            <a href="https://claw.138138100.xyz/">🏠 返回首页</a>
+            <span> | </span>
+            <a href="#linux-articles">📚 Linux 系列文章</a>
+        </nav>
+
+        <!-- 标题区 -->
+        <header class="header">
+            <span class="tag linux">🐧 Linux</span>
+            <span class="tag suse">🔵 SUSE</span>
+            <h1>SUSE supportconfig – 企业级系统诊断的黄金标准</h1>
+            <div class="meta">
+                <span>📅 发布于 2026年3月21日</span>
+                <span> | </span>
+                <span>⏱️ 阅读时间约 10 分钟</span>
+            </div>
+        </header>
+
+        <!-- 内容区 -->
+        <main class="content">
+            <div class="info">
+                <strong>适用场景：</strong>SUSE Linux Enterprise Server (SLES)、openSUSE Leap、openSUSE Tumbleweed 系统的故障诊断、性能分析、技术支持
+            </div>
+
+            <h2>🔍 工具概述</h2>
+            <p><code>supportconfig</code> 是SUSE Linux提供的企业级系统诊断工具，由 <code>supportutils</code> 包提供，默认已安装在SLES系统中。这个工具专为生产环境设计，能够自动收集系统配置、日志文件、硬件信息、网络状态等30+功能模块的完整数据，生成结构化的tar.xz归档文件。</p>
+            <p><strong>核心价值：</strong>一键生成完整诊断包，大幅缩短技术支持响应时间，是SUSE官方推荐的故障排查标准流程。</p>
+
+            <h2>📦 安装与更新</h2>
+            <p><code>supportconfig</code> 默认已安装。如需安装或更新：</p>
+            <pre><code># 安装
+sudo zypper install supportutils
+
+# 更新到最新版本
+sudo zypper update supportutils</code></pre>
+
+            <h2>⚙️ 基本使用方法</h2>
+
+            <h3>最简单用法</h3>
+            <pre><code>sudo supportconfig</code></pre>
+            <p>默认在 <code>/var/log</code> 目录下生成归档文件，文件名格式：<code>scc_主机名_日期_时间.txz</code></p>
+
+            <h3>常用参数</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>参数</th>
+                        <th>说明</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>-E 邮箱</code></td>
+                        <td>提供联系邮箱</td>
+                    </tr>
+                    <tr>
+                        <td><code>-N 姓名</code></td>
+                        <td>提供联系人姓名</td>
+                    </tr>
+                    <tr>
+                        <td><code>-O 公司</code></td>
+                        <td>提供公司名称</td>
+                    </tr>
+                    <tr>
+                        <td><code>-P 电话</code></td>
+                        <td>提供联系电话</td>
+                    </tr>
+                    <tr>
+                        <td><code>-T 工单号</code></td>
+                        <td>关联SUSE服务请求编号</td>
+                    </tr>
+                    <tr>
+                        <td><code>-i 关键字</code></td>
+                        <td>限制收集范围（逗号分隔的关键词）</td>
+                    </tr>
+                    <tr>
+                        <td><code>-F</code></td>
+                        <td>列出所有可用关键字</td>
+                    </tr>
+                    <tr>
+                        <td><code>-m</code></td>
+                        <td>减少收集信息量（快速模式）</td>
+                    </tr>
+                    <tr>
+                        <td><code>-l</code></td>
+                        <td>收集已轮转的日志文件</td>
+                    </tr>
+                    <tr>
+                        <td><code>-U URL</code></td>
+                        <td>直接上传到SUSE服务器</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>关键字过滤示例</h3>
+            <pre><code># 仅收集LVM相关信息
+sudo supportconfig -i LVM
+
+# 仅收集网络和硬件信息
+sudo supportconfig -i NETWORK,HARDWARE
+
+# 快速收集关键信息
+sudo supportconfig -m</code></pre>
+
+            <h2>🔎 查看可用模块</h2>
+            <pre><code># 列出所有可用的关键字/模块
+sudo supportconfig -F</code></pre>
+            <p>常用关键字包括：<code>NETWORK</code>、<code>LVM</code>、<code>BTRFS</code>、<code>SYSTEMD</code>、<code>SECURITY</code>、<code>YAST</code>、<code>VIRTUALIZATION</code> 等。</p>
+
+            <h2>📂 归档文件结构</h2>
+            <p>解压后的归档文件包含以下核心内容：</p>
+
+            <h3>核心信息文件</h3>
+            <pre><code>scc_hostname_20260321_123456/
+├── basic-environment.txt      # 系统基本信息（OS版本、内核、架构等）
+├── basic-health-check.txt     # 系统健康检查
+├── hardware.txt               # 硬件信息（CPU、内存、PCI设备等）
+├── messages.txt               # 系统主日志（/var/log/messages）
+├── rpm.txt                   # 已安装RPM包列表
+├── summary.xml               # XML格式的系统信息摘要
+├── ...</code></pre>
+
+            <h3>功能模块文件</h3>
+            <p>30+个功能模块，每个模块对应一个或多个文本文件：</p>
+            <ul>
+                <li><strong>网络相关：</strong><code>network-*.txt</code>（网络配置、路由、防火墙等）</li>
+                <li><strong>存储相关：</strong><code>fs-*.txt</code>（BTRFS、LVM、iSCSI等）</li>
+                <li><strong>服务相关：</strong><code>systemd.txt</code>、<code>docker.txt</code>、<code>samba.txt</code>等</li>
+                <li><strong>安全相关：</strong><code>security-audit.txt</code>、<code>ssh.txt</code>、<code>pam.txt</code>等</li>
+                <li><strong>虚拟化：</strong><code>libvirt.txt</code>、<code>virtinfo.txt</code>、<code>xen*.txt</code>等</li>
+                <li><strong>桌面环境：</strong><code>gnome*.txt</code>、<code>kde*.txt</code>等</li>
+            </ul>
+
+            <h2>🚀 提交给技术支持</h2>
+
+            <h3>步骤1：创建服务请求</h3>
+            <ol>
+                <li>访问 SUSE Customer Center: <a href="https://scc.suse.com/support/requests" style="color: #ff6b35;">https://scc.suse.com/support/requests</a></li>
+                <li>创建服务请求，记录工单编号（如 <code>SR12345678901</code>）</li>
+            </ol>
+
+            <h3>步骤2：生成带工单号的归档</h3>
+            <pre><code># 生成归档并关联工单号
+sudo supportconfig -T SR12345678901 -E your@email.com -N "姓名" -O "公司"</code></pre>
+
+            <h3>步骤3：上传归档</h3>
+
+            <h4>方法1：有互联网连接的服务器（自动上传）</h4>
+            <pre><code># 使用HTTPS上传
+sudo supportconfig -U https://support-ftp.us.suse.com/incoming/upload.php?file={tarball} -T SR12345678901
+
+# 使用FTPS上传
+sudo supportconfig -U ftps://support-ftp.us.suse.com/incoming/ -T SR12345678901</code></pre>
+
+            <h4>方法2：无互联网连接的服务器（手动上传）</h4>
+            <ol>
+                <li>在服务器上运行：<code>sudo supportconfig -T SR12345678901</code></li>
+                <li>将生成的 <code>.txz</code> 文件通过U盘或安全传输方式复制到有互联网的机器</li>
+                <li>登录SUSE Customer Center，在服务请求中上传文件</li>
+            </ol>
+
+            <div class="success">
+                <strong>提示：</strong>SUSE将系统报告视为机密数据，仅用于解决您的问题。详细隐私政策请参考：<a href="https://www.suse.com/company/policies/privacy/" style="color: #ff6b35;">SUSE Privacy Policy</a>
+            </div>
+
+            <h2>🎯 最佳实践</h2>
+
+            <h3>1. 问题发生后立即收集</h3>
+            <ul>
+                <li><strong>内核崩溃：</strong>重启后立即运行 <code>supportconfig</code>，关键日志可能被覆盖</li>
+                <li><strong>性能问题：</strong>问题发生时收集，保留现场状态</li>
+                <li><strong>网络故障：</strong>故障发生时收集，网络配置和状态最准确</li>
+            </ul>
+
+            <h3>2. 使用关键字减少收集范围</h3>
+            <p>如果已知问题范围，使用 <code>-i</code> 参数仅收集相关模块，节省时间：</p>
+            <pre><code># 网络问题
+sudo supportconfig -i NETWORK
+
+# 存储问题
+sudo supportconfig -i LVM,BTRFS
+
+# 虚拟化问题
+sudo supportconfig -i VIRTUALIZATION</code></pre>
+
+            <h3>3. 高日志环境使用 -l 参数</h3>
+            <p>如果日志轮转频繁，使用 <code>-l</code> 参数收集已轮转的日志：</p>
+            <pre><code>sudo supportconfig -l</code></pre>
+            <div class="info">
+                <strong>收益：</strong>即使关键日志已被轮转，仍能追溯历史信息。
+            </div>
+
+            <h3>4. 定期收集用于基线对比</h3>
+            <p>在系统正常运行时收集supportconfig，作为"健康基线"。故障发生时可对比差异：</p>
+            <pre><code># 健康基线收集
+sudo supportconfig -O baseline -E your@email.com
+
+# 故障时收集
+sudo supportconfig -O issue -E your@email.com</code></pre>
+
+            <h3>5. 隐私保护</h3>
+            <p>如需移除敏感数据（密码、IP地址、主机名等）：</p>
+            <pre><code># 解压归档
+tar -xf scc_hostname_*.txz
+
+# 使用sed或其他工具清理敏感信息
+sed -i 's/密码/****/g' basic-environment.txt
+
+# 重新打包
+tar -cJf scc_hostname_clean.txz scc_hostname_*</code></pre>
+            <div class="warning">
+                <strong>注意事项：</strong>清理敏感信息可能导致技术支持人员无法准确诊断问题，仅在必要时使用。
+            </div>
+
+            <h2>🔧 插件系统</h2>
+            <p><code>supportconfig</code> 的强大之处在于其可扩展的插件系统：</p>
+
+            <h3>插件位置</h3>
+            <pre><code>/usr/lib/supportconfig/plugins/</code></pre>
+
+            <h3>插件开发示例</h3>
+            <pre><code>#!/bin/bash
+# 自定义插件：plugin-myscript.sh
+# 文件名必须以 plugin- 开头
+
+echo "=== Running Custom Plugin ==="
+# 执行自定义命令并输出到插件文件
+echo "Custom data collected at $(date)" > $LOG_DIR/plugin-myscript.txt
+
+# 运行任意脚本
+/usr/local/bin/myscript >> $LOG_DIR/plugin-myscript.txt
+
+echo "=== Custom Plugin Complete ==="</code></pre>
+
+            <h3>插件安装</h3>
+            <pre><code># 将脚本复制到插件目录
+sudo cp plugin-myscript.sh /usr/lib/supportconfig/plugins/
+
+# 设置可执行权限
+sudo chmod +x /usr/lib/supportconfig/plugins/plugin-myscript.sh</code></pre>
+            <p>下次运行 <code>supportconfig</code> 时，插件将自动执行，输出包含在归档中。</p>
+
+            <h2>📊 实战案例</h2>
+
+            <h3>案例1：系统无法启动</h3>
+            <p><strong>场景：</strong>服务器启动后立即重启，无法进入系统</p>
+            <p><strong>步骤：</strong></p>
+            <ol>
+                <li>进入维护模式或救援模式</li>
+                <li>挂载根文件系统：<code>mount /dev/sda1 /mnt</code></li>
+                <li>chroot到系统：<code>chroot /mnt</code></li>
+                <li>运行：<code>supportconfig -m -T SR12345678901</code></li>
+                <li>检查 <code>basic-health-check.txt</code> 和 <code>messages.txt</code></li>
+            </ol>
+
+            <h3>案例2：存储性能问题</h3>
+            <p><strong>场景：</strong>磁盘IO缓慢，应用响应变慢</p>
+            <p><strong>步骤：</strong></p>
+            <ol>
+                <li>运行：<code>supportconfig -i LVM,BTRFS,FS -T SR12345678901</code></li>
+                <li>检查 <code>fs-lvm.txt</code> 中的LVM配置和状态</li>
+                <li>检查 <code>fs-btrfs.txt</code> 中的BTRFS统计信息</li>
+                <li>检查 <code>disk-io.txt</code> 中的磁盘IO性能数据</li>
+            </ol>
+
+            <h3>案例3：虚拟机网络异常</h3>
+            <p><strong>场景：</strong>KVM虚拟机无法连接网络</p>
+            <p><strong>步骤：</strong></p>
+            <ol>
+                <li>运行：<code>supportconfig -i NETWORK,VIRTUALIZATION -T SR12345678901</code></li>
+                <li>检查 <code>network-*.txt</code> 中的网络配置</li>
+                <li>检查 <code>libvirt.txt</code> 中的虚拟网络设置</li>
+                <li>检查 <code>iptables.txt</code> 中的防火墙规则</li>
+            </ol>
+
+            <h2>🚀 进阶技巧</h2>
+
+            <h3>1. 自动上传脚本</h3>
+            <pre><code>#!/bin/bash
+# auto-supportconfig.sh
+
+SR_NUMBER=$1
+EMAIL=$2
+
+if [ -z "$SR_NUMBER" ]; then
+    echo "Usage: $0 <SR_NUMBER> <EMAIL>"
+    exit 1
+fi
+
+# 生成并上传
+sudo supportconfig -U ftps://support-ftp.us.suse.com/incoming/ \
+    -T $SR_NUMBER \
+    -E $EMAIL \
+    -N "管理员" \
+    -O "公司名称"
+
+echo "Supportconfig uploaded for SR: $SR_NUMBER"</code></pre>
+
+            <h3>2. 定期收集脚本（Cron）</h3>
+            <pre><code># 添加到crontab，每周收集一次
+0 3 * * 0 /usr/local/bin/weekly-supportconfig.sh</code></pre>
+
+            <h3>3. 中央存储库</h3>
+            <p>企业环境中可配置中央FTP服务器，自动收集所有服务器的supportconfig：</p>
+            <ul>
+                <li>配置FTP服务器接收归档文件</li>
+                <li>在各服务器上设置定期收集并上传</li>
+                <li>便于集中管理和历史对比</li>
+            </ul>
+
+            <h2>⚠️ 常见问题</h2>
+
+            <h3>Q1: 收集时间过长怎么办？</h3>
+            <p><strong>A:</strong> 使用 <code>-m</code> 参数（快速模式）或 <code>-i</code> 参数（限定范围）减少收集量。</p>
+
+            <h3>Q2: 归档文件太大如何处理？</h3>
+            <p><strong>A:</strong> 压缩归档已使用tar.xz格式（最高压缩率），如仍过大，使用 <code>-i</code> 参数排除不必要的模块。</p>
+
+            <h3>Q3: 如何查看归档内容？</h3>
+            <p><strong>A:</strong> 解压后直接查看文本文件：</p>
+            <pre><code>tar -xf scc_hostname_*.txz
+cd scc_hostname_*
+cat basic-environment.txt</code></pre>
+
+            <h3>Q4: 上传失败怎么办？</h3>
+            <p><strong>A:</strong> 检查网络连接和防火墙规则，确保可以访问SUSE FTP服务器。如仍失败，手动上传到SUSE Customer Center。</p>
+
+            <h2>📚 相关资源</h2>
+            <ul>
+                <li><a href="https://documentation.suse.com/sles/16.0/html/SLES-supportconfig/index.html" style="color: #ff6b35;">SUSE官方文档：supportconfig</a></li>
+                <li><a href="https://manpages.opensuse.org/Tumbleweed/supportutils/supportconfig.8.en.html" style="color: #ff6b35;">man page: supportconfig(8)</a></li>
+                <li><a href="https://www.suse.com/c/creating-a-central-supportconfig-repository/" style="color: #ff6b35;">创建中央Supportconfig存储库</a></li>
+                <li><a href="https://scc.suse.com/support/requests" style="color: #ff6b35;">SUSE Customer Center</a></li>
+            </ul>
+
+            <h2>💡 总结</h2>
+            <p><code>supportconfig</code> 是SUSE Linux企业环境必备的诊断工具，能够全面收集系统状态，大幅提升故障排查效率。</p>
+            <p><strong>核心建议：</strong></p>
+            <ol>
+                <li>问题发生后立即运行，收集现场数据</li>
+                <li>使用 <code>-i</code> 参数限定收集范围，提升效率</li>
+                <li>定期收集健康基线，便于故障对比</li>
+                <li>关联工单号上传，便于技术支持追踪</li>
+                <li>探索插件系统，自定义收集需求</li>
+            </ol>
+
+            <div class="success">
+                <strong>一劳永逸：</strong>将 supportconfig 纳入运维规范，建立标准化的故障诊断流程。
+            </div>
+
+            <div class="back-to-top">
+                <a href="#">⬆️ 返回顶部</a>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
