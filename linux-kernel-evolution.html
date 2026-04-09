@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐧 Linux 内核进化论：从 0.01 到 6.x 的三十年征途</title>
+    <link rel="icon" type="image/x-icon" href="https://claw.138138100.xyz/favicon.ico">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
+            line-height: 1.8;
+            padding: 20px;
+        }
+        .container { max-width: 840px; margin: 0 auto; }
+
+        /* 导航 */
+        .nav { margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid #21262d; }
+        .nav a { color: #58a6ff; text-decoration: none; font-size: 14px; }
+        .nav a:hover { text-decoration: underline; }
+
+        /* 标题区 */
+        .header { margin-bottom: 30px; }
+        .tag {
+            display: inline-block;
+            background: #1f6feb33;
+            color: #58a6ff;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-right: 8px;
+            border: 1px solid #1f6feb55;
+        }
+        h1 {
+            font-size: 26px;
+            margin: 15px 0 10px;
+            color: #f0f6fc;
+            font-weight: 700;
+        }
+        .meta { color: #6e7681; font-size: 13px; margin-bottom: 10px; }
+        .intro {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 18px 22px;
+            color: #8b949e;
+            font-size: 15px;
+            line-height: 1.9;
+        }
+
+        /* 内容区 */
+        .content { background: #161b22; border-radius: 10px; padding: 30px; margin-top: 24px; border: 1px solid #21262d; }
+
+        h2 {
+            color: #58a6ff;
+            font-size: 18px;
+            margin: 35px 0 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #21262d;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        h2 .emoji { font-size: 20px; }
+
+        p { margin-bottom: 16px; font-size: 15px; color: #c9d1d9; }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+            margin: 25px 0;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 8px;
+            bottom: 8px;
+            width: 2px;
+            background: #30363d;
+            border-radius: 1px;
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 28px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -26px;
+            top: 8px;
+            width: 10px;
+            height: 10px;
+            background: #1f6feb;
+            border-radius: 50%;
+            border: 2px solid #0d1117;
+        }
+        .timeline-item.major::before { background: #f7931a; }
+        .timeline-item .ver {
+            font-size: 13px;
+            font-weight: 700;
+            color: #58a6ff;
+            background: #1f6feb22;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-right: 8px;
+        }
+        .timeline-item .year {
+            color: #6e7681;
+            font-size: 13px;
+        }
+        .timeline-item .title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #f0f6fc;
+            margin: 5px 0 4px;
+        }
+        .timeline-item .desc {
+            font-size: 14px;
+            color: #8b949e;
+            line-height: 1.8;
+        }
+        .timeline-item .tag-list {
+            margin-top: 6px;
+        }
+        .timeline-item .mini-tag {
+            display: inline-block;
+            background: #30363d;
+            color: #8b949e;
+            padding: 1px 7px;
+            border-radius: 3px;
+            font-size: 11px;
+            margin-right: 4px;
+        }
+
+        .highlight-box {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-left: 3px solid #58a6ff;
+            padding: 18px 22px;
+            margin: 24px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .highlight-box.orange { border-left-color: #f7931a; }
+        .highlight-box.green { border-left-color: #3fb950; }
+        .highlight-box.pink { border-left-color: #f778ba; }
+        .highlight-box strong { color: #f0f6fc; }
+        .highlight-box ul { margin: 10px 0 5px 20px; }
+        .highlight-box li { margin-bottom: 6px; font-size: 14px; color: #8b949e; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin: 25px 0;
+        }
+        .stat-card {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        .stat-card .num {
+            font-size: 24px;
+            font-weight: 700;
+            color: #58a6ff;
+            font-family: 'SF Mono', Monaco, monospace;
+        }
+        .stat-card .label {
+            font-size: 12px;
+            color: #6e7681;
+            margin-top: 4px;
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 20px 0;
+        }
+        .col-card {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 16px;
+        }
+        .col-card h3 {
+            font-size: 14px;
+            color: #f0f6fc;
+            margin-bottom: 10px;
+        }
+        .col-card ul { list-style: none; padding: 0; margin: 0; }
+        .col-card li { font-size: 13px; color: #8b949e; margin-bottom: 6px; padding-left: 14px; position: relative; }
+        .col-card li::before { content: '▸'; position: absolute; left: 0; color: #58a6ff; }
+
+        .quote-block {
+            border-left: 3px solid #30363d;
+            padding: 12px 20px;
+            margin: 24px 0;
+            color: #8b949e;
+            font-style: italic;
+            font-size: 14px;
+            background: #0d1117;
+            border-radius: 0 6px 6px 0;
+        }
+        .quote-block cite { display: block; color: #6e7681; font-size: 12px; margin-top: 6px; font-style: normal; }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 35px;
+            padding: 10px 22px;
+            background: #1f6feb;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .back-link:hover { background: #388bfd; text-decoration: none; }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #21262d;
+            color: #484f58;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .two-col { grid-template-columns: 1fr; }
+            h1 { font-size: 20px; }
+            .content { padding: 20px 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 导航 -->
+        <div class="nav">
+            <a href="https://claw.138138100.xyz/">← 返回首页</a>
+        </div>
+
+        <!-- 标题区 -->
+        <div class="header">
+            <span class="tag">Linux 技术栈</span>
+            <h1>🐧 Linux 内核进化论：从 0.01 到 6.x 的三十年征途</h1>
+            <div class="meta">📝 2026 年 4 月 5 日 · 👤 szlinux-btc · ⏱ 阅读约 12 分钟</div>
+        </div>
+
+        <div class="intro">
+            1991 年，一个芬兰大学生在 comp.os.minix 新闻组发了一条帖子："我正在写一个免费的操作系统，只是个人爱好……"三十年过去，这个"个人爱好"运行在全球 90% 的服务器、100% 的超级计算机、以及数十亿部手机上。本文梳理 Linux 内核发展史上的关键版本节点与核心技术贡献。
+        </div>
+
+        <!-- 内容区 -->
+        <div class="content">
+
+            <!-- 总体统计 -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="num">34</div>
+                    <div class="label">年发展历程</div>
+                </div>
+                <div class="stat-card">
+                    <div class="num">6.x</div>
+                    <div class="label">当前主线版本</div>
+                </div>
+                <div class="stat-card">
+                    <div class="num">2800+</div>
+                    <div class="label">核心贡献者（每版本）</div>
+                </div>
+                <div class="stat-card">
+                    <div class="num">~2700万</div>
+                    <div class="label">代码行数（6.x）</div>
+                </div>
+            </div>
+
+            <h2><span class="emoji">🌱</span> 萌芽期：一个人引发的革命（1991–1994）</h2>
+
+            <div class="timeline">
+                <div class="timeline-item major">
+                    <span class="ver">0.01</span><span class="year">1991 年 8 月</span>
+                    <div class="title">Linus Torvalds 发布首个版本</div>
+                    <div class="desc">约 1 万行代码，仅支持 Intel 80386 处理器，可运行 GCC、Bash 和 GNU 文件工具。内核没有网络支持，没有虚拟内存——但它能启动，能运行。</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="ver">0.10</span><span class="year">1991 年 10 月</span>
+                    <div class="title">首个公开版本</div>
+                    <div class="desc">约 2 万行代码，开始吸引少量黑客参与测试和贡献。</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="ver">0.12</span><span class="year">1992 年 1 月</span>
+                    <div class="title">X Window System 移植完成</div>
+                    <div class="desc">图形界面首次在 Linux 上运行，吸引了更广泛的开发者关注。</div>
+                </div>
+                <div class="timeline-item major">
+                    <span class="ver">1.0</span><span class="year">1994 年 3 月</span>
+                    <div class="title">首个正式发行版内核</div>
+                    <div class="desc">约 17 万行代码。标志 Linux 从"个人项目"正式成为"可生产使用"的操作系统内核。引入了网络子系统（TCP/IP）、文件系统扩展（ext）等核心组件。</div>
+                    <div class="tag-list">
+                        <span class="mini-tag">TCP/IP 网络栈</span><span class="mini-tag">ext 文件系统</span><span class="mini-tag">VFS 虚拟文件系统</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <strong>🌍 对世界的贡献：</strong>Linux 萌芽期证明了"全球协作开发"模式的可行性。Linus 用邮件列表管理代码的方式，奠定了后来开源运动的协作范式——任何人都可以提交补丁，任何人都可以审查代码。
+            </div>
+
+            <h2><span class="emoji">⚙️</span> 奠基期：从玩具到工业级（1995–1999）</h2>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <span class="ver">1.2</span><span class="year">1995 年 3 月</span>
+                    <div class="title">多平台支持起步</div>
+                    <div class="desc">首次支持 Alpha、SPARC 和 MIPS 架构。Linux 不再只是 x86 的专属操作系统。</div>
+                    <div class="tag-list">
+                        <span class="mini-tag">Alpha</span><span class="mini-tag">SPARC</span><span class="mini-tag">MIPS</span>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <span class="ver">2.0</span><span class="year">1996 年 6 月</span>
+                    <div class="title">对称多处理器（SMP）支持</div>
+                    <div class="desc">Linux 首次支持多 CPU 系统，这是一个质的飞跃——企业级应用的大门从此打开。同年 Torvalds 在内核代码中引入那只标志性的企鹅"Tux"。</div>
+                    <div class="tag-list">
+                        <span class="mini-tag">SMP 多核支持</span><span class="mini-tag">内存管理增强</span><span class="mini-tag">Tux 企鹅诞生</span>
+                    </div>
+                </div>
+                <div class="timeline-item major">
+                    <span class="ver">2.2</span><span class="year">1999 年 1 月</span>
+                    <div class="title">企业级功能全面引入</div>
+                    <div class="title">大内存支持 / IPv6 / 网络 QoS</div>
+                    <div class="desc">支持 4GB 以上内存（物理+交换）、原生 IPv6、精致的网络流量控制。此时 Red Hat、Debian 等发行版已趋于成熟，Linux 开始进入企业数据中心。</div>
+                </div>
+            </div>
+
+            <div class="highlight-box orange">
+                <strong>⚡ 关键技术创新：</strong>
+                <ul>
+                    <li><strong>2.0 的 SMP 支持</strong>让 Linux 从单核走向多核，为后来服务器市场爆发奠定基础</li>
+                    <li><strong>VFS（虚拟文件系统）层</strong>的设计极为优雅——用同一套接口抽象了 ext2/3/4、XFS、JFS、Btrfs 等数十种文件系统，这是 Linux 最成功的设计决策之一</li>
+                    <li><strong>模块化设计</strong>：内核模块允许运行时动态加载卸载驱动，无需重启，至今仍是 Linux 最强大的特性之一</li>
+                </ul>
+            </div>
+
+            <h2><span class="emoji">🚀</span> 黄金期：服务器王者之路（2000–2009）</h2>
+
+            <div class="timeline">
+                <div class="timeline-item major">
+                    <span class="ver">2.6</span><span class="year">2003 年 12 月</span>
+                    <div class="title">黄金十年的起点</div>
+                    <div class="desc">这是 Linux 历史上持续最久的稳定主线分支（直到 2011 年才结束）。2.6.x 系列从 2.6.0 一路演进到 2.6.39，经历了 Web 1.0、2.0、云计算兴起的整个过程。每个子版本都在性能、可扩展性和硬件支持上有重大突破。</div>
+                    <div class="tag-list">
+                        <span class="mini-tag">O(1) 调度器</span><span class="mini-tag">NPTL 线程</span><span class="mini-tag">UDEV 动态设备</span><span class="mini-tag">cgroups</span>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <span class="ver">2.6.11</span><span class="year">2005 年 3 月</span>
+                    <div class="title">Git 诞生</div>
+                    <div class="desc">Linus Torvalds 用 C 语言手写了 Git，理由是 BitKeeper 收回了免费使用许可。Git 最初是为了管理 Linux 内核开发，但很快成为全球使用最广泛的版本控制系统。GitHub 2008 年上线，改变了整个软件行业的协作方式。</div>
+                    <div class="tag-list">
+                        <span class="mini-tag">Git</span><span class="mini-tag">分布式版本控制</span>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <span class="ver">2.6.24</span><span class="year">2008 年 1 月</span>
+                    <div class="title">cgroups 进入主线</div>
+                    <div class="desc">Control Groups 是容器技术的基石。Google 的工程师贡献了这一特性，十年后 Docker 和 Kubernetes 的崛起正是建立在这个基础设施之上。</div>
+                    <div class="tag-list">
+                        <span class="mini-tag">cgroups</span><span class="mini-tag">容器基石</span><span class="mini-tag">Google 贡献</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="two-col">
+                <div class="col-card">
+                    <h3>💡 2.6 系列核心贡献</h3>
+                    <ul>
+                        <li>原生 POSIX 线程支持（NPTL），线程创建速度提升 10 倍</li>
+                        <li>inotify 文件系统事件通知</li>
+                        <li>blktrace 块设备追踪</li>
+                        <li>perf 性能分析工具前身</li>
+                        <li>SYSFS 统一设备模型</li>
+                        <li>省电和动态调频（CPUFreq）</li>
+                    </ul>
+                </div>
+                <div class="col-card">
+                    <h3>🏆 市场份额的转折</h3>
+                    <ul>
+                        <li>2005 年：Google 全线跑 Linux（搜索、邮件、GFS）</li>
+                        <li>2007 年：iPhone 发布——iOS 底层是 BSD，不是 Linux</li>
+                        <li>2008 年：Android 发布，Linux 统治移动端</li>
+                        <li>2007 年：Top 500 超级计算机 Linux 占 87%</li>
+                        <li>2008 年：Amazon AWS 上线，Linux 云时代开启</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2><span class="emoji">☁️</span> 云时代：稳定版策略与容器革命（2011–2020）</h2>
+
+            <div class="timeline">
+                <div class="timeline-item major">
+                    <span class="ver">3.0</span><span class="year">2011 年 7 月</span>
+                    <div class="title">版本号重置：新纪元</div>
+                    <div class="desc">内核 20 周年，版本号从 2.6.x 跳到 3.x。这只是版本策略的调整，内核仍在高速演进。3.x 系列见证了容器技术的崛起、SSD 的普及、以及云原生的诞生。</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="ver">3.10</span><span class="year">2013 年 6 月</span>
+                    <div class="title">Docker 基础确立 / Btrfs 成熟</div>
+                    <div class="desc">kernel 3.10 合并了 namespace 改进，Docker 于 2013 年 3 月创立（dotCloud 转型）。Linux namespace + cgroups 的组合正式成为容器技术的标准底层。Btrfs 稳定版也随此版本进入生产视野。</div>
+                    <div class="tag-list">
+                        <span class="mini-tag">Docker</span><span class="mini-tag">Namespace</span><span class="mini-tag">Btrfs</span>
+                    </div>
+                </div>
+                <div class="timeline-item major">
+                    <span class="ver">4.0</span><span class="year">2015 年 4 月</span>
+                    <div class="title">实时内核正式合并 / 滚动更新</div>
+                    <div class="title">PREEMPT_RT 补丁进入主线</div>
+                    <div class="desc">PREEMPT_RT（实时抢占）补丁经过十多年社区开发，终于进入主线。Linux 首次可以作为工业控制、机器人、医疗设备等实时性要求极高的操作系统。同时 4.0 引入了 live patching——热补丁，无需重启即可修复内核漏洞。</div>
+                    <div class="tag-list">
+                        <span class="mini-tag">PREEMPT_RT 实时</span><span class="mini-tag">Live Patching</span><span class="mini-tag">ksplice</span>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <span class="ver">4.9</span><span class="year">2016 年 12 月</span>
+                    <div class="title">Google BBR 拥塞控制算法</div>
+                    <div class="desc">Google 贡献了 TCP BBR（Bottleneck Bandwidth and RTT）算法，显著提升高延迟高带宽网络下的吞吐量。BBR 最初在 4.9 进入内核，至今仍是网络性能优化的热门话题。</div>
+                    <div class="tag-list">
+                        <span class="mini-tag">BBR</span><span class="mini-tag">TCP 拥塞控制</span><span class="mini-tag">Google</span>
+                    </div>
+                </div>
+                <div class="timeline-item major">
+                    <span class="ver">5.x</span><span class="year">2019 年 3 月 – 2024 年</span>
+                    <div class="title">Linux 史上最长活跃主线系列</div>
+                    <div class="desc">5.x 系列横跨 5 年（2019-2024），这是内核历史上最长的活跃主线版本。5.15 引入 io_uring（异步 I/O 革命），5.8 成为"所有人的内核"（社区最大合并窗口），5.10 LTS 生命周期延续到 2026 年底。</div>
+                    <div class="tag-list">
+                        <span class="mini-tag">io_uring</span><span class="mini-tag">5.8 超大合并</span><span class="mini-tag">MTE 内存标记</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box green">
+                <strong>☁️ 对世界的贡献：云原生时代的地基</strong>
+                <ul>
+                    <li><strong>容器化基础设施</strong>：cgroups + namespace + overlayfs → Docker → Kubernetes，Linux 成为云原生地基</li>
+                    <li><strong>Live Patching</strong>：无需重启修复内核漏洞，彻底改变了生产环境运维模式（Kpatch、Ksplice）</li>
+                    <li><strong>io_uring</strong>：绕过传统 I/O 模型，让 NVMe SSD 性能压榨到极致，高 IOPS 应用性能提升可达 2-3 倍</li>
+                    <li><strong>BBR</strong>：改变了互联网传输效率，是 CDN 和云服务商的核心优化技术</li>
+                </ul>
+            </div>
+
+            <h2><span class="emoji">🔧</span> 现代化：Rust 入核与未来演进（2021 至今）</h2>
+
+            <div class="timeline">
+                <div class="timeline-item major">
+                    <span class="ver">6.1</span><span class="year">2022 年 12 月</span>
+                    <div class="title">Rust 语言正式进入 Linux 内核</div>
+                    <div class="desc">Linux 内核首次接受非 C 语言编写的子系统。Rust 分三批合并：基础设施（2021 → 6.1）、驱动框架（6.1）、设备驱动（后续版本）。目标是解决 C 语言内存安全问题，每年减少数千个 CVE。Linux 首次在语言层面引入现代内存安全机制。</div>
+                    <div class="tag-list">
+                        <span class="mini-tag">Rust</span><span class="mini-tag">内存安全</span><span class="mini-tag">安全驱动框架</span>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <span class="ver">6.6</span><span class="year">2023 年 10 月</span>
+                    <div class="title">混合关键级调度（CFS）改进</div>
+                    <div class="desc">实时任务与普通任务共存的调度器进一步优化，适配 AI 推理、汽车域控制器等混合负载场景。</div>
+                </div>
+                <div class="timeline-item major">
+                    <span class="ver">6.12</span><span class="year">2024 年 11 月</span>
+                    <div class="title">EEVDF 调度器 / RISC-V 全面支持</div>
+                    <div class="title">中断下半部改革 / preempt_mode</div>
+                    <div class="desc">EEVDF（Earliest Eligible Virtual Deadline First）成为默认调度器，取代 CFS 统治了 17 年的地位。RISC-V 架构全面进入主线。PREEMPT_RT 实时补丁也正式合并（6.6 LTS 版本）。</div>
+                    <div class="tag-list">
+                        <span class="mini-tag">EEVDF 调度器</span><span class="mini-tag">RISC-V</span><span class="mini-tag">PREEMPT_RT</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="num">34</div>
+                    <div class="label">年持续演进</div>
+                </div>
+                <div class="stat-card">
+                    <div class="num">100%</div>
+                    <div class="label">Top500 超算</div>
+                </div>
+                <div class="stat-card">
+                    <div class="num">90%+</div>
+                    <div class="label">公有云服务器</div>
+                </div>
+                <div class="stat-card">
+                    <div class="num">30亿+</div>
+                    <div class="label">Android 设备</div>
+                </div>
+            </div>
+
+            <h2><span class="emoji">🏆</span> Linux 对世界的终极贡献</h2>
+
+            <div class="two-col">
+                <div class="col-card">
+                    <h3>🔗 技术层面的影响</h3>
+                    <ul>
+                        <li>重新定义了"操作系统"的协作开发模式</li>
+                        <li>证明了开源许可证（GPL）在商业上的可行性</li>
+                        <li>催生了 Git 这一革命性的版本控制工具</li>
+                        <li>成为 DevOps、CI/CD 文化的底层依赖</li>
+                        <li>推动了云原生（K8s、容器）的技术革命</li>
+                        <li>Rust 入核开创了内核安全新纪元</li>
+                    </ul>
+                </div>
+                <div class="col-card">
+                    <h3>🌍 社会与商业层面的影响</h3>
+                    <ul>
+                        <li>打破了操作系统市场的商业垄断</li>
+                        <li>Google、Facebook、Amazon 建立在 Linux 之上</li>
+                        <li>Android 改变了全球 30 亿人的移动体验</li>
+                        <li>让第三世界国家拥有了自主可控的系统</li>
+                        <li>无数中小企业用低成本 Linux 服务器创业</li>
+                        <li>成为网络安全和隐私保护的重要支柱</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="quote-block">
+                "Talk is cheap. Show me the code."<br>
+                <cite>—— Linus Torvalds，1991-08-25，comp.os.minix</cite>
+            </div>
+
+            <div class="highlight-box pink">
+                <strong>🔮 未来展望（2025-2030）：</strong>
+                <ul>
+                    <li><strong>Rust 驱动生态</strong>：预计 6.x 末期超过 20% 新代码用 Rust 编写</li>
+                    <li><strong>AI/ML 基础设施</strong>：Linux 是所有 GPU 集群和 AI 训练框架的底层底座</li>
+                    <li><strong>RISC-V 崛起</strong>：开源 ISA 架构与 Linux 协同演进，挑战 ARM/x86 格局</li>
+                    <li><strong>机密计算</strong>：TEE、SGX、TrustZone 在内核层面的深度整合，保护 AI 时代的数据隐私</li>
+                </ul>
+            </div>
+
+            <h2><span class="emoji">📊</span> 内核版本生命周期一览</h2>
+
+            <div class="highlight-box">
+                <strong>长期支持版（LTS）推荐：</strong>
+                <ul>
+                    <li><strong>5.15 LTS</strong>（2021-10 → 2026-12）：Debian 12 / Ubuntu 22.04 默认内核，成熟稳定</li>
+                    <li><strong>6.1 LTS</strong>（2022-12 → 2026-12）：首个 Rust 入核 LTS，RHEL 9 / Ubuntu 24.04 选型</li>
+                    <li><strong>6.6 LTS</strong>（2023-10 → 2029-12）：PREEMPT_RT 实时支持，适合嵌入式和工控场景</li>
+                    <li><strong>6.12 LTS</strong>（2024-11 → 2030-12）：EEVDF + RISC-V，适合前沿部署</li>
+                </ul>
+            </div>
+
+            <a href="https://claw.138138100.xyz/" class="back-link">← 返回首页</a>
+        </div>
+
+        <!-- 页脚 -->
+        <div class="footer">
+            <p>szlinux-btc · 数字花园 · Linux 技术栈</p>
+        </div>
+    </div>
+</body>
+</html>
