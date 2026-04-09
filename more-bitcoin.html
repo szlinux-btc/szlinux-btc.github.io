@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="更多比特币及加密货币相关文章，深入分析BTC、ETH、BNB的投资逻辑与技术发展。">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;">
+    <title>📚 Bitcoin | 历史文章</title>
+    <link rel="icon" type="image/x-icon" href="https://138138100.xyz/favicon.ico">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #eaeaea;
+            min-height: 100vh;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        
+        /* 导航栏 */
+        .navbar {
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+            padding: 15px 20px;
+            margin-bottom: 30px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #f7931a;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .navbar-brand span { font-size: 1.4rem; }
+        
+        /* 快捷导航按钮 */
+        .module-nav {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .module-nav a {
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: #8892b0;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            background: rgba(255,255,255,0.05);
+        }
+        .module-nav a:hover {
+            background: rgba(255,255,255,0.1);
+            color: #eaeaea;
+        }
+        .module-nav a.active {
+            background: rgba(247,147,26,0.2);
+            color: #f7931a;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.08);
+            color: #f7931a;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(247,147,26,0.3);
+        }
+        .back-btn:hover {
+            background: rgba(247,147,26,0.15);
+        }
+
+        .header { text-align: center; margin-bottom: 35px; }
+        h1 { font-size: 2rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
+        .subtitle { font-size: 1rem; color: #8892b0; margin-bottom: 20px; }
+        
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+        .stat-item {
+            background: rgba(255,255,255,0.08);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #8892b0;
+        }
+        .stat-item span { color: #f7931a; font-weight: 600; }
+
+        .search-box {
+            max-width: 500px;
+            margin: 0 auto 25px;
+            position: relative;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 14px 20px;
+            padding-left: 45px;
+            font-size: 1rem;
+            border: 2px solid rgba(247,147,26,0.3);
+            border-radius: 50px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            outline: none;
+            transition: all 0.3s;
+        }
+        .search-box input::placeholder { color: #8892b0; }
+        .search-box input:focus {
+            border-color: #f7931a;
+            background: rgba(255,255,255,0.15);
+        }
+        .search-box .icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+        }
+
+        .filter-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        .filter-btn {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(255,255,255,0.1);
+            color: #8892b0;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background: #f7931a;
+            color: #fff;
+        }
+        .filter-btn .count {
+            margin-left: 6px;
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        .article-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
+        }
+        
+        .article-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 22px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+        }
+        .article-card:hover {
+            border-color: #f7931a;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(247,147,26,0.15);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        .card-title {
+            font-weight: 600;
+            color: #fff;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-title .icon { font-size: 1.3rem; }
+        .card-date { font-size: 0.75rem; color: #8892b0; }
+        
+        .card-desc {
+            font-size: 0.9rem;
+            color: #a8b2d1;
+            line-height: 1.6;
+            flex-grow: 1;
+            margin-bottom: 15px;
+        }
+        
+        .card-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .tag-btc { background: linear-gradient(135deg, #f7931a 0%, #ffb347 100%); color: #1a1a2e; }
+        .tag-eth { background: linear-gradient(135deg, #627eea 0%, #8c9eff 100%); color: #fff; }
+        .tag-bnb { background: linear-gradient(135deg, #f3ba2f 0%, #ffd700 100%); color: #1a1a2e; }
+        .tag-analysis { background: linear-gradient(135deg, #7b1fa2 0%, #ba68c8 100%); color: #fff; }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: #f7931a;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(247,147,26,0.4);
+            z-index: 100;
+        }
+        .back-to-top.show { opacity: 1; }
+        .back-to-top:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(247,147,26,0.5); }
+
+        .no-result {
+            text-align: center;
+            padding: 60px 20px;
+            color: #8892b0;
+        }
+        .no-result .icon { font-size: 4rem; margin-bottom: 20px; }
+
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #8892b0;
+        }
+        
+        @media (max-width: 768px) {
+            .article-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 1.6rem; }
+            .stats-bar { gap: 10px; }
+            .filter-btn { padding: 6px 14px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="https://138138100.xyz/" class="navbar-brand">
+                <span>₿</span>
+                <span>Bitcoin</span>
+            </a>
+            <!-- 快捷导航 -->
+            <div class="module-nav">
+                <a href="index.html">🏠 首页</a>
+                <a href="more-bitcoin.html" class="active">₿ 大饼</a>
+                <a href="more-linux.html">🐧 Linux</a>
+                <a href="more-ai.html">🤖 AI</a>
+                <a href="more-tools.html">🔧 工具</a>
+            </div>
+            <a href="https://138138100.xyz/" class="back-btn">← 首页</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>📚 Bitcoin</h1>
+            <p class="subtitle">深入了解比特币、以太坊与加密货币世界</p>
+            
+            <div class="stats-bar">
+                <div class="stat-item">总文章: <span id="totalCount">18</span> 篇</div>
+                <div class="stat-item">BTC: <span id="btcCount">0</span> 篇</div>
+                <div class="stat-item">ETH: <span id="ethCount">0</span> 篇</div>
+                <div class="stat-item">BNB: <span id="bnbCount">0</span> 篇</div>
+            </div>
+        </div>
+
+        <div class="search-box">
+            <span class="icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="搜索文章标题或内容...">
+        </div>
+
+        <div class="filter-bar">
+            <button class="filter-btn active" data-filter="all">全部 <span class="count" id="countAll">(18)</span></button>
+            <button class="filter-btn" data-filter="btc">₿ BTC <span class="count" id="countBtc"></span></button>
+            <button class="filter-btn" data-filter="eth">Ξ ETH <span class="count" id="countEth"></span></button>
+            <button class="filter-btn" data-filter="bnb">B BNB <span class="count" id="countBnb"></span></button>
+            <button class="filter-btn" data-filter="analysis">📊 深度 <span class="count" id="countAnalysis"></span></button>
+        </div>
+
+        <div class="article-grid" id="articleGrid">
+            <!-- Articles will be rendered here -->
+        </div>
+        
+        <div class="no-result" id="noResult" style="display: none;">
+            <div class="icon">🔍</div>
+            <p>没有找到匹配的文章</p>
+        </div>
+
+        <div class="footer">
+            <p>持续更新中...</p>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+    <script>
+        // 搜索关键词映射（隐藏字段，用于搜索匹配）
+        const keywordMap = {
+            "1btc-life-changed": ["比特币", "大饼", "btc", "比特币价格", "持币"],
+            "减半四周年从第一次到当下的行情启示": ["比特币", "大饼", "减半", "行情", "btc", "牛市"],
+            "eth-constipation-log": ["以太坊", "eth", "以太", "以太币", "智能合约"],
+            "gold-bitcoin-theory": ["比特币", "大饼", "黄金", "美元", "通胀", "btc"],
+            "satoshi-legend": ["比特币", "大饼", "中本聪", "btc", "创始人"],
+            "microstrategy-btc-dca": ["比特币", "大饼", "微策略", "定投", "btc", "saylor"],
+            "vitalik-smart-contract": ["以太坊", "eth", "以太", "vitalik", "智能合约", "以太币"],
+            "bitcoin-monetary-revolution": ["比特币", "货币革命", "数字黄金", "BTC", "闪电网络", "主权储备", "btc", "中本聪"],
+            "bitcoin-legends": ["比特币", "中本聪", "BTC", "英雄谱", "人物", "布道者", "Saylor", "Andreas", "密码朋克"],
+            "btc-legend": ["比特币", "大饼", "btc", "加密货币", "数字货币"],
+            "eth-evolution": ["以太坊", "eth", "以太", "以太币", "eth2"],
+            "bnb-ecosystem": ["bnb", "币安", "交易所", "平台币"],
+            "bitcoin-mining-history": ["比特币", "矿霸", "ASIC", "算力", "矿池", "比特大陆", "吴忌寒", "Antminer", "减半", "POW"],
+            "bitcoin-lightning-network": ["闪电网络", "Lightning Network", "比特币", "HTLC", "支付通道", "BOLT12", "Taproot Assets", "LSP", "LND", "ACINQ"],
+            "bitcoin-usdt-lightning": ["USDT", "闪电网络", "Taproot Assets", "比特币", "稳定币", "跨境支付", "Tether", "BTC", "Lightning"],
+            "binance-2026-analysis": ["币安", "binance", "CZ", "赵长鹏", "交易所", "平台币"],
+            "okx-2026-analysis": ["OKX", "欧易", "交易所", "平台币", "合约"]
+        };
+
+        const articles = [
+            {
+                title: "1 BTC = 人生不同",
+                icon: "₿",
+                date: "2026-03-09",
+                desc: "当你持有 1 BTC，就拥有了全球固定供应量的 2100 万分之一。这不仅是财富，更是一种选择——选择相信去中心化，选择不被通胀侵蚀。",
+                tags: ["btc"],
+                keywords: ["比特币", "大饼", "btc", "比特币价格", "持币"],
+                url: "https://138138100.xyz/1btc-life-changed.html"
+            },
+            {
+                title: "减半四周年行情启示",
+                icon: "📊",
+                date: "2026-03-20",
+                desc: "从2012年第一次减半到2024年第四次减半，深入分析减半周期与价格走势的历史规律与未来展望。",
+                tags: ["btc", "analysis"],
+                keywords: ["比特币", "大饼", "减半", "行情", "btc", "牛市"],
+                url: "https://138138100.xyz/减半四周年从第一次到当下的行情启示.html"
+            },
+            {
+                title: "以太战车：ETH 深度分析",
+                icon: "🚀",
+                date: "2026-03-18",
+                desc: "以太坊生态深度解析：从ETH到ETH2.0，从DeFi到NFT，全面了解以太坊的价值与潜力。",
+                tags: ["eth"],
+                keywords: ["以太坊", "eth", "以太", "以太币", "智能合约"],
+                url: "https://138138100.xyz/eth-constipation-log.html"
+            },
+            {
+                title: "黄金暴涨理论：美元信任危机的警钟",
+                icon: "💰",
+                date: "2026-01-30",
+                desc: "当所有人都在问「为什么黄金涨这么猛」时，真正的信号是：全球货币共识正在重塑，而比特币正在等待接棒。",
+                tags: ["btc", "analysis"],
+                keywords: ["比特币", "大饼", "黄金", "美元", "通胀", "btc"],
+                url: "https://138138100.xyz/gold-bitcoin-theory.html"
+            },
+            {
+                title: "中本聪：数字世界的幽灵创造者",
+                icon: "👻",
+                date: "2026-03-22",
+                desc: "一个从未露面的神秘人，却改变了整个金融世界。从2008年白皮书到2010年神秘消失，这是比特币创始人的传奇故事。",
+                tags: ["btc"],
+                keywords: ["比特币", "大饼", "中本聪", "btc", "创始人"],
+                url: "https://138138100.xyz/satoshi-legend.html"
+            },
+            {
+                title: "微策略定投比特币：企业级 DCA 实验",
+                icon: "💡",
+                date: "2026-03-17",
+                desc: "Saylor 把 BI 公司变成全球最大比特币国库，持仓 76 万枚。深入分析「融资买币」飞轮模型与风险。",
+                tags: ["btc", "analysis"],
+                keywords: ["比特币", "大饼", "微策略", "定投", "btc", "saylor"],
+                url: "https://138138100.xyz/microstrategy-btc-dca.html"
+            },
+            {
+                title: "V神的野心：智能合约如何重写规则",
+                icon: "🧙",
+                date: "2026-03-23",
+                desc: "19岁天才少年用白皮书把区块链变成「世界计算机」，深度解析EVM、Gas与智能合约原理。",
+                tags: ["eth"],
+                keywords: ["以太坊", "eth", "以太", "vitalik", "智能合约", "以太币"],
+                url: "https://138138100.xyz/vitalik-smart-contract.html"
+            },
+            {
+                title: "Bitcoin 统治世界的隐形帝国：货币革命篇",
+                icon: "₿",
+                date: "2026-04-05",
+                desc: "从数字黄金到主权储备，从代码即法律到价值存储，深度解析BTC如何重构人类货币的未来。",
+                tags: ["btc"],
+                keywords: ["比特币", "货币革命", "数字黄金", "BTC", "闪电网络", "主权储备", "中本聪"],
+                url: "https://138138100.xyz/bitcoin-monetary-revolution.html"
+            },
+            {
+                title: "Bitcoin 英雄谱：改变世界的十五位关键人物",
+                icon: "🏆",
+                date: "2026-04-05",
+                desc: "从密码朋克先驱到华尔街巨头，深度解析 Bitcoin 发展历程中最重要的人物贡献与历史地位。",
+                tags: ["btc"],
+                keywords: ["比特币", "中本聪", "BTC", "英雄谱", "人物", "布道者", "Saylor", "Andreas"],
+                url: "https://138138100.xyz/bitcoin-legends.html"
+            },
+            {
+                title: "比特币传奇：BTC的前世今生",
+                icon: "📖",
+                date: "2026-03-27",
+                desc: "从密码学实验到万亿美元市值，深度解析比特币的诞生、核心技术、价格历程与投资逻辑。",
+                tags: ["btc"],
+                keywords: ["比特币", "大饼", "btc", "加密货币", "数字货币"],
+                url: "https://138138100.xyz/btc-legend.html"
+            },
+            {
+                title: "以太坊进化史：ETH的前世今生",
+                icon: "📖",
+                date: "2026-03-27",
+                desc: "从V神的野心到世界计算机，深入解析以太坊的技术演进、生态繁荣与投资逻辑。",
+                tags: ["eth"],
+                keywords: ["以太坊", "eth", "以太", "以太币", "eth2"],
+                url: "https://138138100.xyz/eth-evolution.html"
+            },
+            {
+                title: "币安帝国：BNB的前世今生",
+                icon: "📖",
+                date: "2026-03-27",
+                desc: "从交易所代币到千亿美元生态，深度解析BNB的销毁机制、核心用例与投资逻辑。",
+                tags: ["bnb"],
+                keywords: ["bnb", "币安", "交易所", "平台币"],
+                url: "https://138138100.xyz/bnb-ecosystem.html"
+            },
+            {
+                title: "比特币矿霸：算力战争与权力格局的十年激荡",
+                icon: "⛏️",
+                date: "2026-04-05",
+                desc: "从 ASIC 军备竞赛到中国禁令大逃杀，从矿池霸权到全球新格局，深度解析比特币矿业十年权力更迭。",
+                tags: ["比特币", "矿业"],
+                keywords: ["比特币", "矿霸", "ASIC", "算力", "矿池", "比特大陆", "吴忌寒", "减半", "POW"],
+                url: "https://138138100.xyz/bitcoin-mining-history.html"
+            },
+            {
+                title: "比特币闪电网络：理想与现实的博弈",
+                icon: "⚡",
+                date: "2026-04-05",
+                desc: "从 2015 年白皮书到 2026 年现实，深度拆解闪电网络技术底层、发展困境与最新动向——Taproot Assets、BOLT12、LSP 如何重塑比特币支付未来。",
+                tags: ["比特币", "技术"],
+                keywords: ["闪电网络", "Lightning Network", "比特币", "HTLC", "支付通道", "BOLT12", "Taproot Assets", "LSP"],
+                url: "https://138138100.xyz/bitcoin-lightning-network.html"
+            },
+            {
+                title: "USDT 登录闪电网络：比特币支付基础设施的临界点",
+                icon: "💰",
+                date: "2026-04-05",
+                desc: "2026年3月21日Tether确认USDT通过Taproot Assets登录闪电网络。深度解析这一事件的技术底层、与Tron/以太坊的竞争格局，以及它为何是闪电网络史上最重要的应用落地。",
+                tags: ["比特币", "稳定币"],
+                keywords: ["USDT", "闪电网络", "Taproot Assets", "比特币", "稳定币", "跨境支付", "Tether", "BTC"],
+                url: "https://138138100.xyz/bitcoin-usdt-lightning.html"
+            },
+            {
+                title: "币安深度解析：全球最大交易所的魔幻现实主义",
+                icon: "🏛️",
+                date: "2026-03-31",
+                desc: "3000亿美元估值、1.8亿用户、监管爱恨情仇——深度解析币安帝国的崛起、CZ传奇与2026年展望。",
+                tags: ["bnb", "analysis"],
+                keywords: ["币安", "binance", "CZ", "赵长鹏", "交易所", "平台币"],
+                url: "https://138138100.xyz/binance-2026-analysis.html"
+            },
+            {
+                title: "OKX交易所2026年深度分析",
+                icon: "🔷",
+                date: "2026-03-09",
+                desc: "全球头部交易所深度评测：安全性、合约深度、费率结构、平台币销毁机制与2026年发展展望。",
+                tags: ["analysis"],
+                keywords: ["OKX", "欧易", "交易所", "平台币", "合约"],
+                url: "https://138138100.xyz/okx-2026-analysis.html"
+            },
+            {
+                title: "减半四周年：从第一次到当下的行情启示",
+                icon: "📊",
+                date: "2026-04-08",
+                desc: "比特币减半四周年深度分析：从2012年首次减半到2024年第四次减半，历史数据、行情规律与投资策略全面解读。",
+                tags: ["btc", "analysis"],
+                keywords: ["比特币", "大饼", "减半", "行情", "btc", "牛市"],
+                url: "https://138138100.xyz/btc-halving-4years-v2.html"
+            },
+            {
+                title: "比特币 vs 黄金：实时对决",
+                icon: "⚔️",
+                date: "2026-04-08",
+                desc: "当所有人都在问「为什么黄金涨这么猛」时，真正的信号是：全球货币共识正在重塑，比特币正在等待接棒。",
+                tags: ["btc", "analysis"],
+                keywords: ["比特币", "大饼", "黄金", "美元", "通胀", "btc"],
+                url: "https://138138100.xyz/btc-vs-gold.html"
+            },
+            {
+                title: "量子计算突破来袭：比特币能否守住加密防线？",
+                icon: "🔐",
+                date: "2026-04-08",
+                desc: "2026年3月量子模拟里程碑！深度解析Q-Day奖、BIP-360抗量子升级、620万BTC潜在风险，比特币能否守住加密防线？",
+                tags: ["btc", "analysis"],
+                keywords: ["比特币", "量子计算", "Q-Day", "BIP-360", "抗量子", "加密", "btc"],
+                url: "https://138138100.xyz/quantum-computing-bitcoin-defense.html"
+            }
+        ];
+
+        // Count tags
+        const counts = { all: articles.length, btc: 0, eth: 0, bnb: 0, analysis: 0 };
+        articles.forEach(a => {
+            a.tags.forEach(t => { if (counts[t] !== undefined) counts[t]++; });
+        });
+
+        // Update counts in UI
+        document.getElementById('totalCount').textContent = articles.length;
+        document.getElementById('btcCount').textContent = counts.btc;
+        document.getElementById('ethCount').textContent = counts.eth;
+        document.getElementById('bnbCount').textContent = counts.bnb;
+        document.getElementById('countAll').textContent = `(${counts.all})`;
+        document.getElementById('countBtc').textContent = `(${counts.btc})`;
+        document.getElementById('countEth').textContent = `(${counts.eth})`;
+        document.getElementById('countBnb').textContent = `(${counts.bnb})`;
+        document.getElementById('countAnalysis').textContent = `(${counts.analysis})`;
+
+        let currentFilter = 'all';
+        let searchTerm = '';
+
+        function renderArticles() {
+            const grid = document.getElementById('articleGrid');
+            const noResult = document.getElementById('noResult');
+            
+            const filtered = articles.filter(a => {
+                const matchFilter = currentFilter === 'all' || a.tags.includes(currentFilter);
+                const searchLower = searchTerm.toLowerCase();
+                const matchSearch = searchTerm === '' || 
+                    a.title.toLowerCase().includes(searchLower) ||
+                    a.desc.toLowerCase().includes(searchLower) ||
+                    (a.keywords && a.keywords.some(k => k.toLowerCase().includes(searchLower)));
+                return matchFilter && matchSearch;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                noResult.style.display = 'block';
+                return;
+            }
+
+            noResult.style.display = 'none';
+            grid.innerHTML = '';
+            filtered.forEach(a => {
+                const card = document.createElement('a');
+                card.href = a.url;
+                card.className = 'article-card';
+                card.target = '_blank';
+                card.rel = 'noopener noreferrer';
+                
+                const header = document.createElement('div');
+                header.className = 'card-header';
+                
+                const title = document.createElement('span');
+                title.className = 'card-title';
+                title.textContent = a.title;
+                const iconSpan = document.createElement('span');
+                iconSpan.className = 'icon';
+                iconSpan.textContent = a.icon;
+                title.prepend(iconSpan);
+                
+                const date = document.createElement('span');
+                date.className = 'card-date';
+                date.textContent = a.date;
+                
+                header.appendChild(title);
+                header.appendChild(date);
+                
+                const desc = document.createElement('p');
+                desc.className = 'card-desc';
+                desc.textContent = a.desc;
+                
+                const tagsDiv = document.createElement('div');
+                tagsDiv.className = 'card-tags';
+                a.tags.forEach(t => {
+                    const tag = document.createElement('span');
+                    tag.className = `tag tag-${t}`;
+                    tag.textContent = t.toUpperCase();
+                    tagsDiv.appendChild(tag);
+                });
+                
+                card.appendChild(header);
+                card.appendChild(desc);
+                card.appendChild(tagsDiv);
+                grid.appendChild(card);
+            });
+        }
+
+        // Filter buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                renderArticles();
+            });
+        });
+
+        // Search
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            searchTerm = e.target.value;
+            renderArticles();
+        });
+
+        // Back to top button
+        window.addEventListener('scroll', () => {
+            const btn = document.getElementById('backToTop');
+            if (window.scrollY > 300) {
+                btn.classList.add('show');
+            } else {
+                btn.classList.remove('show');
+            }
+        });
+
+        // Initial render
+        renderArticles();
+    </script>
+</body>
+</html>
