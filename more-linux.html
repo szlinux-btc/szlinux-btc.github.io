@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="Linux 技术栈历史文章 - szlinux-btc 的技术博客">
+
+    <title>🐧 Linux 技术栈 | 历史文章</title>
+
+    <link rel="icon" type="image/x-icon" href="https://138138100.xyz/favicon.ico">
+
+    <style>
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+
+            --bg-primary: #0d1117;
+
+            --bg-secondary: #161b22;
+
+            --bg-card: #21262d;
+
+            --border-color: #30363d;
+
+            --text-primary: #e6edf3;
+
+            --text-secondary: #8b949e;
+
+            --accent: #58a6ff;
+
+            --accent-hover: #79c0ff;
+
+            --tag-suse: #0fdb6b;
+
+            --tag-redhat: #ee0000;
+
+            --tag-debian: #a80030;
+
+            --tag-security: #f85149;
+
+            --tag-network: #a371f7;
+
+            --tag-mail: #ffa657;
+
+            --tag-diagnosis: #3fb950;
+
+            --tag-external: #8b949e;
+
+        }
+
+        body {
+
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+            background: var(--bg-primary);
+
+            color: var(--text-primary);
+
+            min-height: 100vh;
+
+            line-height: 1.6;
+
+        }
+
+        .navbar {
+
+            background: var(--bg-secondary);
+
+            padding: 16px 24px;
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 100;
+
+            border-bottom: 1px solid var(--border-color);
+
+        }
+
+        .navbar-content {
+
+            max-width: 1200px;
+
+            margin: 0 auto;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+        }
+
+        .navbar-brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            color: var(--text-primary);
+
+            text-decoration: none;
+
+            font-weight: 700;
+
+            font-size: 1.2rem;
+
+        }
+
+        .navbar-brand span { font-size: 1.5rem; }
+
+        .back-btn {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding: 10px 20px;
+
+            background: var(--bg-card);
+
+            color: var(--text-primary);
+
+            text-decoration: none;
+
+            border-radius: 8px;
+
+            font-weight: 600;
+
+            font-size: 0.9rem;
+
+            transition: all 0.3s ease;
+
+            border: 1px solid var(--border-color);
+
+        }
+
+        .back-btn:hover { background: var(--border-color); }
+
+        
+
+        /* 模块导航 */
+
+        .module-nav {
+
+            display: flex;
+
+            gap: 12px;
+
+            justify-content: center;
+
+            flex-wrap: wrap;
+
+            margin: 0 auto 20px;
+
+            max-width: 1200px;
+
+            padding: 0 24px;
+
+        }
+
+        .module-nav a {
+
+            padding: 8px 16px;
+
+            color: var(--text-secondary);
+
+            text-decoration: none;
+
+            border-radius: 8px;
+
+            border: 1px solid var(--border-color);
+
+            transition: all 0.3s;
+
+            font-size: 0.9rem;
+
+        }
+
+        .module-nav a:hover {
+
+            background: rgba(88,166,255,0.15);
+
+            color: var(--accent);
+
+            border-color: var(--accent);
+
+        }
+
+        .module-nav a.active {
+
+            background: rgba(88,166,255,0.2);
+
+            border-color: var(--accent);
+
+            color: var(--accent);
+
+        }
+
+        
+
+        .header {
+
+            max-width: 1200px;
+
+            margin: 0 auto;
+
+            padding: 50px 24px 30px;
+
+            text-align: center;
+
+        }
+
+        .header-icon { font-size: 4rem; margin-bottom: 16px; }
+
+        .header h1 {
+
+            font-size: 2.2rem;
+
+            font-weight: 700;
+
+            margin-bottom: 12px;
+
+            color: var(--text-primary);
+
+        }
+
+        .header p { font-size: 1.1rem; color: var(--text-secondary); }
+
+        /* 搜索和筛选 */
+
+        .filter-bar {
+
+            max-width: 1200px;
+
+            margin: 0 auto 30px;
+
+            padding: 0 24px;
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 16px;
+
+            align-items: center;
+
+            justify-content: center;
+
+        }
+
+        .search-box {
+
+            flex: 1;
+
+            min-width: 280px;
+
+            max-width: 400px;
+
+            position: relative;
+
+        }
+
+        .search-box input {
+
+            width: 100%;
+
+            padding: 12px 20px 12px 48px;
+
+            background: var(--bg-card);
+
+            border: 1px solid var(--border-color);
+
+            border-radius: 12px;
+
+            color: var(--text-primary);
+
+            font-size: 1rem;
+
+            outline: none;
+
+            transition: border-color 0.3s;
+
+        }
+
+        .search-box input:focus { border-color: var(--accent); }
+
+        .search-box input::placeholder { color: var(--text-secondary); }
+
+        .search-icon {
+
+            position: absolute;
+
+            left: 16px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            font-size: 1.2rem;
+
+        }
+
+        .filter-buttons {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 10px;
+
+            justify-content: center;
+
+        }
+
+        .filter-btn {
+
+            padding: 10px 20px;
+
+            background: var(--bg-card);
+
+            border: 1px solid var(--border-color);
+
+            border-radius: 8px;
+
+            color: var(--text-secondary);
+
+            font-size: 0.9rem;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition: all 0.3s ease;
+
+        }
+
+        .filter-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+
+        .filter-btn.active {
+
+            background: var(--accent);
+
+            border-color: var(--accent);
+
+            color: #fff;
+
+        }
+
+        .filter-btn .count {
+
+            margin-left: 6px;
+
+            opacity: 0.7;
+
+            font-size: 0.8rem;
+
+        }
+
+        /* 统计信息 */
+
+        .stats-bar {
+
+            max-width: 1200px;
+
+            margin: 0 auto 24px;
+
+            padding: 0 24px;
+
+            text-align: center;
+
+        }
+
+        .stats-bar span {
+
+            color: var(--text-secondary);
+
+            font-size: 0.9rem;
+
+        }
+
+        .stats-bar .num { color: var(--accent); font-weight: 700; }
+
+        /* 文章网格 */
+
+        .container {
+
+            max-width: 1200px;
+
+            margin: 0 auto;
+
+            padding: 0 24px 60px;
+
+        }
+
+        .article-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+
+            gap: 20px;
+
+        }
+
+        .article-card {
+
+            background: var(--bg-card);
+
+            border: 1px solid var(--border-color);
+
+            border-radius: 12px;
+
+            padding: 24px;
+
+            text-decoration: none;
+
+            transition: all 0.3s ease;
+
+            display: flex;
+
+            flex-direction: column;
+
+        }
+
+        .article-card:hover {
+
+            border-color: var(--accent);
+
+            transform: translateY(-4px);
+
+            box-shadow: 0 8px 30px rgba(88, 166, 255, 0.15);
+
+        }
+
+        .card-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 12px;
+
+        }
+
+        .card-title {
+
+            font-size: 1.1rem;
+
+            font-weight: 600;
+
+            color: var(--text-primary);
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+        }
+
+        .card-title .icon { font-size: 1.2rem; }
+
+        .card-date { font-size: 0.8rem; color: var(--text-secondary); }
+
+        .card-desc {
+
+            font-size: 0.9rem;
+
+            color: var(--text-secondary);
+
+            line-height: 1.7;
+
+            flex: 1;
+
+            margin-bottom: 16px;
+
+        }
+
+        .card-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+
+        .tag {
+
+            padding: 4px 12px;
+
+            border-radius: 20px;
+
+            font-size: 0.75rem;
+
+            font-weight: 600;
+
+            text-transform: uppercase;
+
+        }
+
+        .tag-suse { background: rgba(15, 219, 107, 0.15); color: var(--tag-suse); }
+
+        .tag-redhat { background: rgba(238, 0, 0, 0.15); color: var(--tag-redhat); }
+
+        .tag-debian { background: rgba(168, 0, 48, 0.15); color: var(--tag-debian); }
+
+        .tag-security { background: rgba(248, 81, 73, 0.15); color: var(--tag-security); }
+
+        .tag-network { background: rgba(163, 113, 247, 0.15); color: var(--tag-network); }
+
+        .tag-mail { background: rgba(255, 166, 87, 0.15); color: var(--tag-mail); }
+
+        .tag-diagnosis { background: rgba(63, 185, 80, 0.15); color: var(--tag-diagnosis); }
+
+        .tag-external { background: rgba(139, 148, 158, 0.15); color: var(--tag-external); }
+
+        /* 无结果提示 */
+
+        .no-result {
+
+            text-align: center;
+
+            padding: 60px 20px;
+
+            display: none;
+
+        }
+
+        .no-result p { color: var(--text-secondary); font-size: 1.1rem; }
+
+        /* 底部 */
+
+        .footer-nav {
+
+            max-width: 1200px;
+
+            margin: 40px auto 0;
+
+            padding: 40px 24px;
+
+            text-align: center;
+
+            border-top: 1px solid var(--border-color);
+
+        }
+
+        .footer-btn {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            padding: 14px 32px;
+
+            background: var(--accent);
+
+            color: #fff;
+
+            text-decoration: none;
+
+            border-radius: 12px;
+
+            font-weight: 600;
+
+            font-size: 1rem;
+
+            transition: all 0.3s ease;
+
+        }
+
+        .footer-btn:hover { background: var(--accent-hover); }
+
+        /* 响应式 */
+
+        @media (max-width: 768px) {
+
+            .header h1 { font-size: 1.6rem; }
+
+            .article-grid { grid-template-columns: 1fr; }
+
+            .filter-bar { flex-direction: column; }
+
+            .search-box { max-width: 100%; }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <div class="navbar-content">
+
+            <a href="https://138138100.xyz/" class="navbar-brand">
+
+                <span>🐧</span>
+
+                <span>Linux 技术栈</span>
+
+            </a>
+
+            <a href="https://138138100.xyz/" class="back-btn">← 返回首页</a>
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- 模块导航 -->
+
+    <div class="module-nav">
+
+        <a href="index.html">🏠 首页</a>
+
+        <a href="more-bitcoin.html">₿ 大饼爱好者</a>
+
+        <a href="more-linux.html" class="active">🐧 Linux</a>
+
+        <a href="more-ai.html">🤖 AI</a>
+
+        <a href="more-tools.html">🔧 工具</a>
+
+    </div>
+
+
+
+    <header class="header">
+
+        <div class="header-icon">🐧</div>
+
+        <h1>Linux 技术栈</h1>
+
+        <p>系统管理 & 自动化 · 开源爱好者 · 相信代码改变世界</p>
+
+    </header>
+
+
+
+    <div class="filter-bar">
+
+        <div class="search-box">
+
+            <span class="search-icon">🔍</span>
+
+            <input type="text" id="searchInput" placeholder="搜索文章标题、描述或关键词...">
+
+        </div>
+
+        <div class="filter-buttons" id="filterButtons"></div>
+
+    </div>
+
+
+
+    <div class="stats-bar">
+
+        <span>共 <span class="num" id="totalCount">1</span> 篇文章</span>
+
+    </div>
+
+
+
+    <main class="container">
+
+        <div class="article-grid" id="articleGrid"></div>
+
+        <div class="no-result" id="noResult">
+
+            <p>没有找到匹配的文章，换个关键词试试？</p>
+
+        </div>
+
+    </main>
+
+
+
+    <footer class="footer-nav">
+
+        <a href="https://138138100.xyz/" class="footer-btn">← 返回首页</a>
+
+    </footer>
+
+
+
+    <script>
+
+        // 关键词映射（用于搜索）
+
+        const keywordMap = {
+
+            "linux-genius-obsession": ["linux", "系统管理员", "开源", "内核", "linus", "torvalds"],
+
+            "linux-kernel-evolution": ["linux", "内核", "kernel", "版本历史", "演进", "linus", "服务器"],
+
+            "linux-cloud-native": ["linux", "云原生", "docker", "kubernetes", "k8s", "容器", "cloud native", "CNCF", "cgroups"],
+
+            "linux-distros-compare": ["linux", "RHEL", "ubuntu", "SUSE", "麒麟", "欧拉", "信创", "商业版", "发行版", "CentOS", "AlmaLinux"],
+
+            "suse-history": ["SUSE", "linux", "openSUSE", "SLES", "YaST", "NeuVector", "Rancher", "企业级", "欧洲", "Novell"],
+
+            "redhat-history": ["Red Hat", "RHEL", "linux", "IBM", "OpenShift", "Ansible", "Ceph", "CentOS", "开源", "企业级"],
+
+            "debian-history": ["Debian", "Ubuntu", "linux", "apt", "dpkg", "Ian Murdock", "Bruce Perens", "自由软件", "社区", "DFSG"],
+
+            "linux-package-managers": ["yum", "apt", "YaST", "zypper", "RPM", "DPKG", "linux", "包管理", "dnf", "SUSE", "RHEL", "Debian", "依赖解析", "APT"],
+
+            "suse-supportconfig": ["suse", "supportconfig", "诊断", "企业", "redhat"],
+
+            "sosreport-swiss-army-knife": ["sosreport", "诊断", "redhat", "centos", "排障"],
+
+            "debian-luks-unlock": ["debian", "luks", "加密", "远程解锁", "dropbear", "ssh"],
+
+            "postfix-tls-cert-fix": ["postfix", "邮件", "tls", "ssl", "证书", "smtp"],
+
+            "suse12-kernel-management": ["suse", "内核", "kernel", "升级", "管理"],
+
+            "ufw-libvirt-bridge-fix": ["ufw", "libvirt", "桥接", "网络", "防火墙", "kvm"],
+
+            "sles-lifecycle": ["suse", "sles", "生命周期", "支持", "企业"],
+
+            "windows-history": ["windows", "历史", "操作系统", "微软"],
+
+            "win10-lifecycle": ["windows", "win10", "生命周期", "支持", "终止"]
+
+        };
+
+
+
+        const articles = [
+
+            {
+
+                title: "Linux 内核进化论：从 0.01 到 6.x 的三十年征途",
+
+                icon: "🐧",
+
+                date: "2026-04-05",
+
+                desc: "1991 年至今三十年关键版本节点与核心技术贡献，覆盖服务器、云计算、容器革命与 Rust 入核。",
+
+                tags: ["linux"],
+
+                url: "https://138138100.xyz/linux-kernel-evolution.html"
+
+            },
+
+            {
+
+                title: "国产操作系统深度解析：麒麟、欧拉、统信UOS技术对比与生态战略",
+
+                icon: "🇨🇳",
+
+                date: "2026-04-08",
+
+                desc: "从信创政策驱动到自主技术突破，站在系统工程与软件生态的高度，重新审视麒麟/欧拉/UOS的战略分野与未来走向。",
+
+                tags: ["linux"],
+
+                url: "https://138138100.xyz/china-os-analysis.html"
+
+            },
+
+            {
+
+                title: "Linux 统治世界的隐形帝国：云原生篇",
+
+                icon: "🐋",
+
+                date: "2026-04-05",
+
+                desc: "cgroups + namespace → Docker → Kubernetes → CNCF，Linux 如何从根本重构全球软件部署方式，并成为 AI 时代的基础设施底座。",
+
+                tags: ["linux"],
+
+                url: "https://138138100.xyz/linux-cloud-native.html"
+
+            },
+
+            {
+
+                title: "Linux 商业版全景图：全球格局与国产替代深度分析",
+
+                icon: "🐧",
+
+                date: "2026-04-05",
+
+                desc: "RHEL / Ubuntu / SUSE vs 银河麒麟 / 欧拉 / 统信 UOS，深度分析全球 Linux 商业发行版格局、市场占有率与选型逻辑。",
+
+                tags: ["linux"],
+
+                url: "https://138138100.xyz/linux-distros-compare.html"
+
+            },
+
+            {
+
+                title: "Linux 三大包管理工具：yum、apt、YaST 深度解析",
+
+                icon: "📦",
+
+                date: "2026-04-05",
+
+                desc: "RPM/DPKG 生态的核心引擎，从命令行到底层架构，全面拆解 yum、apt、YaST 的设计哲学、技术实现与生态格局。",
+
+                tags: ["linux"],
+
+                keywords: ["yum", "apt", "YaST", "zypper", "RPM", "DPKG", "包管理", "dnf", "SUSE", "RHEL", "Debian", "依赖解析"],
+
+                url: "https://138138100.xyz/linux-package-managers.html"
+
+            },
+
+            {
+
+                title: "Debian 发展史：社区共和国的三十年坚守",
+
+                icon: "🟠",
+
+                date: "2026-04-05",
+
+                desc: "全球最大志愿者驱动 Linux 发行版，Ubuntu 的母亲，最纯正的 Debian 之魂，深度解析 Debian 三十一年进化史与社会契约。",
+
+                tags: ["linux"],
+
+                keywords: ["Debian", "Ubuntu", "apt", "dpkg", "Ian Murdock", "Bruce Perens", "自由软件", "DFSG"],
+
+                url: "https://138138100.xyz/debian-history.html"
+
+            },
+
+            {
+
+                title: "Red Hat Linux 发展史：开源商业化的终极范本",
+
+                icon: "🔴",
+
+                date: "2026-04-05",
+
+                desc: "从三张软盘到340亿美元收购，深度解析全球最大开源软件公司 Red Hat 三十三年进化史与技术遗产。",
+
+                tags: ["linux"],
+
+                keywords: ["Red Hat", "RHEL", "linux", "IBM", "OpenShift", "Ansible", "Ceph", "CentOS", "开源"],
+
+                url: "https://138138100.xyz/redhat-history.html"
+
+            },
+
+            {
+
+                title: "SUSE Linux 发展史：欧洲开源的一面旗帜",
+
+                icon: "🟢",
+
+                date: "2026-04-05",
+
+                desc: "从德语区本地化发行版到全球企业级 Linux 三巨头，深度解析 SUSE 三十四年进化史与核心技术遗产。",
+
+                tags: ["linux"],
+
+                keywords: ["SUSE", "linux", "openSUSE", "SLES", "YaST", "企业级", "欧洲", "Novell"],
+
+                url: "https://138138100.xyz/suse-history.html"
+
+            },
+
+            {
+
+                title: "Linux大神：伟大而又偏执的创造者",
+
+                icon: "🐧",
+
+                date: "2026-03-24",
+
+                desc: "从专业视角到行业影响，从未来发展到人工智能时代，深度解析Linux的伟大之处。",
+
+                tags: ["suse"],
+
+                url: "https://138138100.xyz/linux-genius-obsession.html"
+
+            },
+
+            {
+
+                title: "SUSE supportconfig – 企业级系统诊断的黄金标准",
+
+                icon: "🔧",
+
+                date: "2026-03",
+
+                desc: "SUSE supportconfig 是企业级 Linux 系统诊断的黄金工具。自动收集系统信息、生成完整诊断报告、快速定位问题根源。",
+
+                tags: ["suse"],
+
+                url: "https://138138100.xyz/suse-supportconfig.html"
+
+            },
+
+            {
+
+                title: "sos report – Linux 系统诊断的瑞士军刀",
+
+                icon: "🔧",
+
+                date: "2026-03",
+
+                desc: "sos report 是 Red Hat/CentOS 系统的官方诊断工具。一站式收集系统配置、日志、硬件信息，快速排障必备。",
+
+                tags: ["redhat"],
+
+                url: "https://138138100.xyz/sosreport-swiss-army-knife.html"
+
+            },
+
+            {
+
+                title: "Debian LUKS 自动解锁实战",
+
+                icon: "🔐",
+
+                date: "2026-03",
+
+                desc: "通过 dropbear-initramfs 实现 Debian LUKS 加密盘远程解锁。SSH 连接、自动解锁、安全加固完整方案。",
+
+                tags: ["debian"],
+
+                url: "https://138138100.xyz/debian-luks-unlock.html"
+
+            },
+
+            {
+
+                title: "Postfix TLS 证书修复指南",
+
+                icon: "📧",
+
+                date: "2026-03",
+
+                desc: "解决 Postfix TLS 证书配置问题。证书路径、格式转换、测试验证完整流程，确保邮件传输安全。",
+
+                tags: ["mail"],
+
+                url: "https://138138100.xyz/postfix-tls-cert-fix.html"
+
+            },
+
+            {
+
+                title: "SUSE 12 内核管理：正确保留当前和最新内核",
+
+                icon: "⚙️",
+
+                date: "2026-03",
+
+                desc: "SUSE 12 内核管理实战指南。保留当前运行内核和最新内核的正确方法，避免误删导致的启动问题。",
+
+                tags: ["suse"],
+
+                url: "https://138138100.xyz/suse12-kernel-management.html"
+
+            },
+
+            {
+
+                title: "UFW 与 libvirt 桥接网络冲突解决方案",
+
+                icon: "🛡️",
+
+                date: "2026-03",
+
+                desc: "解决 UFW 防火墙与 libvirt 桥接网络冲突问题。配置 libvirt 绕过 UFW，正确设置桥接网络流量规则。",
+
+                tags: ["network"],
+
+                url: "https://138138100.xyz/ufw-libvirt-bridge-fix.html"
+
+            },
+
+            {
+
+                title: "Linux 前沿技术综合分析 2026：eBPF + Rust 引领内核革命",
+
+                icon: "🚀",
+
+                date: "2026-03",
+
+                desc: "深度解析 eBPF 革命、Rust 入核、AI/HPC 优化、云原生增强，2026 年 Linux 核心技术栈全面升级。",
+
+                tags: ["kernel"],
+
+                url: "https://138138100.xyz/linux-frontier-tech-2026.html"
+
+            },
+
+            {
+
+                title: "SUSE Multi-Linux Support",
+
+                icon: "🔗",
+
+                date: "2026-03",
+
+                desc: "SUSE 官方多 Linux 系统支持解决方案。企业和混合 Linux 环境的专业支持服务。",
+
+                tags: ["external"],
+
+                url: "https://www.suse.com/products/multi-linux-support/"
+
+            },
+
+            {
+
+                title: "Mozilla SSL Configuration Generator",
+
+                icon: "🔐",
+
+                date: "2026-03",
+
+                desc: "Mozilla 官方 SSL 配置生成器。一键生成安全的服务器 SSL/TLS 配置文件，支持 Nginx、Apache 等。",
+
+                tags: ["external"],
+
+                url: "https://ssl-config.mozilla.org/"
+
+            },
+
+            {
+
+                title: "SUSE Linux Enterprise Server 版本生命周期",
+
+                icon: "📅",
+
+                date: "2026-03",
+
+                desc: "SUSE Linux Enterprise Server (SLES) 各版本支持周期一览，SP版本升级路线图。",
+
+                tags: ["suse"],
+
+                url: "https://138138100.xyz/sles-lifecycle.html"
+
+            },
+
+            {
+
+                title: "量子计算机9分钟就能破解私钥：你的比特币和SSH还安全吗？",
+
+                icon: "🔐",
+
+                date: "2026-03-31",
+
+                desc: "深度解析比特币地址安全选择、Bitcoin Core私钥管理、OpenSSH量子加固策略，以及中本聪地址的终极考验。",
+
+                tags: ["security"],
+
+                url: "https://138138100.xyz/quantum-computing-ssh-security.html"
+
+            },
+            {
+                    "title": "发展眼光看红帽撤离中国：一个时代终结的深层解读",
+                    "icon": "🐧",
+                    "date": "2026-04-09",
+                    "desc": "红帽裁撤500人研发团队深度解析：IBM整合、全球科技寒潮与地缘政治的全方位解读。",
+                    "tags": ["linux", "open-source"],
+                    "url": "https://138138100.xyz/redhat-china-exit-2026.html"
+            }
+        
+
+        ];
+
+
+
+        // 提取所有标签
+
+        const allTags = [...new Set(articles.flatMap(a => a.tags))];
+
+        const tagNames = {
+
+            'suse': 'SUSE',
+
+            'redhat': 'RedHat',
+
+            'debian': 'Debian',
+
+            'security': '安全',
+
+            'network': '网络',
+
+            'mail': '邮件',
+
+            'diagnosis': '诊断',
+
+            'external': '外部'
+
+        };
+
+
+
+        let currentFilter = 'all';
+
+        let searchTerm = '';
+
+
+
+        // 初始化筛选按钮
+
+        function initFilters() {
+
+            const btnContainer = document.getElementById('filterButtons');
+
+            const tagCounts = {};
+
+            articles.forEach(a => {
+
+                a.tags.forEach(t => {
+
+                    tagCounts[t] = (tagCounts[t] || 0) + 1;
+
+                });
+
+            });
+
+
+
+            let buttonsHTML = `<button class="filter-btn active" data-filter="all">全部 <span class="count">${articles.length}</span></button>`;
+
+            allTags.forEach(tag => {
+
+                const count = tagCounts[tag] || 0;
+
+                const name = tagNames[tag] || tag;
+
+                buttonsHTML += `<button class="filter-btn" data-filter="${tag}">${name} <span class="count">${count}</span></button>`;
+
+            });
+
+            btnContainer.innerHTML = buttonsHTML;
+
+
+
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+
+                btn.addEventListener('click', () => {
+
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+
+                    btn.classList.add('active');
+
+                    currentFilter = btn.dataset.filter;
+
+                    renderArticles();
+
+                });
+
+            });
+
+        }
+
+
+
+        // 渲染文章（安全方式）
+
+        function renderArticles() {
+
+            const grid = document.getElementById('articleGrid');
+
+            const noResult = document.getElementById('noResult');
+
+            const totalCount = document.getElementById('totalCount');
+
+
+
+            const filtered = articles.filter(a => {
+
+                const matchFilter = currentFilter === 'all' || a.tags.includes(currentFilter);
+
+                const searchLower = searchTerm.toLowerCase();
+
+                const matchSearch = searchTerm === '' || 
+
+                    a.title.toLowerCase().includes(searchLower) ||
+
+                    a.desc.toLowerCase().includes(searchLower) ||
+
+                    (keywordMap[a.url.split('/').pop()] && keywordMap[a.url.split('/').pop()].some(k => k.toLowerCase().includes(searchLower)));
+
+                return matchFilter && matchSearch;
+
+            });
+
+
+
+            totalCount.textContent = filtered.length;
+
+
+
+            if (filtered.length === 0) {
+
+                grid.innerHTML = '';
+
+                noResult.style.display = 'block';
+
+                return;
+
+            }
+
+
+
+            noResult.style.display = 'none';
+
+            grid.innerHTML = '';
+
+            
+
+            filtered.forEach(a => {
+
+                const card = document.createElement('a');
+
+                card.href = a.url;
+
+                card.className = 'article-card';
+
+                if (a.url.startsWith('http')) {
+
+                    card.target = '_blank';
+
+                    card.rel = 'noopener noreferrer';
+
+                }
+
+                
+
+                const header = document.createElement('div');
+
+                header.className = 'card-header';
+
+                
+
+                const title = document.createElement('span');
+
+                title.className = 'card-title';
+
+                const iconSpan = document.createElement('span');
+
+                iconSpan.className = 'icon';
+
+                iconSpan.textContent = a.icon;
+
+                title.appendChild(iconSpan);
+
+                const titleText = document.createTextNode(a.title);
+
+                title.appendChild(titleText);
+
+                
+
+                const date = document.createElement('span');
+
+                date.className = 'card-date';
+
+                date.textContent = a.date;
+
+                
+
+                header.appendChild(title);
+
+                header.appendChild(date);
+
+                
+
+                const desc = document.createElement('p');
+
+                desc.className = 'card-desc';
+
+                desc.textContent = a.desc;
+
+                
+
+                const tagsDiv = document.createElement('div');
+
+                tagsDiv.className = 'card-tags';
+
+                a.tags.forEach(t => {
+
+                    const tag = document.createElement('span');
+
+                    tag.className = `tag tag-${t}`;
+
+                    tag.textContent = (tagNames[t] || t).toUpperCase();
+
+                    tagsDiv.appendChild(tag);
+
+                });
+
+                
+
+                card.appendChild(header);
+
+                card.appendChild(desc);
+
+                card.appendChild(tagsDiv);
+
+                grid.appendChild(card);
+
+            });
+
+        }
+
+
+
+        // 搜索功能
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+
+            searchTerm = e.target.value;
+
+            renderArticles();
+
+        });
+
+
+
+        // 初始化
+
+        initFilters();
+
+        renderArticles();
+
+    </script>
+
+</body>
+
+</html>
+
