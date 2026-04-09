@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Claude Code v2.1.88 源码泄露事件深度分析：51.2万行TypeScript完整曝光，Undercover Mode、Buddy宠物、Dream记忆、未发布功能全解析">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <title>🔍 Claude Code 源码泄露深度分析 | szlinux-btc</title>
+    <link rel="icon" type="image/x-icon" href="https://claw.138138100.xyz/favicon.ico">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: #21262d;
+            --bg-card-hover: #2d333b;
+            --border-color: #30363d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --accent: #f778ba;
+            --accent-blue: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-orange: #ffa657;
+            --accent-red: #f85149;
+            --code-bg: #1c2128;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+
+        /* 导航 */
+        .navbar {
+            background: var(--bg-secondary);
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .navbar-content {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .navbar-brand {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .module-nav { display: flex; gap: 8px; flex-wrap: wrap; }
+        .module-nav a {
+            padding: 7px 14px;
+            border-radius: 20px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            background: rgba(255,255,255,0.05);
+        }
+        .module-nav a:hover { background: rgba(255,255,255,0.1); color: var(--text-primary); }
+        .module-nav a.active { background: rgba(247,120,186,0.2); color: #f778ba; }
+
+        /* 文章头部 */
+        .article-header {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 24px 40px;
+        }
+        .article-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 24px;
+            align-items: center;
+        }
+        .tag {
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .tag-security { background: rgba(248,81,73,0.15); color: var(--accent-red); border: 1px solid rgba(248,81,73,0.3); }
+        .tag-analysis { background: rgba(247,120,186,0.15); color: var(--accent); border: 1px solid rgba(247,120,186,0.3); }
+        .tag-ai { background: rgba(88,166,255,0.15); color: var(--accent-blue); border: 1px solid rgba(88,166,255,0.3); }
+        .date { color: var(--text-muted); font-size: 0.9rem; }
+        .article-title {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+        .article-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* 文章主体 */
+        .article-body {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 24px 80px;
+        }
+
+        /* 目录 */
+        .toc {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 40px;
+        }
+        .toc-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+        .toc ol { padding-left: 20px; }
+        .toc li { margin-bottom: 8px; }
+        .toc a {
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+        .toc a:hover { color: var(--accent); }
+
+        /* 内容样式 */
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 48px 0 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin: 32px 0 14px;
+        }
+        h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 24px 0 10px;
+        }
+        p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            line-height: 1.8;
+        }
+        strong { color: var(--text-primary); font-weight: 600; }
+
+        /* 高亮块 */
+        .highlight-box {
+            border-radius: 10px;
+            padding: 20px 24px;
+            margin: 24px 0;
+            border-left: 4px solid;
+        }
+        .highlight-red { background: rgba(248,81,73,0.08); border-color: var(--accent-red); }
+        .highlight-blue { background: rgba(88,166,255,0.08); border-color: var(--accent-blue); }
+        .highlight-pink { background: rgba(247,120,186,0.08); border-color: var(--accent); }
+        .highlight-green { background: rgba(63,185,80,0.08); border-color: var(--accent-green); }
+        .highlight-orange { background: rgba(255,166,87,0.08); border-color: var(--accent-orange); }
+        .highlight-box p { margin-bottom: 0; }
+        .highlight-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        .highlight-red .highlight-label { color: var(--accent-red); }
+        .highlight-blue .highlight-label { color: var(--accent-blue); }
+        .highlight-pink .highlight-label { color: var(--accent); }
+        .highlight-green .highlight-label { color: var(--accent-green); }
+        .highlight-orange .highlight-label { color: var(--accent-orange); }
+
+        /* 代码块 */
+        pre {
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-size: 0.88rem;
+            line-height: 1.6;
+        }
+        code {
+            font-family: 'SF Mono', 'Cascadia Code', Monaco, Consolas, monospace;
+            color: #e6edf3;
+        }
+        p code, li code {
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.85em;
+            color: var(--accent);
+        }
+
+        /* 表格 */
+        .table-wrap { overflow-x: auto; margin: 24px 0; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        th {
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 2px solid var(--border-color);
+            white-space: nowrap;
+        }
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+        tr:hover td { background: rgba(255,255,255,0.02); }
+        td strong { color: var(--text-primary); }
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+        .badge-unreleased { background: rgba(248,81,73,0.15); color: var(--accent-red); }
+        .badge-released { background: rgba(63,185,80,0.15); color: var(--accent-green); }
+        .badge-limited { background: rgba(255,166,87,0.15); color: var(--accent-orange); }
+
+        /* 信息卡片 */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+        .info-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 18px;
+            text-align: center;
+        }
+        .info-card .num {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            font-family: 'SF Mono', monospace;
+            margin-bottom: 6px;
+        }
+        .info-card .label { font-size: 0.85rem; color: var(--text-muted); }
+
+        /* 列表 */
+        ul, ol {
+            padding-left: 22px;
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+        }
+        li { margin-bottom: 8px; line-height: 1.7; }
+        li strong { color: var(--text-primary); }
+
+        /* 分割线 */
+        .section-divider {
+            border: none;
+            border-top: 1px solid var(--border-color);
+            margin: 48px 0;
+        }
+
+        /* 时间线 */
+        .timeline {
+            position: relative;
+            padding-left: 28px;
+            margin: 24px 0;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 8px;
+            bottom: 8px;
+            width: 2px;
+            background: var(--border-color);
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 24px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 7px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: 2px solid var(--bg-primary);
+        }
+        .timeline-time {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-family: monospace;
+            margin-bottom: 4px;
+        }
+        .timeline-content {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* 结尾 */
+        .article-footer {
+            border-top: 1px solid var(--border-color);
+            padding-top: 32px;
+            margin-top: 48px;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: var(--accent); }
+
+        /* 响应式 */
+        @media (max-width: 600px) {
+            .article-title { font-size: 1.5rem; }
+            .article-header, .article-body { padding-left: 16px; padding-right: 16px; }
+            .info-grid { grid-template-columns: repeat(2, 1fr); }
+            pre { padding: 14px; font-size: 0.82rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航 -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="https://claw.138138100.xyz/" class="navbar-brand">
+                <span>🥮</span> szlinux-btc
+            </a>
+            <div class="module-nav">
+                <a href="index.html">🏠 首页</a>
+                <a href="more-bitcoin.html">₿ 大饼</a>
+                <a href="more-linux.html">🐧 Linux</a>
+                <a href="more-ai.html" class="active">🤖 AI</a>
+                <a href="more-tools.html">🔧 工具</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 文章头部 -->
+    <div class="article-header">
+        <div class="article-meta">
+            <span class="tag tag-security">⚠️ 安全事件</span>
+            <span class="tag tag-analysis">🔬 深度分析</span>
+            <span class="tag tag-ai">🤖 AI 工具</span>
+            <span class="date">2026-04-04</span>
+        </div>
+        <h1 class="article-title">Claude Code 源码泄露深度分析<br>— 51.2 万行 TypeScript 里藏了什么</h1>
+        <p class="article-subtitle">
+            2026年3月31日，Anthropic 因 npm 构建失误意外将 59.8MB 的 source map 打包进生产包，
+            完整暴露了 Claude Code 的 TypeScript 源码长达约3小时。本文基于对原始泄露代码的直接阅读，
+            深度解析这次事件背后隐藏的未发布功能、内部代号体系与架构秘密。
+        </p>
+    </div>
+
+    <!-- 文章主体 -->
+    <div class="article-body">
+
+        <!-- 数据总览 -->
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="num">1906</div>
+                <div class="label">TypeScript 源文件</div>
+            </div>
+            <div class="info-card">
+                <div class="num">51.2万</div>
+                <div class="label">代码行数</div>
+            </div>
+            <div class="info-card">
+                <div class="num">59.8MB</div>
+                <div class="label">Source Map 大小</div>
+            </div>
+            <div class="info-card">
+                <div class="num">3小时</div>
+                <div class="label">暴露窗口期</div>
+            </div>
+        </div>
+
+        <!-- 目录 -->
+        <div class="toc">
+            <div class="toc-title">目录</div>
+            <ol>
+                <li><a href="#event">事件经过：一次失误引发的全曝光</a></li>
+                <li><a href="#arch">整体架构：1906个文件的秘密</a></li>
+                <li><a href="#undercover">Undercover Mode：专为卧底内部员工设计的隐身模式</a></li>
+                <li><a href="#fastmode">Fast Mode = 企鹅模式（Penguin Mode）</a></li>
+                <li><a href="#buddy">Buddy 宠物系统：Terminal 里的电子鸡</a></li>
+                <li><a href="#dream">Dream 记忆整理：后台运行的 AI 整理工</a></li>
+                <li><a href="#models">模型代号与演进历史：Fennec → Opus</a></li>
+                <li><a href="#unreleased">8个未发布功能全景</a></li>
+                <li><a href="#conclusion">技术观点与安全启示</a></li>
+            </ol>
+        </div>
+
+        <!-- 一、事件经过 -->
+        <h2 id="event">一、事件经过：一次失误引发的全曝光</h2>
+
+        <div class="highlight-box highlight-red">
+            <div class="highlight-label">⚠️ 泄露根因</div>
+            <p>Bun 打包器默认开启 source map 生成，但发布脚本的 <code>.npmignore</code> 没有排除 <code>*.map</code> 文件，导致 59.8MB 的 source map（包含完整 TypeScript 原始代码）被打包进 npm 生产版本。</p>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-time">2026-03-31 · 凌晨</div>
+                <div class="timeline-content">Anthropic 发布 Claude Code <strong>v2.1.88</strong>，npm 包中意外包含 <code>cli.js.map</code>（59.8MB）</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-time">2026-03-31 · 约3小时后</div>
+                <div class="timeline-content">安全研究员 <strong>Chaofan Shou (@Fried_rice)</strong> 首先发现泄露并公开，Anthropic 紧急下架 v2.1.88</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-time">2026-03-31 · 随后24小时</div>
+                <div class="timeline-content">源码被迅速镜像至 GitHub，出现大量 fork；Anthropic 发布 v2.1.89 修复版本，并从 npm 删除 v2.1.88</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-time">2026-04-01 ~ 今</div>
+                <div class="timeline-content">社区开始系统性分析，多篇技术分析文章流传，部分镜像仓库仍可访问</div>
+            </div>
+        </div>
+
+        <div class="highlight-box highlight-pink">
+            <div class="highlight-label">🔥 讽刺之处</div>
+            <p>Anthropic 专门构建了 <strong>Undercover Mode</strong> 防止 AI 在代码提交中泄露内部信息 —— 结果源码本身通过一个 <code>.npmignore</code> 疏漏完整泄露，包括 Undercover Mode 本身的完整实现、所有内部代号和未发布功能。</p>
+        </div>
+
+        <!-- 二、架构 -->
+        <h2 id="arch">二、整体架构：1906个文件的秘密</h2>
+
+        <h3>技术栈</h3>
+        <p>Claude Code 的技术栈出乎很多人意料：</p>
+        <ul>
+            <li><strong>运行时</strong>：Bun（不是 Node.js），使用 <code>bun:bundle</code> 的编译期特性门控</li>
+            <li><strong>UI 框架</strong>：React + Ink（将 React 渲染到终端 Terminal，而不是浏览器 DOM）</li>
+            <li><strong>CLI 解析</strong>：Commander.js</li>
+            <li><strong>Feature Flag</strong>：GrowthBook（从 Statsig 迁移中）</li>
+        </ul>
+
+        <h3>核心目录结构</h3>
+        <pre><code>src/
+├── main.tsx              # CLI 入口 (~800KB)，含引导、REPL、主循环
+├── QueryEngine.ts        # 核心 LLM 调用引擎
+├── Tool.ts               # 工具基类
+├── tools/                # 184 个文件，40+ 工具
+│   ├── AgentTool/        # 子 Agent 管理
+│   ├── BashTool/         # Shell 执行（含安全模块）
+│   ├── FileEditTool/     # 文件编辑
+│   ├── WebSearchTool/    # 网页搜索
+│   └── MCPTool/          # MCP 协议工具
+├── services/             # 130 个文件
+│   ├── analytics/        # GrowthBook + 事件埋点
+│   ├── autoDream/        # 后台记忆整理（Dream 系统）
+│   └── MCP/              # MCP 服务器管理
+├── buddy/                # 6 个文件 — 宠物伙伴系统
+├── commands/             # 207 个文件 — CLI 命令
+├── components/           # 389 个文件 — React 组件
+├── utils/                # 564 个文件 — 工具函数
+└── migrations/           # 11 个文件 — 数据迁移历史</code></pre>
+
+        <h3>编译期特性门控（完整列表）</h3>
+        <p>Claude Code 使用 Bun 的 <code>feature()</code> 函数实现编译期死码消除，发布版本中所有 <code>false</code> 的门控分支都不会出现在最终 JS 里。以下是从源码中找到的完整未发布功能清单：</p>
+        <div class="table-wrap">
+        <table>
+            <tr><th>特性名</th><th>功能说明</th><th>状态</th></tr>
+            <tr><td><code>PROACTIVE / KAIROS</code></td><td>永续助手模式，主动观察和行动</td><td><span class="badge badge-unreleased">未发布</span></td></tr>
+            <tr><td><code>BRIDGE_MODE</code></td><td>与 claude.ai 远程连接控制</td><td><span class="badge badge-unreleased">未发布</span></td></tr>
+            <tr><td><code>DAEMON</code></td><td>后台守护进程常驻模式</td><td><span class="badge badge-unreleased">未发布</span></td></tr>
+            <tr><td><code>VOICE_MODE</code></td><td>语音输入命令</td><td><span class="badge badge-unreleased">未发布</span></td></tr>
+            <tr><td><code>COORDINATOR_MODE</code></td><td>多 Agent 编排协调器</td><td><span class="badge badge-unreleased">未发布</span></td></tr>
+            <tr><td><code>TRANSCRIPT_CLASSIFIER</code></td><td>ML 自动审批（AFK 模式）</td><td><span class="badge badge-unreleased">未发布</span></td></tr>
+            <tr><td><code>BUDDY</code></td><td>Terminal 宠物伙伴系统</td><td><span class="badge badge-unreleased">未发布</span></td></tr>
+            <tr><td><code>WORKFLOW_SCRIPTS</code></td><td>工作流自动化脚本</td><td><span class="badge badge-unreleased">未发布</span></td></tr>
+        </table>
+        </div>
+
+        <!-- 三、Undercover Mode -->
+        <h2 id="undercover">三、Undercover Mode：专为卧底内部员工设计的隐身模式</h2>
+
+        <p>这是泄露源码里最有意思的功能之一。Anthropic 内部员工大量使用 Claude Code 参与开源开发，但为了防止 AI 在 commit 消息、PR 描述中无意泄露内部信息，专门为此构建了 Undercover Mode。</p>
+
+        <h3>工作原理</h3>
+        <pre><code>// src/utils/undercover.ts
+export function isUndercover(): boolean {
+  if (process.env.USER_TYPE === 'ant') {
+    // 强制开启
+    if (isEnvTruthy(process.env.CLAUDE_CODE_UNDERCOVER)) return true
+    // 自动模式：不在内部仓库白名单就开启
+    return getRepoClassCached() !== 'internal'
+  }
+  return false  // 外部用户不生效
+}</code></pre>
+
+        <p>三档激活逻辑：<strong>① 环境变量强制</strong> → <strong>② 自动模式（不在内部白名单就开启）</strong> → <strong>③ 没有强制关闭选项</strong>（安全优先）</p>
+
+        <h3>隐藏的内容类型</h3>
+        <p>当 Undercover Mode 开启时，系统提示词会注入以下指令，要求 AI 在 commit/PR 内容中隐藏：</p>
+        <ul>
+            <li>内部模型代号（Capybara、Tengu、Fennec 等动物名）</li>
+            <li>未发布模型版本号（如 opus-4-7、sonnet-4-8）</li>
+            <li>内部仓库名称（claude-cli-internal、anthropics/...）</li>
+            <li>内部工具链、Slack 频道、短链（go/cc、#claude-code-...）</li>
+            <li><strong>"Claude Code" 这个词本身</strong>以及"你是 AI"这个事实</li>
+            <li>Co-Authored-By 署名行</li>
+        </ul>
+
+        <!-- 四、Fast Mode -->
+        <h2 id="fastmode">四、Fast Mode = 企鹅模式（Penguin Mode）</h2>
+
+        <p>源码直接确认了 Fast Mode 的内部代号是 <strong>Penguin Mode</strong>（而不是坊间猜测的其他名字）。</p>
+
+        <pre><code>// API 端点
+const endpoint = `/api/claude_code_penguin_mode`
+
+// 配置键
+penguinModeOrgEnabled
+
+// 杀死开关（GrowthBook）
+tengu_penguins_off
+
+// 分析事件
+tengu_org_penguin_mode_fetch_failed
+tengu_fast_mode_fallback_triggered</code></pre>
+
+        <h3>状态机架构</h3>
+        <p>Fast Mode 有完整的四层状态机：</p>
+        <ul>
+            <li><code>isFastModeEnabled()</code> — 全局开关</li>
+            <li><code>isFastModeAvailable()</code> — 可用性检查（含 Statsig 门控）</li>
+            <li><code>isFastModeSupportedByModel()</code> — 仅限 Opus 4.6</li>
+            <li><code>isFastModeCooldown()</code> — 速率限制冷却计时</li>
+        </ul>
+
+        <p><strong>不可用原因</strong>：<code>free</code>（免费账户）/ <code>preference</code>（组织禁用）/ <code>extra_usage_disabled</code>（超额计费未开启）</p>
+        <p><strong>冷却触发</strong>：<code>rate_limit</code> 或 <code>overloaded</code>，冷却时长由 API 返回的 <code>resetTimestamp</code> 决定</p>
+
+        <!-- 五、Buddy -->
+        <h2 id="buddy">五、Buddy 宠物系统：Terminal 里的电子鸡</h2>
+
+        <p>这是泄露代码里最令人意外的发现。Anthropic 正在开发一个在终端里显示的宠物伙伴系统，完整度相当高——不是玩笑项目，是正经的产品规划。</p>
+
+        <h3>19 个物种（不是 18 个）</h3>
+        <p>所有物种名通过 <code>String.fromCharCode()</code> 混淆，防止在源码搜索中暴露：</p>
+        <div class="table-wrap">
+        <table>
+            <tr>
+                <td>🦆 duck</td><td>🪿 goose</td><td>🫧 blob</td><td>🐱 cat</td>
+            </tr>
+            <tr>
+                <td>🐉 dragon</td><td>🐙 octopus</td><td>🦉 owl</td><td>🐧 penguin</td>
+            </tr>
+            <tr>
+                <td>🐢 turtle</td><td>🐌 snail</td><td>👻 ghost</td><td>🦎 axolotl</td>
+            </tr>
+            <tr>
+                <td>🐭 capybara</td><td>🌵 cactus</td><td>🤖 robot</td><td>🐰 rabbit</td>
+            </tr>
+            <tr>
+                <td>🍄 mushroom</td><td>🐾 chonk</td><td colspan="2">（19个，社区普遍说18个，实际多一个 chonk）</td>
+            </tr>
+        </table>
+        </div>
+
+        <h3>抽卡系统</h3>
+        <div class="table-wrap">
+        <table>
+            <tr><th>稀有度</th><th>概率</th><th>属性下限</th></tr>
+            <tr><td>Common</td><td>60%</td><td>5</td></tr>
+            <tr><td>Uncommon</td><td>25%</td><td>15</td></tr>
+            <tr><td>Rare</td><td>10%</td><td>25</td></tr>
+            <tr><td>Epic</td><td>4%</td><td>35</td></tr>
+            <tr><td>Legendary</td><td>1%</td><td>50</td></tr>
+        </table>
+        </div>
+
+        <p><strong>5 项属性</strong>：DEBUGGING（调试力）/ PATIENCE（耐心）/ CHAOS（混乱度）/ WISDOM（智慧）/ SNARK（毒舌度）</p>
+        <p><strong>确定性</strong>：使用 Mulberry32 PRNG，种子 = <code>hash(userId + 'friend-2026-401')</code>，同一用户永远抽到同一只宠物。只有 "Soul"（AI 生成的名字和个性）会持久化存储。</p>
+
+        <!-- 六、Dream -->
+        <h2 id="dream">六、Dream 记忆整理：后台运行的 AI 整理工</h2>
+
+        <p>Dream 系统是 Claude Code 的后台记忆整理机制，当满足特定条件时自动 fork 一个子 Agent 在后台整理你的 memory 文件。</p>
+
+        <h3>三门触发机制</h3>
+        <pre><code>门1：时间门   → 距上次整理 >= 24小时
+门2：会话门   → 新会话数 >= 5
+门3：锁门     → 获取排他锁（防止并发）
+全部通过 → Fork 子 Agent 执行整理</code></pre>
+
+        <h3>四阶段整理流程</h3>
+        <ul>
+            <li><strong>Phase 1 - Orient</strong>：读取 MEMORY.md，了解已有结构，避免重复</li>
+            <li><strong>Phase 2 - Gather</strong>：读日志、找矛盾记忆、grep 关键信息</li>
+            <li><strong>Phase 3 - Consolidate</strong>：合并信息，相对日期转绝对日期，删除矛盾</li>
+            <li><strong>Phase 4 - Prune</strong>：MEMORY.md 控制在 &lt;200行/&lt;25KB，每条索引 &lt;150 字符</li>
+        </ul>
+
+        <div class="highlight-box highlight-green">
+            <div class="highlight-label">✅ 安全约束</div>
+            <p>Dream Agent 的 Bash 权限严格受限，只允许 <code>ls</code>、<code>grep</code>、<code>cat</code> 等只读命令，所有写操作全部拒绝。无法被利用做危险操作。</p>
+        </div>
+
+        <!-- 七、模型演进 -->
+        <h2 id="models">七、模型代号与演进历史</h2>
+
+        <h3>动物命名体系</h3>
+        <p>源码 <code>migrations/</code> 目录里的迁移文件揭示了完整的模型演进路径：</p>
+        <pre><code>// migrateFennecToOpus.ts
+'fennec-latest'        → 'opus'
+'fennec-latest[1m]'    → 'opus[1m]'
+'fennec-fast-latest'   → 'opus[1m]' + fastMode: true
+
+// migrateSonnet45ToSonnet46.ts
+'claude-sonnet-4-5-20250929'    → 'sonnet'
+'sonnet-4-5-20250929[1m]'       → 'sonnet[1m]'</code></pre>
+
+        <p>确认的代号体系：</p>
+        <ul>
+            <li><strong>Fennec</strong>（耳廓狐）→ Opus 的历史代号</li>
+            <li><strong>Tengu</strong> → Claude Code 项目本身的内部代号</li>
+            <li><strong>Capybara</strong>（水豚）→ 新一代模型系列（Anthropic 正在工程化）</li>
+        </ul>
+
+        <div class="highlight-box highlight-orange">
+            <div class="highlight-label">🔧 Capybara 生产工程问题</div>
+            <p>源码揭示 Anthropic 观察到 Capybara 模型在 Prompt 形状类似 turn boundary 时会提前停止生成。已实施缓解措施：强制插入 <code>Tool loaded.</code> 安全标记、重新定位有风险的兄弟块、压缩工具输出内容。</p>
+        </div>
+
+        <!-- 八、未发布功能 -->
+        <h2 id="unreleased">八、8个未发布功能全景</h2>
+
+        <div class="table-wrap">
+        <table>
+            <tr><th>功能</th><th>内部代号</th><th>说明</th><th>状态</th></tr>
+            <tr>
+                <td><strong>永续助手</strong></td>
+                <td><code>KAIROS</code></td>
+                <td>不等用户输入，主动观察和行动的后台 Agent</td>
+                <td><span class="badge badge-unreleased">未发布</span></td>
+            </tr>
+            <tr>
+                <td><strong>超长规划</strong></td>
+                <td><code>ULTRAPLAN</code></td>
+                <td>30分钟 CCR 远程规划会话（Opus 4.6）</td>
+                <td><span class="badge badge-unreleased">未发布</span></td>
+            </tr>
+            <tr>
+                <td><strong>记忆梦想</strong></td>
+                <td>Dream</td>
+                <td>后台记忆整理 Agent（已见上文）</td>
+                <td><span class="badge badge-unreleased">未发布</span></td>
+            </tr>
+            <tr>
+                <td><strong>宠物伙伴</strong></td>
+                <td>Buddy</td>
+                <td>Terminal 电子鸡（已见上文）</td>
+                <td><span class="badge badge-unreleased">未发布</span></td>
+            </tr>
+            <tr>
+                <td><strong>多 Agent 编排</strong></td>
+                <td><code>COORDINATOR</code></td>
+                <td>并行工作 Agent + 协调器</td>
+                <td><span class="badge badge-unreleased">未发布</span></td>
+            </tr>
+            <tr>
+                <td><strong>Agent 群</strong></td>
+                <td>Agent Swarms</td>
+                <td>跨进程队友协作（需 opt-in）</td>
+                <td><span class="badge badge-limited">需申请</span></td>
+            </tr>
+            <tr>
+                <td><strong>计算机使用</strong></td>
+                <td>Chicago</td>
+                <td>@ant/computer-use-mcp 集成</td>
+                <td><span class="badge badge-limited">Max/Pro限定</span></td>
+            </tr>
+            <tr>
+                <td><strong>语音输入</strong></td>
+                <td><code>VOICE_MODE</code></td>
+                <td>语音命令输入</td>
+                <td><span class="badge badge-unreleased">未发布</span></td>
+            </tr>
+        </table>
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- 九、结论 -->
+        <h2 id="conclusion">九、技术观点与安全启示</h2>
+
+        <h3>工程质量评价</h3>
+        <p><strong>优秀方面：</strong></p>
+        <ul>
+            <li>编译期死码消除 + GrowthBook 运行时控制的双层特性门控，设计成熟</li>
+            <li>GrowthBook 内存→磁盘→网络三级缓存降级，容错能力强</li>
+            <li>Dream 系统四阶段提示词精细，三门触发避免过度运行</li>
+            <li>宠物系统确定性好（Mulberry32）+ 隐私保护兼顾，产品完整度高</li>
+        </ul>
+        <p><strong>需要改进的地方：</strong></p>
+        <ul>
+            <li>npm 发布流程缺少产物检查（最低成本的安全措施）</li>
+            <li><code>String.fromCharCode()</code> 混淆只是掩耳盗铃，反而增加了可读性负担</li>
+        </ul>
+
+        <h3>与社区分析的差异</h3>
+        <p>基于直接阅读源码，对社区流传分析的几点修正：</p>
+        <ul>
+            <li><strong>物种数量</strong>：流传版本说 18 个，源码确认是 <strong>19 个</strong>（增加了 chonk）</li>
+            <li><strong>Undercover Mode</strong>：没有强制关闭选项，外部用户完全不受影响</li>
+            <li><strong>Dream 触发条件</strong>：不是单独的时间或次数，是<strong>时间门 + 会话门 + 锁门三个同时通过</strong></li>
+            <li><strong>Beta Headers</strong>：完整列表有 16 个，包含 task-budgets-2026-03-13、token-efficient-tools-2026-03-28 等比较新的</li>
+        </ul>
+
+        <div class="highlight-box highlight-blue">
+            <div class="highlight-label">💡 最重要的结论</div>
+            <p>这次泄露最大的意义不是"Claude Code 有多少 bug"，而是揭示了 <strong>AI 工具的真实研发节奏</strong>：发布版本只是冰山一角，大量功能已经完成甚至生产就绪，只是通过特性门控锁住。Anthropic 在 Claude Code 上的投入，远超产品表面呈现的规模。</p>
+        </div>
+
+        <!-- 结尾 -->
+        <div class="article-footer">
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:20px;">
+                源码版本：v2.1.88 · 分析日期：2026-04-04 · 免责声明：本文仅用于技术研究，所有源码版权归 Anthropic PBC 所有
+            </p>
+            <a href="more-ai.html" class="back-link">← 返回 AI 学习者</a>
+        </div>
+
+    </div>
+
+</body>
+</html>
