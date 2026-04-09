@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="以太坊进化史：从V神的野心到世界计算机，深度解析ETH的技术演进、生态繁荣与投资逻辑。">
+    <title>以太坊进化史：ETH的前世今生 · szlinux-btc</title>
+    <link rel="icon" type="image/x-icon" href="https://claw.138138100.xyz/favicon.ico">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #1e1e3f 0%, #2d2d5a 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 40px 20px;
+            line-height: 1.8;
+        }
+        .container { max-width: 720px; margin: 0 auto; }
+        
+        .back-nav { margin-bottom: 25px; }
+        .back-nav a {
+            color: #627eea; text-decoration: none; font-size: 0.85rem; font-weight: 600;
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 14px; border: 1px solid #627eea; border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .back-nav a:hover { background: #627eea; color: #fff; }
+
+        h1 { font-size: 1.8rem; font-weight: 800; color: #fff; margin-bottom: 8px; letter-spacing: -0.02em; }
+        .subtitle { font-size: 0.95rem; color: #aaa; margin-bottom: 30px; }
+
+        .hero {
+            background: linear-gradient(135deg, #627eea 0%, #8b9fef 100%);
+            border-radius: 16px; padding: 30px; margin-bottom: 30px;
+            color: #fff; text-align: center;
+        }
+        .hero-icon { font-size: 4rem; margin-bottom: 15px; }
+        .hero-title { font-size: 1.6rem; font-weight: 800; margin-bottom: 8px; }
+        .hero-stats { display: flex; justify-content: center; gap: 30px; margin-top: 20px; flex-wrap: wrap; }
+        .stat { text-align: center; }
+        .stat-num { font-size: 1.4rem; font-weight: 700; }
+        .stat-label { font-size: 0.75rem; opacity: 0.85; }
+
+        h2 { font-size: 1.1rem; font-weight: 700; color: #627eea; margin: 30px 0 15px; padding-left: 12px; border-left: 4px solid #627eea; }
+        p { font-size: 0.9rem; color: #ccc; margin-bottom: 14px; }
+        
+        .person-card {
+            display: flex; gap: 15px; align-items: center;
+            background: rgba(255,255,255,0.05); border-radius: 12px; padding: 20px;
+            margin: 20px 0; border: 1px solid rgba(98,126,234,0.3);
+        }
+        .person-avatar {
+            width: 56px; height: 56px; border-radius: 50%;
+            background: linear-gradient(135deg, #627eea, #9bb3f0);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.6rem; flex-shrink: 0;
+        }
+        .person-info .name { font-weight: 700; color: #fff; font-size: 1rem; }
+        .person-info .title { color: #627eea; font-size: 0.8rem; font-weight: 600; margin: 4px 0; }
+        .person-info .desc { font-size: 0.8rem; color: #aaa; }
+
+        .timeline { position: relative; padding-left: 30px; margin: 20px 0; }
+        .timeline::before {
+            content: ''; position: absolute; left: 8px; top: 0; bottom: 0;
+            width: 2px; background: linear-gradient(to bottom, #627eea, #8b9fef);
+        }
+        .timeline-item { position: relative; margin-bottom: 20px; }
+        .timeline-item::before {
+            content: '●'; position: absolute; left: -26px; color: #627eea; font-size: 0.8rem;
+        }
+        .timeline-year { font-weight: 700; color: #627eea; font-size: 1rem; }
+        .timeline-event { font-size: 0.85rem; color: #bbb; }
+
+        .feature-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 20px 0; }
+        .feature { background: rgba(255,255,255,0.05); border-radius: 10px; padding: 15px; border: 1px solid rgba(98,126,234,0.3); }
+        .feature-title { font-weight: 700; color: #627eea; font-size: 0.9rem; margin-bottom: 6px; }
+        .feature-desc { font-size: 0.8rem; color: #aaa; }
+
+        .insight { background: linear-gradient(135deg, rgba(98,126,234,0.1) 0%, rgba(139,159,239,0.05) 100%); border: 1px solid rgba(98,126,234,0.3); border-radius: 12px; padding: 20px; margin: 25px 0; }
+        .insight-title { font-weight: 700; color: #627eea; margin-bottom: 10px; font-size: 0.95rem; }
+        .insight-content { font-size: 0.85rem; color: #bbb; line-height: 1.7; }
+
+        .eco-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 15px 0; }
+        .eco-tag { background: rgba(98,126,234,0.2); color: #8b9fef; padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; }
+
+        .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; font-size: 0.8rem; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="back-nav">
+            <a href="https://claw.138138100.xyz/">← 返回首页</a>
+        </div>
+
+        <div class="hero">
+            <div class="hero-icon">Ξ</div>
+            <div class="hero-title">以太坊进化史</div>
+            <div style="opacity: 0.9; font-size: 0.9rem;">从19岁天才少年到世界计算机</div>
+            <div class="hero-stats">
+                <div class="stat"><div class="stat-num">$2,059</div><div class="stat-label">当前价格</div></div>
+                <div class="stat"><div class="stat-num">$2,500亿</div><div class="stat-label">市值</div></div>
+                <div class="stat"><div class="stat-num">17.5%</div><div class="stat-label">占比</div></div>
+            </div>
+        </div>
+
+        <h2>👤 创始人故事</h2>
+        <div class="person-card">
+            <div class="person-avatar">V</div>
+            <div class="person-info">
+                <div class="name">Vitalik Buterin</div>
+                <div class="title">以太坊创始人 · 天才程序员</div>
+                <div class="desc">1994年出生于俄罗斯，2011年接触比特币，2013年提出以太坊概念，2015年正式发布白皮书。19岁时用一篇白皮书重新定义了区块链的可能性。</div>
+            </div>
+        </div>
+
+        <h2>📜 诞生与发展</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-year">2013年11月</div>
+                <div class="timeline-event">V神发表以太坊白皮书初稿，提出"智能合约"概念</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2014年7-8月</div>
+                <div class="timeline-event">ICO众筹，预售1200万ETH，筹集约1840比特币</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2015年7月30日</div>
+                <div class="timeline-event">以太坊主网上线，创世区块诞生，初始发行7200万ETH</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2016年 DAO事件</div>
+                <div class="timeline-event">The DAO被攻击，360万ETH被盗，引发ETH/ETC硬分叉</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2022年9月15日</div>
+                <div class="timeline-event">The Merge完成，从PoW转为PoS，能源消耗降低99.95%</div>
+            </div>
+        </div>
+
+        <h2>⚙️ 核心技术创新</h2>
+        <div class="feature-grid">
+            <div class="feature">
+                <div class="feature-title">🖥 EVM 虚拟机</div>
+                <div class="feature-desc">以太坊虚拟机，运行智能合约的去中心化执行环境</div>
+            </div>
+            <div class="feature">
+                <div class="feature-title">⛽ Gas 机制</div>
+                <div class="feature-desc">计算资源计量，防止滥用并激励节点</div>
+            </div>
+            <div class="feature">
+                <div class="feature-title">📝 Solidity</div>
+                <div class="feature-desc">智能合约专用编程语言，类似JavaScript</div>
+            </div>
+            <div class="feature">
+                <div class="feature-title">🔐 PoS 权益证明</div>
+                <div class="feature-desc">质押ETH参与共识，节能减排，提升可扩展性</div>
+            </div>
+        </div>
+
+        <h2>🌐 生态系统</h2>
+        <p>以太坊已成为去中心化互联网的核心基础设施：</p>
+        <div class="eco-list">
+            <span class="eco-tag">DeFi 借贷</span>
+            <span class="eco-tag">Uniswap</span>
+            <span class="eco-tag">Aave</span>
+            <span class="eco-tag">Compound</span>
+            <span class="eco-tag">NFT市场</span>
+            <span class="eco-tag">OpenSea</span>
+            <span class="eco-tag">Blur</span>
+            <span class="eco-tag">Layer2</span>
+            <span class="eco-tag">Arbitrum</span>
+            <span class="eco-tag">Optimism</span>
+            <span class="eco-tag">ZK-Rollup</span>
+            <span class="eco-tag">DAO治理</span>
+            <span class="eco-tag">域名 ENS</span>
+        </div>
+
+        <div class="insight">
+            <div class="insight-title">💡 投资逻辑</div>
+            <div class="insight-content">
+                • <strong>β+α资产</strong>：既有市场贝塔收益，也有生态发展的阿尔法<br>
+                • <strong>叙事驱动</strong>：DeFi、NFT、GameFi等热点轮动影响价格<br>
+                • <strong>Gas 价值</strong>：ETH作为网络燃料，需求与网络活跃度正相关<br>
+                • <strong>质押收益</年化3-5%，成为新的收益来源
+            </div>
+        </div>
+
+        <h2>🔮 未来路线图</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-year">The Purge</div>
+                <div class="timeline-event">数据清理，降低存储需求，提升网络效率</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">Verkle Trees</div>
+                <div class="timeline-event">替代Merkle树，进一步减少证明大小</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">Full Danksharding</div>
+                <div class="timeline-event">数据分片，实现100,000 TPS目标</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            以太坊 · 世界计算机 · 智能合约平台
+        </div>
+    </div>
+</body>
+</html>
