@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="工具和速查表历史文章 - szlinux-btc 的技术博客">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;">
+    <title>🪟 工具 & 速查表 | 历史文章</title>
+    <link rel="icon" type="image/x-icon" href="https://138138100.xyz/favicon.ico">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: #21262d;
+            --border-color: #30363d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --accent: #58a6ff;
+            --accent-hover: #79c0ff;
+            --tag-history: #f778ba;
+            --tag-security: #f85149;
+            --tag-consumer: #ffa657;
+            --tag-windows: #3fb950;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        .navbar {
+            background: var(--bg-secondary);
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        /* 快捷导航按钮 */
+        .module-nav {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .module-nav a {
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            background: rgba(255,255,255,0.05);
+        }
+        .module-nav a:hover {
+            background: rgba(255,255,255,0.1);
+            color: var(--text-primary);
+        }
+        .module-nav a.active {
+            background: rgba(63,185,80,0.2);
+            color: #3fb950;
+        }
+        
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+        .navbar-brand span { font-size: 1.5rem; }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+        .back-btn:hover { background: var(--border-color); }
+        .header {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px 24px 30px;
+            text-align: center;
+        }
+        .header-icon { font-size: 4rem; margin-bottom: 16px; }
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+        .header p { font-size: 1.1rem; color: var(--text-secondary); }
+        .filter-bar {
+            max-width: 1200px;
+            margin: 0 auto 30px;
+            padding: 0 24px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+            justify-content: center;
+        }
+        .search-box {
+            flex: 1;
+            min-width: 280px;
+            max-width: 400px;
+            position: relative;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px 12px 48px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .search-box input:focus { border-color: var(--accent); }
+        .search-box input::placeholder { color: var(--text-secondary); }
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+        }
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        .filter-btn {
+            padding: 10px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .filter-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+        .filter-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+        .filter-btn .count {
+            margin-left: 6px;
+            opacity: 0.7;
+            font-size: 0.8rem;
+        }
+        .stats-bar {
+            max-width: 1200px;
+            margin: 0 auto 24px;
+            padding: 0 24px;
+            text-align: center;
+        }
+        .stats-bar span { color: var(--text-secondary); font-size: 0.9rem; }
+        .stats-bar .num { color: var(--accent); font-weight: 700; }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 60px;
+        }
+        .article-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        .article-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .article-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(88, 166, 255, 0.15);
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-title .icon { font-size: 1.2rem; }
+        .card-date { font-size: 0.8rem; color: var(--text-secondary); }
+        .card-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            flex: 1;
+            margin-bottom: 16px;
+        }
+        .card-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .tag-history { background: rgba(247, 120, 186, 0.15); color: var(--tag-history); }
+        .tag-security { background: rgba(248, 81, 73, 0.15); color: var(--tag-security); }
+        .tag-consumer { background: rgba(255, 166, 87, 0.15); color: var(--tag-consumer); }
+        .tag-windows { background: rgba(63, 185, 80, 0.15); color: var(--tag-windows); }
+        .no-result {
+            text-align: center;
+            padding: 60px 20px;
+            display: none;
+        }
+        .no-result p { color: var(--text-secondary); font-size: 1.1rem; }
+        .footer-nav {
+            max-width: 1200px;
+            margin: 40px auto 0;
+            padding: 40px 24px;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+        }
+        .footer-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 32px;
+            background: var(--accent);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .footer-btn:hover { background: var(--accent-hover); }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.6rem; }
+            .article-grid { grid-template-columns: 1fr; }
+            .filter-bar { flex-direction: column; }
+            .search-box { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="https://138138100.xyz/" class="navbar-brand">
+                <span>🪟</span>
+                <span>工具 & 速查表</span>
+            </a>
+            <!-- 快捷导航 -->
+            <div class="module-nav">
+                <a href="index.html">🏠 首页</a>
+                <a href="more-bitcoin.html">₿ 大饼</a>
+                <a href="more-linux.html">🐧 Linux</a>
+                <a href="more-ai.html">🤖 AI</a>
+                <a href="more-tools.html" class="active">🔧 工具</a>
+            </div>
+            <a href="https://138138100.xyz/" class="back-btn">← 首页</a>
+        </div>
+    </nav>
+
+    <header class="header">
+        <div class="header-icon">🪟</div>
+        <h1>工具 & 速查表</h1>
+        <p>实用工具 · 速查手册 · 提高效率的小技巧</p>
+    </header>
+
+    <div class="filter-bar">
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="搜索文章标题、描述或关键词...">
+        </div>
+        <div class="filter-buttons" id="filterButtons"></div>
+    </div>
+
+    <div class="stats-bar">
+        <span>共 <span class="num" id="totalCount">9</span> 篇文章</span>
+    </div>
+
+    <main class="container">
+        <div class="article-grid" id="articleGrid"></div>
+        <div class="no-result" id="noResult">
+            <p>没有找到匹配的文章，换个关键词试试？</p>
+        </div>
+    </main>
+
+    <footer class="footer-nav">
+        <a href="https://138138100.xyz/" class="footer-btn">← 返回首页</a>
+    </footer>
+
+    <script>
+        const keywordMap = {
+            "today-in-history": ["历史", "今天", "事件", "每日"],
+            "today-history": ["历史", "归档", "记录"],
+            "ai-poisoning-vs-dns": ["ai", "投毒", "dns", "安全"],
+            "cctv315-2026": ["315", "央视", "消费", "晚会"],
+            "win10-lifecycle": ["windows", "win10", "生命周期", "支持"],
+            "windows-history": ["windows", "历史", "操作系统"],
+            "git-team-guide": ["git", "团队", "分支", "冲突", "协作", "github", "pull request", "pr"]
+        };
+
+        const articles = [
+            {
+                title: "tmux 终端复用完全指南：SSH 远程会话的瑞士军刀",
+                icon: "🖥️",
+                date: "2026-04",
+                desc: "分屏、会话持久化、后台运行、共享协作——tmux 完整配置指南。覆盖快捷键、插件（TPM/resurrect）、同步窗格、脚本化等实战技巧。",
+                tags: ["windows", "consumer"],
+                url: "https://138138100.xyz/tmux-guide.html"
+            },
+            {
+                title: "历史上的今天",
+                icon: "📅",
+                date: "每日更新",
+                desc: "探索历史上的今天发生了什么。重大事件、人物诞生与逝世、文化里程碑，每日自动更新。",
+                tags: ["history"],
+                url: "https://138138100.xyz/today-in-history.html"
+            },
+            {
+                title: "历史上的今天 · 历史记录",
+                icon: "📜",
+                date: "历史归档",
+                desc: "查看所有历史上的今天归档记录。按日期浏览历史事件，发现过去每一天的精彩。",
+                tags: ["history"],
+                url: "https://138138100.xyz/today-history.html"
+            },
+            {
+                title: "AI投毒 vs DNS投毒：为什么不能用「坏多少」来衡量？",
+                icon: "🪟",
+                date: "2026-03",
+                desc: "由 3·15 GEO 投毒事件引发的深度思考：二者攻击维度、影响深度完全不同，AI投毒的危害是指数级且代际传递的。",
+                tags: ["security"],
+                url: "https://138138100.xyz/ai-poisoning-vs-dns.html"
+            },
+            {
+                title: "2026 央视 3·15 晚会：3 大消费乱象速览",
+                icon: "📺",
+                date: "2026-03",
+                desc: "第 36 届 · 主题：放心消费 品质生活。从工业双氧水漂白鸡脚到 AI 被投毒，附快速避雷速查表。",
+                tags: ["consumer"],
+                url: "https://138138100.xyz/cctv315-2026.html"
+            },
+            {
+                title: "Windows 10 各版本生命周期全览",
+                icon: "🛠",
+                date: "2026-03",
+                desc: "主流版本已于 2025 年 10 月 14 日终止支持，含 LTSC/LTSB 版本结束日期一览，数据来源微软官方。",
+                tags: ["windows"],
+                url: "https://138138100.xyz/win10-lifecycle.html"
+            },
+            {
+                title: "Windows 四十年：从 MS-DOS 外壳到现代操作系统",
+                icon: "🪟",
+                date: "2026-03",
+                desc: "回顾 Windows 从 1985 年 1.0 到 2021 年 11 的发展历程，涵盖 15 个主要版本及客观评价。",
+                tags: ["windows"],
+                url: "https://138138100.xyz/windows-history.html"
+            },
+            {
+                title: "Windows 10 LTSC 专业分析",
+                icon: "🪟",
+                date: "2026-03",
+                desc: "深度解读 LTSC：10年超长支持周期、无强制更新、企业 IT 必看。",
+                tags: ["windows"],
+                url: "https://138138100.xyz/windows-10-ltsc-analysis.html"
+            },
+            {
+                title: "Git 团队协作指南：分支模型与冲突解决",
+                icon: "🔀",
+                date: "2026-04",
+                desc: "GitFlow vs Trunk-Based 横向对比，commit 规范、PR 审查 checklist、冲突解决完整流程与工具链推荐。",
+                tags: ["git"],
+                url: "https://138138100.xyz/git-team-guide.html"
+            },
+            {
+                    "title": "Vim实用、专业、高效",
+                    "icon": "🔧",
+                    "date": "2026-04-09",
+                    "desc": "为什么Vim值得花时间学？实用、专业、高效三个维度深度解析，附常用命令速查表。",
+                    "tags": [
+                            "vim",
+                            "linux",
+                            "效率"
+                    ],
+                    "keywords": [
+                            "实用",
+                            "专业",
+                            "高效",
+                            "为什么",
+                            "值得花时间学",
+                            "高效三个维度深度解析",
+                            "附常用命令速查表"
+                    ],
+                    "url": "https://138138100.xyz/vim-practical-professional-efficient.html"
+            }
+        
+        ];
+
+        const allTags = [...new Set(articles.flatMap(a => a.tags))];
+        const tagNames = {
+            'history': '历史',
+            'security': '安全',
+            'consumer': '消费',
+            'windows': 'Windows',
+            'git': 'Git'
+        };
+
+        let currentFilter = 'all';
+        let searchTerm = '';
+
+        function initFilters() {
+            const btnContainer = document.getElementById('filterButtons');
+            const tagCounts = {};
+            articles.forEach(a => {
+                a.tags.forEach(t => {
+                    tagCounts[t] = (tagCounts[t] || 0) + 1;
+                });
+            });
+
+            let buttonsHTML = `<button class="filter-btn active" data-filter="all">全部 <span class="count">${articles.length}</span></button>`;
+            allTags.forEach(tag => {
+                const count = tagCounts[tag] || 0;
+                const name = tagNames[tag] || tag;
+                buttonsHTML += `<button class="filter-btn" data-filter="${tag}">${name} <span class="count">${count}</span></button>`;
+            });
+            btnContainer.innerHTML = buttonsHTML;
+
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentFilter = btn.dataset.filter;
+                    renderArticles();
+                });
+            });
+        }
+
+        function renderArticles() {
+            const grid = document.getElementById('articleGrid');
+            const noResult = document.getElementById('noResult');
+            const totalCount = document.getElementById('totalCount');
+
+            const filtered = articles.filter(a => {
+                const matchFilter = currentFilter === 'all' || a.tags.includes(currentFilter);
+                const searchLower = searchTerm.toLowerCase();
+                const matchSearch = searchTerm === '' || 
+                    a.title.toLowerCase().includes(searchLower) ||
+                    a.desc.toLowerCase().includes(searchLower) ||
+                    (keywordMap[a.url.split('/').pop()] && keywordMap[a.url.split('/').pop()].some(k => k.toLowerCase().includes(searchLower)));
+                return matchFilter && matchSearch;
+            });
+
+            totalCount.textContent = filtered.length;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                noResult.style.display = 'block';
+                return;
+            }
+
+            noResult.style.display = 'none';
+            grid.innerHTML = '';
+            
+            filtered.forEach(a => {
+                const card = document.createElement('a');
+                card.href = a.url;
+                card.className = 'article-card';
+                
+                const header = document.createElement('div');
+                header.className = 'card-header';
+                
+                const title = document.createElement('span');
+                title.className = 'card-title';
+                const iconSpan = document.createElement('span');
+                iconSpan.className = 'icon';
+                iconSpan.textContent = a.icon;
+                title.appendChild(iconSpan);
+                const titleText = document.createTextNode(a.title);
+                title.appendChild(titleText);
+                
+                const date = document.createElement('span');
+                date.className = 'card-date';
+                date.textContent = a.date;
+                
+                header.appendChild(title);
+                header.appendChild(date);
+                
+                const desc = document.createElement('p');
+                desc.className = 'card-desc';
+                desc.textContent = a.desc;
+                
+                const tagsDiv = document.createElement('div');
+                tagsDiv.className = 'card-tags';
+                a.tags.forEach(t => {
+                    const tag = document.createElement('span');
+                    tag.className = `tag tag-${t}`;
+                    tag.textContent = (tagNames[t] || t).toUpperCase();
+                    tagsDiv.appendChild(tag);
+                });
+                
+                card.appendChild(header);
+                card.appendChild(desc);
+                card.appendChild(tagsDiv);
+                grid.appendChild(card);
+            });
+        }
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            searchTerm = e.target.value;
+            renderArticles();
+        });
+
+        initFilters();
+        renderArticles();
+    </script>
+</body>
+</html>
