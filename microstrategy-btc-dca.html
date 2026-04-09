@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="微策略（Strategy）定投比特币全解析：从软件公司到比特币国库公司的蜕变，Saylor 的 21/21 计划、融资机制、BTC Yield 指标与争议">
+    <title>微策略定投比特币：企业级 DCA 的疯狂实验 | szlinux-btc</title>
+    <link rel="icon" type="image/x-icon" href="https://claw.138138100.xyz/favicon.ico">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background: #f5f7fa;
+            color: #1a1a1a;
+            line-height: 1.8;
+            padding: 30px 20px;
+        }
+        .container { max-width: 760px; margin: 0 auto; }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 24px;
+            color: #f7931a;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .back-link:hover { text-decoration: underline; }
+        .article-header {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border-radius: 16px;
+            padding: 36px 32px;
+            margin-bottom: 30px;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+        .article-header::before {
+            content: '₿';
+            position: absolute;
+            right: 24px;
+            top: 20px;
+            font-size: 6rem;
+            opacity: 0.08;
+            font-weight: 700;
+        }
+        .article-tag {
+            display: inline-block;
+            background: #f7931a;
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 14px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        .article-title {
+            font-size: 1.85rem;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+        .article-meta {
+            font-size: 0.85rem;
+            opacity: 0.6;
+        }
+        .section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 28px;
+            margin-bottom: 20px;
+            border: 1px solid #e8e8e8;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        }
+        .section h2 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f7931a;
+            color: #1a1a1a;
+        }
+        .section p { margin-bottom: 12px; color: #333; font-size: 0.95rem; }
+        .section p:last-child { margin-bottom: 0; }
+
+        /* 数据卡片网格 */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            margin: 16px 0;
+        }
+        @media (max-width: 540px) { .stat-grid { grid-template-columns: 1fr 1fr; } }
+        .stat-card {
+            background: linear-gradient(135deg, #fff8f0 0%, #fff 100%);
+            border: 1px solid #ffe0b2;
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+        }
+        .stat-label { font-size: 0.72rem; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
+        .stat-value { font-size: 1.4rem; font-weight: 800; color: #f7931a; }
+        .stat-sub { font-size: 0.75rem; color: #aaa; margin-top: 4px; }
+
+        /* 时间线 */
+        .timeline { margin: 16px 0; }
+        .tl-item {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 14px;
+            align-items: flex-start;
+        }
+        .tl-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #f7931a;
+            flex-shrink: 0;
+            margin-top: 5px;
+        }
+        .tl-date { font-size: 0.78rem; font-weight: 700; color: #f7931a; min-width: 82px; margin-top: 3px; }
+        .tl-content { font-size: 0.88rem; color: #444; }
+
+        /* 对比表 */
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            margin: 16px 0;
+        }
+        .compare-table th {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 10px 14px;
+            text-align: left;
+            font-size: 0.82rem;
+        }
+        .compare-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .compare-table tr:nth-child(even) td { background: #fafafa; }
+        .compare-table tr:last-child td { border-bottom: none; }
+
+        /* 融资循环示意 */
+        .cycle-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 16px 0;
+            font-size: 0.82rem;
+        }
+        .cycle-step {
+            background: #fff8f0;
+            border: 1px solid #f7931a;
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-weight: 600;
+            color: #1a1a1a;
+            text-align: center;
+        }
+        .cycle-arrow { color: #f7931a; font-weight: 700; font-size: 1.1rem; }
+
+        /* 风险提示框 */
+        .risk-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-left: 4px solid #ffc107;
+            border-radius: 8px;
+            padding: 16px 18px;
+            font-size: 0.88rem;
+            color: #5a4a00;
+            margin: 16px 0;
+        }
+        .risk-box strong { color: #b8860b; }
+
+        /* 观点框 */
+        .quote-box {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border-radius: 10px;
+            padding: 20px 24px;
+            margin: 16px 0;
+            color: #fff;
+        }
+        .quote-box p { color: #e0e0e0; font-style: italic; margin-bottom: 8px; font-size: 0.95rem; }
+        .quote-box .quote-author { font-size: 0.8rem; color: #f7931a; font-style: normal; font-weight: 700; }
+
+        .btc-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f7931a, #ffb347);
+            color: #fff;
+            font-weight: 700;
+            padding: 2px 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+        .highlight { color: #f7931a; font-weight: 700; }
+        ul { padding-left: 20px; }
+        ul li { margin-bottom: 8px; font-size: 0.92rem; color: #444; }
+        .footer-nav {
+            text-align: center;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid #e8e8e8;
+            font-size: 0.88rem;
+            color: #888;
+        }
+        .footer-nav a {
+            color: #f7931a;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 0 10px;
+        }
+        .note-small { font-size: 0.78rem; color: #999; margin-top: 8px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back-link" href="https://claw.138138100.xyz/">← 返回首页</a>
+
+    <div class="article-header">
+        <div class="article-tag">₿ 大饼研究</div>
+        <div class="article-title">微策略定投比特币<br>企业级 DCA 的疯狂实验</div>
+        <div class="article-meta">📅 2026 年 3 月 17 日 &nbsp;|&nbsp; szlinux-btc</div>
+    </div>
+
+    <!-- 核心数据快照 -->
+    <div class="section">
+        <h2>📊 当前持仓快照（截至 2026-03-15）</h2>
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-label">持仓规模</div>
+                <div class="stat-value">761,068</div>
+                <div class="stat-sub">枚 BTC</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">占总量</div>
+                <div class="stat-value">3.62%</div>
+                <div class="stat-sub">全球比特币总量 2,100 万</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">平均买入成本</div>
+                <div class="stat-value">$70,194</div>
+                <div class="stat-sub">每枚 BTC</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">2026年目标</div>
+                <div class="stat-value">100万</div>
+                <div class="stat-sub">枚 BTC（年底）</div>
+            </div>
+        </div>
+        <p class="note-small">数据来源：Strategy 8-K 公告 / TradingKey / 新浪财经 &nbsp;|&nbsp; 仅供参考，不构成投资建议</p>
+    </div>
+
+    <!-- 从软件公司到比特币国库 -->
+    <div class="section">
+        <h2>🏢 从 BI 软件公司到比特币国库公司</h2>
+        <p>MicroStrategy 成立于 1989 年，是一家做商业智能（BI）软件的公司，在 2020 年以前默默无闻。</p>
+        <p>2020 年 8 月，CEO <strong class="highlight">Michael Saylor</strong> 做了一个改变公司命运的决定：将企业现金储备全部转换为比特币，理由是美联储无限 QE 下美元正在"融化"，而比特币是数字时代的黄金。</p>
+        <p>这家公司随后改名为 <strong>Strategy（MSTR）</strong>，商业模式从"卖软件"变成了"<strong class="highlight">融资 → 买 BTC → 再融资 → 再买</strong>"的无限循环。</p>
+
+        <div class="timeline">
+            <div class="tl-item">
+                <div class="tl-dot"></div>
+                <div>
+                    <div class="tl-date">2020-08</div>
+                    <div class="tl-content">首次购入 21,454 枚 BTC，均价约 11,652 美元 — 比特币国库战略正式启动</div>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot"></div>
+                <div>
+                    <div class="tl-date">2021-02</div>
+                    <div class="tl-content">发行 10 亿美元可转债购入 BTC，开创"发债买币"先例</div>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot"></div>
+                <div>
+                    <div class="tl-date">2024-10</div>
+                    <div class="tl-content">提出 "21/21 计划"：3 年内通过股权 + 债权各融资 210 亿美元购入 BTC</div>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot"></div>
+                <div>
+                    <div class="tl-date">2025-11</div>
+                    <div class="tl-content">正式更名为 Strategy，软件业务退居幕后，比特币国库成为核心</div>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot"></div>
+                <div>
+                    <div class="tl-date">2025-11</div>
+                    <div class="tl-content">持仓突破 50 万枚，企业持仓量位居全球第一（超越任何主权国家）</div>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-dot"></div>
+                <div>
+                    <div class="tl-date">2026-03</div>
+                    <div class="tl-content">持仓达 761,068 枚，单周购入 22,337 枚（约 15.7 亿美元），迈向 100 万目标</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 融资飞轮 -->
+    <div class="section">
+        <h2>⚙️ Saylor 的融资飞轮：怎么一直买？</h2>
+        <p>Strategy 本质上不是在"定投"，而是在用<strong class="highlight">资本市场杠杆</strong>持续放大比特币敞口。核心循环如下：</p>
+        <div class="cycle-box">
+            <div class="cycle-step">股价溢价于 BTC NAV</div>
+            <div class="cycle-arrow">→</div>
+            <div class="cycle-step">增发股票 / 发行优先股</div>
+            <div class="cycle-arrow">→</div>
+            <div class="cycle-step">募集美元</div>
+            <div class="cycle-arrow">→</div>
+            <div class="cycle-step">买入 BTC</div>
+            <div class="cycle-arrow">→</div>
+            <div class="cycle-step">BTC 涨价推高 NAV</div>
+            <div class="cycle-arrow">→</div>
+            <div class="cycle-step">股价溢价再现</div>
+        </div>
+        <p>这个飞轮的关键前提是：MSTR 股票的市值必须持续<strong class="highlight">高于</strong>其持有的比特币价值（即 mNAV > 1）。一旦溢价消失，融资成本就会上升，循环就会减速甚至停止。</p>
+
+        <h2 style="margin-top: 20px;">📐 BTC Yield：衡量增持效率的核心指标</h2>
+        <p>Saylor 发明了一个叫 <strong>BTC Yield</strong> 的指标：</p>
+        <p style="background: #f8f8f8; border-radius: 8px; padding: 12px; font-family: monospace; font-size: 0.88rem;">BTC Yield = (每股对应 BTC 持仓量的增长率)</p>
+        <p>简单说：公司发了更多股，但每股对应的 BTC 也变多了，就是正向的。如果增发导致每股 BTC 被稀释，BTC Yield 就是负的，说明购币效率在下降。</p>
+        <p>2026 年初的数据显示，随着 MSTR 股价承压、mNAV 跌破 1 附近，BTC Yield 有所走低，市场开始质疑增持效率。</p>
+    </div>
+
+    <!-- DCA vs 企业融资增持对比 -->
+    <div class="section">
+        <h2>⚖️ 个人 DCA vs 微策略增持：本质区别</h2>
+        <table class="compare-table">
+            <tr>
+                <th>维度</th>
+                <th>个人 DCA（定投）</th>
+                <th>微策略增持</th>
+            </tr>
+            <tr>
+                <td><strong>资金来源</strong></td>
+                <td>自有闲置资金</td>
+                <td>发债 + 增发股票（杠杆）</td>
+            </tr>
+            <tr>
+                <td><strong>频率</strong></td>
+                <td>固定时间（周/月）</td>
+                <td>随融资窗口机动增持</td>
+            </tr>
+            <tr>
+                <td><strong>清算风险</strong></td>
+                <td>无强制清算</td>
+                <td>债务到期若无法再融资存在压力</td>
+            </tr>
+            <tr>
+                <td><strong>成本摊平</strong></td>
+                <td>随市场波动自然摊平</td>
+                <td>大额买入推高均价，反向摊平</td>
+            </tr>
+            <tr>
+                <td><strong>目的</strong></td>
+                <td>长期保值/增值</td>
+                <td>用比特币叙事重构公司估值体系</td>
+            </tr>
+            <tr>
+                <td><strong>退出机制</strong></td>
+                <td>随时可卖</td>
+                <td>Saylor 公开声称"永不卖"</td>
+            </tr>
+        </table>
+        <p>微策略的操作更接近<strong class="highlight">企业级做多 + 股权故事再包装</strong>，而非传统意义的价值投资定投。</p>
+    </div>
+
+    <!-- 争议与风险 -->
+    <div class="section">
+        <h2>⚠️ 争议与潜在风险</h2>
+        <div class="risk-box">
+            <strong>⚠️ 以下为中性分析，不代表看空或看多立场。</strong>
+        </div>
+        <ul>
+            <li><strong>泡沫隐忧：</strong>若 BTC 价格大幅下跌，mNAV 跌破 1 后融资循环断裂，MSTR 股价可能腰斩甚至更多</li>
+            <li><strong>股权稀释：</strong>持续增发股票意味着老股东单位持仓的 BTC 量被摊薄；BlackRock、Vanguard 等机构 2025 年三季度已减持 MSTR 约 54 亿美元</li>
+            <li><strong>债务到期压力：</strong>公司持有大量可转债，若到期时 BTC 价格不佳，再融资难度上升</li>
+            <li><strong>监管风险：</strong>美国 SEC 对企业比特币国库策略的监管态度尚不明朗</li>
+            <li><strong>集中风险：</strong>单一资产持仓超 76 万枚，相当于把公司命运完全押注在 BTC 上</li>
+        </ul>
+    </div>
+
+    <!-- Saylor 的信仰 -->
+    <div class="section">
+        <h2>💬 Saylor 说什么</h2>
+        <div class="quote-box">
+            <p>"比特币是人类有史以来创造的最完美的财产存储形式。我们不卖，因为没有卖的理由。"</p>
+            <div class="quote-author">— Michael Saylor，Strategy 执行主席</div>
+        </div>
+        <div class="quote-box">
+            <p>"如果你持有 21 万枚比特币，你就是一个比特币国家。我们目标是持有 100 万枚。"</p>
+            <div class="quote-author">— Michael Saylor，2025 年采访</div>
+        </div>
+        <p>Saylor 的逻辑是：<strong class="highlight">法币系统通胀是必然</strong>，持有任何美元计价资产都是在亏损，唯有固定上限的比特币才能对抗货币贬值。他把 Strategy 定位为"数字资本市场的比特币做市商"。</p>
+    </div>
+
+    <!-- 效仿者 -->
+    <div class="section">
+        <h2>🌍 效仿者：企业囤币潮</h2>
+        <p>微策略的成功（或"疯狂"）激励了一批上市公司跟随：</p>
+        <ul>
+            <li><strong>特斯拉：</strong>2021 年买入 15 亿美元 BTC，后部分卖出，持仓约 9,720 枚</li>
+            <li><strong>Block（Square）：</strong>持有约 8,027 枚 BTC</li>
+            <li><strong>Metaplanet（日本）：</strong>号称"日本版微策略"，持续增持中</li>
+            <li><strong>多家矿企：</strong>Marathon、CleanSpark 等将挖出的 BTC 直接留存国库</li>
+        </ul>
+        <p>2026 年 3 月，要在年底达成 100 万枚目标，Strategy 需要在剩余约 42 周内每周买入约 <strong class="highlight">6,158 枚 BTC</strong>（按均价 85,000 美元计，需追加约 219 亿美元）。</p>
+    </div>
+
+    <!-- 大饼信仰者视角 -->
+    <div class="section">
+        <h2>₿ 大饼信仰者视角</h2>
+        <p>无论你认为 Saylor 是天才还是赌徒，有一件事值得承认：</p>
+        <p>他<strong class="highlight">用资本市场的游戏规则</strong>，把一家市值平庸的软件公司变成了全球最大的企业比特币国库，并且持续从传统金融体系里"虹吸"美元换成比特币——这本身就是一种独特的比特币普及路径。</p>
+        <p>从大饼信仰者的角度，微策略每次买入都在减少市场流通量，配合 ETF 资金、主权财富基金的入场，供给侧的压力只会越来越大。</p>
+        <div class="quote-box">
+            <p>₿ 2100 万上限是写在代码里的宪法。<br>每一个机构买家，都是在帮散户抬轿——同时也在压缩散户的上车窗口。</p>
+            <div class="quote-author">— szlinux-btc 个人观点</div>
+        </div>
+    </div>
+
+    <div class="footer-nav">
+        <a href="https://claw.138138100.xyz/">🏠 首页</a>
+        <a href="https://claw.138138100.xyz/reports/daily-report.html">📊 今日简报</a>
+        <a href="https://claw.138138100.xyz/1btc-life-changed.html">₿ 1 BTC = 人生不同</a>
+        <p style="margin-top: 12px;">本文仅为个人记录与学习，不构成任何投资建议。</p>
+    </div>
+</div>
+</body>
+</html>
