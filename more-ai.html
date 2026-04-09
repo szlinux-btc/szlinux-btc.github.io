@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI学习者历史文章 - szlinux-btc 的技术博客">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;">
+    <title>🦞 AI 学习者 | 历史文章</title>
+    <link rel="icon" type="image/x-icon" href="https://138138100.xyz/favicon.ico">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: #21262d;
+            --border-color: #30363d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --accent: #58a6ff;
+            --accent-hover: #79c0ff;
+            --tag-analysis: #f778ba;
+            --tag-security: #f85149;
+            --tag-agent: #3fb950;
+            --tag-contrast: #ffa657;
+            --tag-skill: #a371f7;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        .navbar {
+            background: var(--bg-secondary);
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        /* 快捷导航按钮 */
+        .module-nav {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .module-nav a {
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            background: rgba(255,255,255,0.05);
+        }
+        .module-nav a:hover {
+            background: rgba(255,255,255,0.1);
+            color: var(--text-primary);
+        }
+        .module-nav a.active {
+            background: rgba(247,120,186,0.2);
+            color: #f778ba;
+        }
+        
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+        .navbar-brand span { font-size: 1.5rem; }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+        .back-btn:hover { background: var(--border-color); }
+        .header {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px 24px 30px;
+            text-align: center;
+        }
+        .header-icon { font-size: 4rem; margin-bottom: 16px; }
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+        .header p { font-size: 1.1rem; color: var(--text-secondary); }
+        .filter-bar {
+            max-width: 1200px;
+            margin: 0 auto 30px;
+            padding: 0 24px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+            justify-content: center;
+        }
+        .search-box {
+            flex: 1;
+            min-width: 280px;
+            max-width: 400px;
+            position: relative;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px 12px 48px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .search-box input:focus { border-color: var(--accent); }
+        .search-box input::placeholder { color: var(--text-secondary); }
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+        }
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        .filter-btn {
+            padding: 10px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .filter-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+        .filter-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+        .filter-btn .count {
+            margin-left: 6px;
+            opacity: 0.7;
+            font-size: 0.8rem;
+        }
+        .stats-bar {
+            max-width: 1200px;
+            margin: 0 auto 24px;
+            padding: 0 24px;
+            text-align: center;
+        }
+        .stats-bar span { color: var(--text-secondary); font-size: 0.9rem; }
+        .stats-bar .num { color: var(--accent); font-weight: 700; }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 60px;
+        }
+        .article-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        .article-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .article-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(88, 166, 255, 0.15);
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-title .icon { font-size: 1.2rem; }
+        .card-date { font-size: 0.8rem; color: var(--text-secondary); }
+        .card-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            flex: 1;
+            margin-bottom: 16px;
+        }
+        .card-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .tag-analysis { background: rgba(247, 120, 186, 0.15); color: var(--tag-analysis); }
+        .tag-security { background: rgba(248, 81, 73, 0.15); color: var(--tag-security); }
+        .tag-agent { background: rgba(63, 185, 80, 0.15); color: var(--tag-agent); }
+        .tag-contrast { background: rgba(255, 166, 87, 0.15); color: var(--tag-contrast); }
+        .tag-skill { background: rgba(163, 113, 247, 0.15); color: var(--tag-skill); }
+        .no-result {
+            text-align: center;
+            padding: 60px 20px;
+            display: none;
+        }
+        .no-result p { color: var(--text-secondary); font-size: 1.1rem; }
+        .footer-nav {
+            max-width: 1200px;
+            margin: 40px auto 0;
+            padding: 40px 24px;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+        }
+        .footer-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 32px;
+            background: var(--accent);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .footer-btn:hover { background: var(--accent-hover); }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.6rem; }
+            .article-grid { grid-template-columns: 1fr; }
+            .filter-bar { flex-direction: column; }
+            .search-box { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="https://138138100.xyz/" class="navbar-brand">
+                <span>🦞</span>
+                <span>AI 学习者</span>
+            </a>
+            <!-- 快捷导航 -->
+            <div class="module-nav">
+                <a href="index.html">🏠 首页</a>
+                <a href="more-bitcoin.html">₿ 大饼</a>
+                <a href="more-linux.html">🐧 Linux</a>
+                <a href="more-ai.html" class="active">🤖 AI</a>
+                <a href="more-tools.html">🔧 工具</a>
+            </div>
+            <a href="https://138138100.xyz/" class="back-btn">← 首页</a>
+        </div>
+    </nav>
+
+    <header class="header">
+        <div class="header-icon">🦞</div>
+        <h1>AI 学习者</h1>
+        <p>AI Agent · 大模型 · 人机协作新范式</p>
+    </header>
+
+    <div class="filter-bar">
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="搜索文章标题、描述或关键词...">
+        </div>
+        <div class="filter-buttons" id="filterButtons"></div>
+    </div>
+
+    <div class="stats-bar">
+        <span>共 <span class="num" id="totalCount">18</span> 篇文章</span>
+    </div>
+
+    <main class="container">
+        <div class="article-grid" id="articleGrid"></div>
+        <div class="no-result" id="noResult">
+            <p>没有找到匹配的文章，换个关键词试试？</p>
+        </div>
+    </main>
+
+    <footer class="footer-nav">
+        <a href="https://138138100.xyz/" class="footer-btn">← 返回首页</a>
+    </footer>
+
+    <script>
+        const keywordMap = {
+            "prompt-engineering-mastery": ["analysis"],
+            "llm-how-it-works": ["analysis"],
+            "llm-war-history": ["war", "history"],
+            "mcp-protocol-deep-dive": ["core", "protocol"],
+            "china-llm-compare": ["comparison", "deepseek", "qwen"],
+            "instagram-recommendation-deep-dive": ["system", "architecture", "meta"],
+            "agent-architecture-deep-dive": ["system", "architecture", "agent"],
+            "prompt-injection-attack-defense": ["security", "ai-safety", "red-team"],
+            "claude-code-source-leak": ["analysis", "security"],
+            "ai-lobster-trend-march-2026": ["analysis"],
+            "fu-sheng-lobster-analysis": ["analysis"],
+            "openclaw-security-alert": ["security"],
+            "openclaw-essence": ["agent"],
+            "claw-variants-comparison": ["contrast"],
+            "chatgpt-vs-agent": ["contrast"],
+            "ai-poisoning-vs-dns": ["security"],
+            "skill-top20": ["skill"],
+            "easyclaw-intro": ["agent"]
+        };
+
+        const articles = [
+            {"title": "\u63d0\u793a\u5de5\u7a0b\u5b9e\u6218\uff1a\u4ece\"\u804a\u5929\"\u5230\"\u7f16\u7a0b\"\u7684\u7ef4\u5ea6\u8dc3\u8fc1", "icon": "\ud83d\ude80", "date": "2026-04", "desc": "PEAKS\u6846\u67b6\u3001Chain-of-Thought\u539f\u7406\u3001Few-shot\u4fe1\u606f\u8bba\uff0c\u8ba9AI\u8f93\u51fa\u8d28\u91cf\u7ffb\u500d\u7684\u6df1\u5c42\u903b\u8f91\u3002", "tags": ["analysis"], "url": "prompt-engineering-mastery.html"},
+            {"title": "\u5927\u6a21\u578b\u662f\u600e\u4e48\u5de5\u4f5c\u7684\uff1a\u4ece Token \u5230\u601d\u8003", "icon": "\ud83e\udde0", "date": "2026-04", "desc": "\u6df1\u5165\u89e3\u6790 ChatGPT/Gemini/Claude \u80cc\u540e\u7684\u6838\u5fc3\u6280\u672f\uff1aToken\u3001Embedding\u3001Transformer\u3001\u6d8c\u73b0\u80fd\u529b\u3002", "tags": ["analysis"], "url": "llm-how-it-works.html"},
+            {"title": "LLM\u6218\u4e89\u53f2\uff1a\u4ece\u56fe\u7075\u6d4b\u8bd5\u5230\u4e07\u4ebf\u53c2\u6570\u519b\u5907\u7ade\u8d5b", "icon": "\u2694\ufe0f", "date": "2026-04", "desc": "\u5927\u56fd\u535a\u5f08\u3001\u8d44\u672c\u75af\u72c2\u3001\u53d1\u5e03\u7b56\u7565\u3001\u5f00\u6e90vs\u95ed\u6e90\u2014\u2014\u590d\u76d8AI\u519b\u5907\u7ade\u8d5b\u80cc\u540e\u90a3\u4e9b\u79bb\u8c31\u5230\u4e0d\u6562\u4fe1\u7684\u771f\u5b9e\u6545\u4e8b\u3002", "tags": ["war", "history"], "url": "llm-war-history.html"},
+            {"title": "MCP\u534f\u8bae\u6df1\u5ea6\u89e3\u6790\uff1aAI\u8fde\u63a5\u4e07\u7269\u7684USB\u6807\u51c6", "icon": "\ud83d\udd0c", "date": "2026-04", "desc": "Client-Server\u67b6\u6784\u3001\u4e09\u5927\u539f\u8bed\u3001\u5b89\u5168\u673a\u5236\u3001Streamable HTTP\u4f20\u8f93\u3001\u4e0eFunction Calling\u7684\u672c\u8d28\u533a\u522b\u3002", "tags": ["core", "protocol"], "url": "mcp-protocol-deep-dive.html"},
+            {"title": "\u56fd\u4ea7\u5927\u6a21\u578b\u6df1\u5ea6\u5bf9\u6bd4\uff1a2026\u5e74\u8c01\u4e3b\u6c89\u6d6e\uff1f", "icon": "\ud83c\udde8\ud83c\uddf3", "date": "2026-04", "desc": "DeepSeek\u3001\u901a\u4e49\u5343\u95ee\u3001Kimi\u3001\u8c46\u5305\u3001\u6587\u5fc3\u4e00\u8a00\u5168\u65b9\u4f4d\u6a2a\u8bc4\uff1a\u6280\u672f\u67b6\u6784\u3001API\u4ef7\u683c\u3001\u516d\u7ef4\u5ea6\u80fd\u529b\u5bf9\u6bd4\u3002", "tags": ["comparison", "deepseek", "qwen"], "url": "china-llm-compare.html"},
+            {"title": "Instagram \u63a8\u8350\u7cfb\u7edf\u6280\u672f\u6df1\u5ea6\u89e3\u6790", "icon": "\ud83d\udcf8", "date": "2026-04", "desc": "Meta\u8d85\u5927\u89c4\u6a21\u63a8\u8350\u7cfb\u7edf\u5de5\u7a0b\u89e3\u6790\uff1a\u591a\u9636\u6bb5\u6f0f\u6597\u3001\u53cc\u5854\u6a21\u578b\u3001MTML\u591a\u76ee\u6807\u4f18\u5316\u300124,000\u5757H100 GPU\u96c6\u7fa4\u3002", "tags": ["system", "architecture", "meta"], "url": "instagram-recommendation-deep-dive.html"},
+            {"title": "AI Agent \u67b6\u6784\u539f\u7406\uff1a\u62c6\u89e3\u667a\u80fd\u4f53\u7684\u4e94\u5927\u6838\u5fc3\u6a21\u5757", "icon": "\ud83c\udff0", "date": "2026-04", "desc": "LLM\u5f15\u64ce\u3001\u89c4\u5212\u6a21\u5757\uff08ReAct/CoT/ToT\uff09\u3001\u4e09\u5c42\u8bb0\u5fc6\u67b6\u6784\u3001\u5de5\u5177\u8c03\u7528\uff08MCP\u534f\u8bae\uff09\u3001\u6267\u884c\u6a21\u5757\uff0c\u4ee5\u53ca\u4e3b\u6d41\u6846\u67b6\u6a2a\u8bc4\u3002", "tags": ["system", "architecture", "agent"], "url": "agent-architecture-deep-dive.html"},
+            {"title": "Prompt Injection \u653b\u9632\uff1aOWASP LLM Top 10 \u5934\u53f7\u98ce\u9669", "icon": "\ud83d\udd1e", "date": "2026-04", "desc": "\u4ece\u5976\u5976\u6f0f\u6d1e\u5230RAG\u6295\u6bd2\uff0c\u62c6\u89e36\u7c7b\u653b\u51fb\u624b\u6cd5\u30015\u5c42\u9632\u5fa1\u4f53\u7cfb\uff0c\u4ee5\u53ca\u4ee3\u7801\u7ea7\u5b9e\u6218\u9632\u5fa1\u3002", "tags": ["security", "ai-safety", "red-team"], "url": "prompt-injection-attack-defense.html"},
+            {"title": "Claude Code \u6e90\u7801\u6cc4\u9732\u6df1\u5ea6\u5206\u6790", "icon": "\ud83d\udd0d", "date": "2026-04", "desc": "v2.1.88 npm \u5305\u610f\u5916\u66dd\u5149\u5b8c\u6574TypeScript\u6e90\u7801\uff0cUndercover Mode\u3001Buddy\u7535\u5b50\u9e21\u3001Dream\u8bb0\u5fc6\u7b49\u5168\u90e8\u57fa\u4e8e\u539f\u59cb\u4ee3\u7801\u76f4\u63a5\u5206\u6790\u3002", "tags": ["analysis", "security"], "url": "claude-code-source-leak.html"},
+            {"title": "2026\u5e743\u6708AI\u9f99\u867e\u53d1\u5c55\u8d8b\u52bf\u6df1\u5ea6\u5206\u6790", "icon": "\ud83d\udcca", "date": "2026-03", "desc": "\u4e13\u4e1a\u89c6\u89d2\u5206\u6790AI Agent\u4ece\u6280\u672f\u9a8c\u8bc1\u5230\u5de5\u7a0b\u5316\u843d\u5730\u7684\u5173\u952e\u62d0\u70b9\u3002", "tags": ["analysis"], "url": "ai-lobster-trend-march-2026.html"},
+            {"title": "\u5085\u76db\u4e0eAI\u9f99\u867e\uff1a14\u5929\u6df1\u5ea6\u89c2\u5bdf", "icon": "\ud83e\udd8e", "date": "2026-03", "desc": "\u4e13\u4e1a\u89c6\u89d2\u5206\u6790\u5085\u76db14\u5929\u9f99\u867e\u5b9e\u9a8c\uff1a\u4ece\u6280\u672f\u67b6\u6784\u3001\u7ec4\u7ec7\u6f14\u5316\u3001\u5546\u4e1a\u6a21\u5f0f\u5230\u884c\u4e1a\u5f71\u54cd\u7684\u6df1\u5ea6\u62c6\u89e3\u3002", "tags": ["analysis"], "url": "fu-sheng-lobster-analysis.html"},
+            {"title": "\u5b89\u5168\u8b66\u62a5\uff1aOpenClaw ClawHub \u6076\u610f\u6295\u6bd2\u4e8b\u4ef6", "icon": "\u26a0\ufe0f", "date": "2026-03", "desc": "ClawHub \u63d2\u4ef6\u5e02\u573a\u906d\u9047\u5927\u89c4\u6a21\u6076\u610f skills \u653b\u51fb\uff0c\u53ef\u80fd\u5bfc\u81f4\u4ee3\u7801\u6ce8\u5165\u3001\u94b1\u5305\u76d7\u53d6\u3001AI \u8eab\u4efd\u63a5\u7ba1\u3002", "tags": ["security"], "url": "openclaw-security-alert.html"},
+            {"title": "OpenClaw \u672c\u8d28\u662f\u4ec0\u4e48\uff1fAI Agent \u7684\u54f2\u5b66\u601d\u8003", "icon": "\ud83e\udd8e", "date": "2026-03", "desc": "\u6df1\u5165\u63a2\u8ba8 OpenClaw \u7684\u672c\u8d28\u4e0e\u6838\u5fc3\u7406\u5ff5\uff0c\u7406\u89e3 AI Agent \u5982\u4f55\u91cd\u65b0\u5b9a\u4e49\u4eba\u673a\u534f\u4f5c\u65b9\u5f0f\u3002", "tags": ["agent"], "url": "openclaw-essence.html"},
+            {"title": "\u9f99\u86c7\u5927\u6218\uff1aOpenClaw 5 \u4e2a\u53d8\u79cd\u7248\u672c\u6df1\u5ea6\u5bf9\u6bd4", "icon": "\ud83e\udd8e", "date": "2026-03", "desc": "ZeroClaw/PicoClaw/NanoClaw/MemU Bot/MaxClaw/OpenClaw \u516d\u5927\u53d8\u79cd\u6a2a\u5411\u8bc4\u6d4b\u3002", "tags": ["contrast"], "url": "claw-variants-comparison.html"},
+            {"title": "ChatGPT \u662f\u804a\u5929\u7a97\u53e3\uff0c\u9f99\u867e\u662f\u5e2e\u4f60\u5e72\u6d3b\u7684\u5458\u5de5", "icon": "\ud83e\udd16", "date": "2026-03", "desc": "\u4ece\u6280\u672f\u67b6\u6784\u5230\u4ea7\u54c1\u5f62\u6001\uff0c\u6df1\u5165\u89e3\u6790\u4f20\u7edf LLM \u4e0e AI Agent \u7684\u672c\u8d28\u533a\u522b\u3002", "tags": ["contrast"], "url": "chatgpt-vs-agent.html"},
+            {"title": "AI \u6a21\u578b\u6295\u6bd2\u653b\u51fb\u4e0e DNS \u52ab\u6301\u5bf9\u6bd4\u5206\u6790", "icon": "\ud83c\udfaf", "date": "2026-03", "desc": "\u6df1\u5ea6\u5bf9\u6bd4 AI \u6a21\u578b\u6295\u6bd2\u653b\u51fb\u4e0e DNS \u52ab\u6301\u7684\u539f\u7406\u3001\u5f71\u54cd\u548c\u9632\u62a4\u7b56\u7565\u3002", "tags": ["security"], "url": "ai-poisoning-vs-dns.html"},
+            {"title": "20\u4e2a\u6700\u9760\u8c31 \u795e\u7ea7 Skill \u63a8\u8350\u699c", "icon": "\u2b50", "date": "2026-03", "desc": "ClawHub \u91cc\u7cfb\u7edf\u8bc4\u5206 >3.4 \u7684 20 \u4e2a\u795e\u7ea7 Skill \u63a8\u8350\uff0c\u6309\u529f\u80fd\u5206\u56db\u7c7b\u3002", "tags": ["skill"], "url": "skill-top20.html"},
+            {"title": "EasyClaw \u2014 AI \u52a9\u624b\u4ea7\u54c1\u5168\u89e3\u6790", "icon": "\ud83e\udd16", "date": "2026-03", "desc": "\u57fa\u4e8e OpenClaw \u6846\u67b6\u7684 AI \u52a9\u624b\u4ea7\u54c1\u5bfc\u822a\uff0c\u4f01\u4e1a\u7248/\u4e2a\u4eba\u7248/\u56fd\u5185\u5916\u7248\u5168\u89e3\u6790\u3002", "tags": ["agent"], "url": "easyclaw-intro.html"}
+        ];
+
+        const allTags = [...new Set(articles.flatMap(a => a.tags))];
+        const tagNames = {
+            'analysis': '深度分析',
+            'security': '安全警报',
+            'agent': 'AI Agent',
+            'contrast': '对比评测',
+            'skill': 'Skill推荐'
+        };
+
+        let currentFilter = 'all';
+        let searchTerm = '';
+
+        function initFilters() {
+            const btnContainer = document.getElementById('filterButtons');
+            const tagCounts = {};
+            articles.forEach(a => {
+                a.tags.forEach(t => {
+                    tagCounts[t] = (tagCounts[t] || 0) + 1;
+                });
+            });
+
+            let buttonsHTML = `<button class="filter-btn active" data-filter="all">全部 <span class="count">${articles.length}</span></button>`;
+            allTags.forEach(tag => {
+                const count = tagCounts[tag] || 0;
+                const name = tagNames[tag] || tag;
+                buttonsHTML += `<button class="filter-btn" data-filter="${tag}">${name} <span class="count">${count}</span></button>`;
+            });
+            btnContainer.innerHTML = buttonsHTML;
+
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentFilter = btn.dataset.filter;
+                    renderArticles();
+                });
+            });
+        }
+
+        function renderArticles() {
+            const grid = document.getElementById('articleGrid');
+            const noResult = document.getElementById('noResult');
+            const totalCount = document.getElementById('totalCount');
+
+            const filtered = articles.filter(a => {
+                const matchFilter = currentFilter === 'all' || a.tags.includes(currentFilter);
+                const searchLower = searchTerm.toLowerCase();
+                const matchSearch = searchTerm === '' || 
+                    a.title.toLowerCase().includes(searchLower) ||
+                    a.desc.toLowerCase().includes(searchLower) ||
+                    (keywordMap[a.url.split('/').pop()] && keywordMap[a.url.split('/').pop()].some(k => k.toLowerCase().includes(searchLower)));
+                return matchFilter && matchSearch;
+            });
+
+            totalCount.textContent = filtered.length;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                noResult.style.display = 'block';
+                return;
+            }
+
+            noResult.style.display = 'none';
+            grid.innerHTML = '';
+            
+            filtered.forEach(a => {
+                const card = document.createElement('a');
+                card.href = a.url;
+                card.className = 'article-card';
+                if (a.url.startsWith('http') && !a.url.includes('138138100.xyz')) {
+                    card.target = '_blank';
+                    card.rel = 'noopener noreferrer';
+                }
+                
+                const header = document.createElement('div');
+                header.className = 'card-header';
+                
+                const title = document.createElement('span');
+                title.className = 'card-title';
+                const iconSpan = document.createElement('span');
+                iconSpan.className = 'icon';
+                iconSpan.textContent = a.icon;
+                title.appendChild(iconSpan);
+                const titleText = document.createTextNode(a.title);
+                title.appendChild(titleText);
+                
+                const date = document.createElement('span');
+                date.className = 'card-date';
+                date.textContent = a.date;
+                
+                header.appendChild(title);
+                header.appendChild(date);
+                
+                const desc = document.createElement('p');
+                desc.className = 'card-desc';
+                desc.textContent = a.desc;
+                
+                const tagsDiv = document.createElement('div');
+                tagsDiv.className = 'card-tags';
+                a.tags.forEach(t => {
+                    const tag = document.createElement('span');
+                    tag.className = `tag tag-${t}`;
+                    tag.textContent = (tagNames[t] || t).toUpperCase();
+                    tagsDiv.appendChild(tag);
+                });
+                
+                card.appendChild(header);
+                card.appendChild(desc);
+                card.appendChild(tagsDiv);
+                grid.appendChild(card);
+            });
+        }
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            searchTerm = e.target.value;
+            renderArticles();
+        });
+
+        initFilters();
+        renderArticles();
+    </script>
+</body>
+</html>
