@@ -19,7 +19,8 @@
     {"title": "OKX 2026 深度分析", "icon": "\ud83d\udcc8", "date": "2026-03", "desc": "OKX 欧易平台现状与 OKB 代币价值分析。", "tags": ["okx"], "url": "okx-2026-analysis.html", "file": "okx-2026-analysis"},
     {"title": "减半四周年：从第一次到当下的行情启示", "icon": "\ud83d\udcca", "date": "2026-03-20", "desc": "完整复盘四次减半周期的价格走势与规律总结。", "tags": ["btc", "\u51cf\u534a"], "url": "btc-halving-4years-v2.html", "file": "btc-halving-4years-v2"},
     {"title": "BTC vs 黄金：三十年对决", "icon": "\ud83d\udc8e", "date": "2026-03", "desc": "比特币与黄金作为价值存储的全面对比分析。", "tags": ["btc", "gold"], "url": "btc-vs-gold.html", "file": "btc-vs-gold"},
-    {"title": "量子计算威胁比特币？深度解析", "icon": "\u269b\ufe0f", "date": "2026-03", "desc": "Q-Day 威胁、BIP-360 抗量子方案与比特币的防御策略。", "tags": ["btc", "quantum"], "url": "quantum-computing-bitcoin-defense.html", "file": "quantum-computing-bitcoin-defense"}
+    {"title": "量子计算威胁比特币？深度解析", "icon": "\u269b\ufe0f", "date": "2026-03", "desc": "Q-Day 威胁、BIP-360 抗量子方案与比特币的防御策略。", "tags": ["btc", "quantum"], "url": "quantum-computing-bitcoin-defense.html", "file": "quantum-computing-bitcoin-defense"},
+    {"title": "Strategy 的比特币帝国：766,970 枚背后的金融逻辑", "icon": "\ud83c\udff0", "date": "2026-04-10", "desc": "STRC 优先股融资机制解析、全球持仓格局与「挑战中本聪」的路线图。766,970 枚、3.65% 流通供应量、61.8% 上市公司占比。", "tags": ["btc", "mstr", "institution"], "url": "strategy-bitcoin-accumulation-2026.html", "file": "strategy-bitcoin-accumulation-2026"}
   ],
   "linux": [
     {"title": "Linux 内核进化论：从 0.01 到 6.x 的三十年征途", "icon": "\ud83d\udc27", "date": "2026-04", "desc": "从 1991 年 Linus 写下第一行代码，到 2024 年 Linux 6.x 内核，全面解析内核三十年演进史。", "tags": ["linux", "kernel", "history"], "url": "linux-kernel-evolution.html", "file": "linux-kernel-evolution"},
