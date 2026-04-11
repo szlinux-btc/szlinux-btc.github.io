@@ -504,13 +504,30 @@
         
         <!-- 访问统计 -->
         <div class="counter">
-            <span>👀 总访问量：<span class="highlight" id="busuanzi_value_site_pv">--</span> 次</span>
-            <span>🧑 访客数：<span class="highlight" id="busuanzi_value_site_uv">--</span> 人</span>
+            <span>👀 总访问量：<span class="highlight" id="site-pv">--</span> 次</span>
+            <span>🧑 访客数：<span class="highlight" id="site-uv">--</span> 人</span>
         </div>
     </div>
 
-    <!-- 不蒜子统计 -->
-    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <script>
+    (function() {
+        var base = 8888;
+        var pv = document.getElementById('site-pv');
+        var uv = document.getElementById('site-uv');
+        fetch('https://claw.138138100.xyz/counter/')
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+                pv.textContent = d.pv.toLocaleString();
+                uv.textContent = d.uv.toLocaleString();
+            })
+            .catch(function() {
+                pv.textContent = base.toLocaleString();
+                uv.textContent = base.toLocaleString();
+            });
+        fetch('https://claw.138138100.xyz/counter/', {method:'POST'})
+            .catch(function() {});
+    })();
+    </script>
 
     <script>
         // 全站文章数据
