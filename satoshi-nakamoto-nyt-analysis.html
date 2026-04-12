@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中本聪是谁：NYT 调查的方法论批判</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: #0a0a0f; color: #e0e0e0; line-height: 1.8; font-size: 16px; }
+        .container { max-width: 760px; margin: 0 auto; padding: 40px 20px; }
+        .article-meta { color: #888; font-size: 0.9rem; margin-bottom: 8px; }
+        .article-title { font-size: 1.9rem; font-weight: 700; color: #f0c040; margin-bottom: 12px; line-height: 1.3; }
+        .article-subtitle { font-size: 1.1rem; color: #999; margin-bottom: 32px; font-weight: 400; }
+        .lead { font-size: 1.1rem; color: #ccc; border-left: 3px solid #f0c040; padding-left: 18px; margin-bottom: 32px; }
+        h2 { font-size: 1.3rem; color: #f0c040; margin: 36px 0 16px; padding-bottom: 8px; border-bottom: 1px solid #333; }
+        h3 { font-size: 1.1rem; color: #d4a843; margin: 24px 0 12px; }
+        p { margin-bottom: 18px; color: #ccc; }
+        blockquote { background: #16161e; border-left: 4px solid #f0c040; padding: 16px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        blockquote p { color: #bbb; margin-bottom: 8px; }
+        blockquote p:last-child { margin-bottom: 0; }
+        .quote-label { font-size: 0.85rem; color: #888; margin-bottom: 8px; font-weight: 600; }
+        .tag-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+        .tag { background: #1c1c28; color: #f0c040; padding: 3px 10px; border-radius: 4px; font-size: 0.8rem; }
+        .verdict { background: linear-gradient(135deg, #1a1a2e, #16213e); border: 1px solid #f0c040; border-radius: 12px; padding: 28px; margin: 32px 0; }
+        .verdict-title { font-size: 1.1rem; color: #f0c040; margin-bottom: 14px; font-weight: 700; }
+        .verdict p { color: #c0c0c0; }
+        .evidence-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+        .evidence-card { background: #13131d; border-radius: 8px; padding: 18px; border: 1px solid #2a2a3a; }
+        .evidence-card h4 { color: #e0b84a; font-size: 0.95rem; margin-bottom: 8px; }
+        .evidence-card p { color: #999; font-size: 0.9rem; margin: 0; }
+        .score-row { display: flex; justify-content: space-between; align-items: center; margin: 10px 0; }
+        .score-label { color: #999; font-size: 0.9rem; }
+        .score-bar { flex: 1; height: 6px; background: #222; margin: 0 12px; border-radius: 3px; overflow: hidden; }
+        .score-fill { height: 100%; border-radius: 3px; }
+        .score-fill.high { background: #52c41a; }
+        .score-fill.mid { background: #faad14; }
+        .score-fill.low { background: #f5222d; }
+        .score-val { color: #888; font-size: 0.85rem; min-width: 60px; text-align: right; }
+        ul { margin: 16px 0; padding-left: 24px; }
+        li { margin-bottom: 10px; color: #ccc; }
+        .conclusion-box { background: #1a1a2a; border-radius: 10px; padding: 24px; margin: 28px 0; }
+        .footer-note { text-align: center; color: #555; font-size: 0.8rem; margin-top: 48px; padding-top: 20px; border-top: 1px solid #222; }
+        @media (max-width: 600px) { .evidence-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="article-meta">2026-04-11 · Bitcoin</div>
+        <h1 class="article-title">中本聪是谁：NYT 调查的方法论批判</h1>
+        <div class="article-subtitle">从 1 万小时写作习惯分析，到邮件元数据的沉默</div>
+        <div class="tag-row">
+            <span class="tag">中本聪</span>
+            <span class="tag">Adam Back</span>
+            <span class="tag">身份之谜</span>
+            <span class="tag">方法论</span>
+        </div>
+
+        <p class="lead">17 年了，全球最聪明的人花了无数个小时追踪中本聪的身份。最近，《纽约时报》的一篇调查把矛头指向了 Blockstream 联合创始人 Adam Back。这篇文章我想从方法论角度，认真分析一下——这轮调查的说服力到底有多强。</p>
+
+        <h2>一、调查者用了什么方法？</h2>
+        <p>先把立场放一边，客观说这篇调查用了几种不同的分析手段，每种手段的可靠性差异很大。</p>
+
+        <h3>1. 文体计量学（Stylometry）</h3>
+        <p>这是语言学里用来识别作者身份的技术，通过统计高频功能词（the、and、of）的使用频率来建立风格指纹。调查者请了法国计算语言学家 Florian Cafiero 做了两轮分析：</p>
+        <ul>
+            <li>第一轮：Back 与白皮书的匹配度最高</li>
+            <li>第二轮：调整算法后，其他候选人反而超过了他</li>
+        </ul>
+        <p>结论：互相矛盾，两轮都没能给出明确结论。这个工具的局限在于——如果对方知道 stylometry 的原理，是可以刻意调整写作风格的。事实上，Back 本人在 1998 年的一篇帖子中就提出过"多项选择式句子构造器"来规避风格识别。所以这个方法对有反侦察意识的人是打折扣的。</p>
+
+        <h3>2. 连字符使用错误的统计分析</h3>
+        <p>这是整篇调查中最有意思的部分。调查者发现了 325 处中本聪在语法性连字符使用上的错误，然后与 Cypherpunks 邮件列表上 620 名活跃用户的写作进行比对。</p>
+        <p>结果：Back 与中本聪共享了 67 处完全相同的连字符错误，排名第二的候选人只有 38 处。这个差距是显著的。</p>
+        <p>我的判断：这是整篇调查中最扎实的一项证据。连字符使用习惯属于"无意识写作行为"，很难刻意伪装，也没有明显的功能性目的。你不会因为想隐藏身份就特意把 "proof-of-work" 加上连字符。这种习惯更像是下意识的。</p>
+
+        <h3>3. 邮件列表发帖行为模式分析</h3>
+        <p>调查者从三个 Cypherpunks 相关邮件列表中提取了 2008 年 10 月之前的全部帖子（约 13.4 万篇），通过层层筛选（过滤垃圾账号、会话量不足者、未讨论过数字货币者），最终锁定到 620 名候选人。</p>
+        <p>然后做了一件事：找出中本聪全部文本中"没有同义词的技术词汇"，看谁使用过最多这类词。Back 以 521 个共享词汇排名第一。</p>
+        <p>我的判断：这个方向是对的——用技术词汇代替高频功能词，可以规避 stylometry 的弱点。但问题在于，Back 本身就是 Hashcash 的发明者，他在邮件列表中大量讨论相关概念是理所当然的，所以这个数字高本身并不意外。</p>
+
+        <h3>4. 关键概念的预言式提前出现</h3>
+        <p>这是整篇调查最吸引眼球的部分：Back 在 1997-1999 年间，就在 Cypherpunks 邮件列表上几乎完整描述了 Bitcoin 的所有核心要素：</p>
+        <ul>
+            <li>分布式电子现金的四项关键属性（隐私、分布式网络、内生稀缺性、无信任第三方）</li>
+            <li>拜占庭将军问题的解决思路</li>
+            <li>用计算成本来对抗垃圾邮件（Hashcash 的核心）</li>
+            <li>动态调整计算难度的必要性</li>
+            <li>能源消耗的辩护逻辑（"只要低于法币体系的成本就是值得的"）</li>
+        </ul>
+        <p>而这些观点，中本聪在 2008-2009 年几乎用完全相同的逻辑重新表述了一遍。</p>
+
+        <h2>二、反方观点：为什么 Back 不可能是中本聪？</h2>
+        <p>行业内的反驳声音同样值得认真对待。Nothing Research 合伙人 0xTodd 提出了三点质疑：</p>
+
+        <div class="evidence-grid">
+            <div class="evidence-card">
+                <h4>质疑一：邮件请教语气</h4>
+                <p>2008-2009 年间，中本聪曾主动联系 Adam Back 请教技术问题。如果 Back 就是中本聪，这个互动显得刻意且多余。</p>
+            </div>
+            <div class="evidence-card">
+                <h4>质疑二：代码实现风格</h4>
+                <p>Bitcoin 早期代码的编程风格与 Back 的习惯存在可识别的差异。代码风格是比写作风格更难伪装的东西。</p>
+            </div>
+            <div class="evidence-card">
+                <h4>质疑三：动机矛盾</h4>
+                <p>Back 持有约 100 万枚 BTC 的前提下，后续在 Blockstream 的商业化路径在动机上难以自洽。如果要隐姓埋名，为什么还要高调创办公司并主导 Bitcoin 发展方向？</p>
+            </div>
+            <div class="evidence-card">
+                <h4>质疑四：当面否认</h4>
+                <p>Back 本人在 HBO 纪录片和纽约时报采访中均明确否认，并表示后悔没有更早挖矿。</p>
+            </div>
+        </div>
+
+        <p>这四点里，动机矛盾是最有分量的。代码风格差异如果经过独立代码审计支持，也会很有说服力（但目前没有看到完整的审计报告）。当面否认的效力最低——说谎的人当然会否认。</p>
+
+        <h2>三、最值得关注的一个疑点</h2>
+        <p>在整个调查过程中，有一个细节让我觉得值得深究：</p>
+
+        <blockquote>
+            <div class="quote-label">最值得追问的疑点</div>
+            <p>中本聪在 Bitcoin 白皮书中同时引用了 Hashcash 和 b-money。但根据 Craig Wright 庭审中公开的 Back 与中本聪邮件，中本聪似乎是在 Back 让他去看 Dai 的网站之后，才知道 b-money 的存在的。</p>
+            <p>但 Back 的 Hashcash 论文中明确提到 b-money 是其应用场景之一。如果中本聪读过自己要引用的论文，不可能不知道 b-money。</p>
+        </blockquote>
+
+        <p>调查者提出了一个合理的推测：这些邮件可能是 Back 自己写给自己的，用来制造掩护性叙事。而 Back 拒绝提供这些邮件的元数据（发件时间、IP 来源等），这一点本身就很值得玩味。</p>
+        <p>如果邮件是真的——Back 就是无辜被联系的人。</p>
+        <p>如果邮件是伪造的——那 Back 的嫌疑就大幅上升。</p>
+        <p>在元数据被公开之前，这个疑点无法被排除。</p>
+
+        <h2>四、证据说服力评估</h2>
+
+        <div class="score-row">
+            <span class="score-label">连字符使用习惯匹配（67 vs 38）</span>
+            <div class="score-bar"><div class="score-fill high" style="width:85%"></div></div>
+            <span class="score-val">强有力</span>
+        </div>
+        <div class="score-row">
+            <span class="score-label">1997-1999 年概念预言</span>
+            <div class="score-bar"><div class="score-fill high" style="width:78%"></div></div>
+            <span class="score-val">较强</span>
+        </div>
+        <div class="score-row">
+            <span class="score-label">无同义词技术词汇匹配</span>
+            <div class="score-bar"><div class="score-fill mid" style="width:60%"></div></div>
+            <span class="score-val">中等</span>
+        </div>
+        <div class="score-row">
+            <span class="score-label">文体计量学结果</span>
+            <div class="score-bar"><div class="score-fill low" style="width:30%"></div></div>
+            <span class="score-val">不确定</span>
+        </div>
+        <div class="score-row">
+            <span class="score-label">邮件元数据缺失</span>
+            <div class="score-bar"><div class="score-fill mid" style="width:65%"></div></div>
+            <span class="score-val">增加疑虑</span>
+        </div>
+
+        <h2>五、我的判断</h2>
+
+        <div class="verdict">
+            <div class="verdict-title">一个法证调查者的诚实结论</div>
+            <p>作为读者，我读完这篇调查的整体感受是：证据指向性确实明显，但还达不到"定论"的程度。核心问题在于，调查者使用的工具（stylometry）被它自己否定了自己的结论，而最有力的证据（连字符习惯）在统计意义上显著，但这类统计永远存在"巧合"的解释空间。</p>
+            <br>
+            <p>真正让我觉得这件事值得继续关注的，是 Back 对邮件元数据的沉默。数字取证不是玄学，一封邮件从哪台服务器发出、经没经过 Tor 转发、有没有被修改过——这些都是有迹可循的。如果 Back 真的没有问题，给出元数据是最简单的自证清白方式。</p>
+            <br>
+            <p>当然，这件事可能永远没有答案。中本聪持有约 100 万枚 BTC，按当前价格超过 1000 亿美元。这个利益足够大到，任何真正的中本聪都会把身份带到坟墓里。而我们能做的，只是在这些留下来的文本碎片中，继续寻找那个始终隐身的影子。</p>
+        </div>
+
+        <div class="conclusion-box">
+            <h3>最终观点</h3>
+            <p>Back 是目前所有候选人中证据链最完整的——技术背景、意识形态、地理位置、年龄、用词习惯，大部分都能对上。但这不是证明，只是高度吻合。</p>
+            <p>真正解开谜团的钥匙只有一把：移动那 100 万枚 BTC 中的任意一枚。</p>
+            <p>在那之前，这仍然是一个概率问题，而不是事实。</p>
+        </div>
+
+        <div class="footer-note">
+            本文为原创分析评论，内容基于公开报道及行业讨论，不构成任何投资建议
+        </div>
+    </div>
+</body>
+</html>

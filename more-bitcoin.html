@@ -10,7 +10,7 @@
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;">
     <title>📚 Bitcoin | 历史文章</title>
-    <link rel="icon" type="image/x-icon" href="https://138138100.xyz/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="https://claw.138138100.xyz/favicon.ico">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
@@ -282,7 +282,7 @@
 <body>
     <nav class="navbar">
         <div class="navbar-content">
-            <a href="https://138138100.xyz/" class="navbar-brand">
+            <a href="https://claw.138138100.xyz/" class="navbar-brand">
                 <span>₿</span>
                 <span>Bitcoin</span>
             </a>
@@ -294,7 +294,7 @@
                 <a href="more-ai.html">🤖 AI</a>
                 <a href="more-tools.html">🔧 工具</a>
             </div>
-            <a href="https://138138100.xyz/" class="back-btn">← 首页</a>
+            <a href="https://claw.138138100.xyz/" class="back-btn">← 首页</a>
         </div>
     </nav>
 
@@ -317,7 +317,7 @@
         </div>
 
         <div class="filter-bar">
-            <button class="filter-btn active" data-filter="all">全部 <span class="count" id="countAll">(18)</span></button>
+            <button class="filter-btn active" data-filter="all">全部 <span class="count" id="countAll">(19)</span></button>
             <button class="filter-btn" data-filter="btc">₿ BTC <span class="count" id="countBtc"></span></button>
             <button class="filter-btn" data-filter="eth">Ξ ETH <span class="count" id="countEth"></span></button>
             <button class="filter-btn" data-filter="bnb">B BNB <span class="count" id="countBnb"></span></button>
@@ -344,7 +344,7 @@
         // 搜索关键词映射（隐藏字段，用于搜索匹配）
         const keywordMap = {
             "1btc-life-changed": ["btc"],
-            "减半四周年从第一次到当下的行情启示": ["btc", "analysis"],
+            "satoshi-nakamoto-nyt-analysis": ["btc", "satoshi", "analysis"],
             "eth-constipation-log": ["eth"],
             "gold-bitcoin-theory": ["btc", "gold"],
             "satoshi-legend": ["btc", "satoshi"],
@@ -368,7 +368,7 @@
 
         const articles = [
             {"title": "1 BTC = \u4eba\u751f\u4e0d\u540c", "icon": "\u20bf", "date": "2026-03-09", "desc": "\u5f53\u4f60\u6301\u6709 1 BTC\uff0c\u5c31\u62e5\u6709\u4e86\u5168\u7403\u56fa\u5b9a\u4f9b\u5e94\u91cf\u7684 2100 \u4e07\u5206\u4e4b\u4e00\u3002", "tags": ["btc"], "url": "1btc-life-changed.html"},
-            {"title": "\u51cf\u534a\u56db\u5468\u5e74\u884c\u60c5\u542f\u793a", "icon": "\ud83d\udcca", "date": "2026-03-20", "desc": "\u4ece2012\u5e74\u7b2c\u4e00\u6b21\u51cf\u534a\u52302024\u5e74\u7b2c\u56db\u6b21\u51cf\u534a\uff0c\u6df1\u5165\u5206\u6790\u51cf\u534a\u5468\u671f\u4e0e\u4ef7\u683c\u8d70\u52bf\u7684\u5386\u53f2\u89c4\u5f8b\u3002", "tags": ["btc", "analysis"], "url": "\u51cf\u534a\u56db\u5468\u5e74\u4ece\u7b2c\u4e00\u6b21\u5230\u5f53\u4e0b\u7684\u884c\u60c5\u542f\u793a.html"},
+            {"title": "\u4e2d\u672c\u806a\u8eab\u4efd\u5206\u6790\uff1aNYT\u8c03\u67e5\u7684\u65b9\u6cd5\u8bba\u6279\u5224", "icon": "\ud83d\udcca", "date": "2026-04-11", "desc": "\u4ece\u6587\u4f53\u8ba1\u91cf\u5b66\u5230\u8fde\u5b57\u7b26\u5206\u6790\uff0c\u6df1\u5ea6\u62c6\u89e3\u300a\u7ebd\u7ea6\u65f6\u62a5\u300b\u6307\u5411Adam Back\u7684\u8c03\u67e5\u8bc1\u636e\u94fe\uff0c\u517c\u8bba0xTodd\u7684\u53cd\u9a73\u4e0e\u90ae\u4ef6\u5143\u6570\u636e\u7591\u70b9\u3002", "tags": ["btc", "satoshi", "analysis"], "url": "satoshi-nakamoto-nyt-analysis.html"},
             {"title": "\u4ee5\u592a\u6218\u8f66\uff1aETH \u6df1\u5ea6\u5206\u6790", "icon": "\ud83d\ude80", "date": "2026-03", "desc": "\u6df1\u5165\u5206\u6790\u4ee5\u592a\u574a\u73b0\u72b6\u4e0e\u672a\u6765\u8d70\u5411\u3002", "tags": ["eth"], "url": "eth-constipation-log.html"},
             {"title": "\u9ec4\u91d1\u4e0e\u6bd4\u7279\u5e01\u7684\u4e16\u7eaa\u8fa9\u8bba", "icon": "\ud83d\udc8e", "date": "2026-03", "desc": "\u4ece\u8d27\u5e01\u7406\u8bba\u89d2\u5ea6\u5bf9\u6bd4\u5206\u6790\u9ec4\u91d1\u4e0e\u6bd4\u7279\u5e01\u7684\u4ef7\u503c\u903b\u8f91\u3002", "tags": ["btc", "gold"], "url": "gold-bitcoin-theory.html"},
             {"title": "\u4e2d\u672c\u806a\uff1a\u6bd4\u7279\u5e01\u4e4b\u7236", "icon": "\ud83d\udcbb", "date": "2026-03", "desc": "\u8fd8\u539f\u4e2d\u672c\u806a\u7684\u771f\u5b9e\u8eab\u4efd\u4e4b\u8c1c\u4e0e\u6bd4\u7279\u5e01\u8bde\u751f\u7684\u5386\u53f2\u80cc\u666f\u3002", "tags": ["btc", "satoshi"], "url": "satoshi-legend.html"},

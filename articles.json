@@ -1,7 +1,7 @@
 {
   "bitcoin": [
     {"title": "1 BTC = 人生不同", "icon": "\u20bf", "date": "2026-03-09", "desc": "当你持有 1 BTC，就拥有了全球固定供应量的 2100 万分之一。", "tags": ["btc"], "url": "1btc-life-changed.html", "file": "1btc-life-changed"},
-    {"title": "减半四周年行情启示", "icon": "\ud83d\udcca", "date": "2026-03-20", "desc": "从2012年第一次减半到2024年第四次减半，深入分析减半周期与价格走势的历史规律。", "tags": ["btc", "analysis"], "url": "\u51cf\u534a\u56db\u5468\u5e74\u4ece\u7b2c\u4e00\u6b21\u5230\u5f53\u4e0b\u7684\u884c\u60c5\u542f\u793a.html", "file": "\u51cf\u534a\u56db\u5468\u5e74\u4ece\u7b2c\u4e00\u6b21\u5230\u5f53\u4e0b\u7684\u884c\u60c5\u542f\u793a"},
+    {"title": "中本聪身份分析：NYT调查的方法论批判", "icon": "\ud83d\udcca", "date": "2026-04-11", "desc": "从文体计量学到连字符分析，深度拆解《纽约时报》指向Adam Back的调查证据链，兼论0xTodd的反驳与邮件元数据疑点。", "tags": ["btc", "satoshi", "analysis"], "url": "satoshi-nakamoto-nyt-analysis.html", "file": "satoshi-nakamoto-nyt-analysis"},
     {"title": "以太战车：ETH 深度分析", "icon": "\ud83d\ude80", "date": "2026-03", "desc": "深入分析以太坊现状与未来走向。", "tags": ["eth"], "url": "eth-constipation-log.html", "file": "eth-constipation-log"},
     {"title": "黄金与比特币的世纪辩论", "icon": "\ud83d\udc8e", "date": "2026-03", "desc": "从货币理论角度对比分析黄金与比特币的价值逻辑。", "tags": ["btc", "gold"], "url": "gold-bitcoin-theory.html", "file": "gold-bitcoin-theory"},
     {"title": "中本聪：比特币之父", "icon": "\ud83d\udcbb", "date": "2026-03", "desc": "还原中本聪的真实身份之谜与比特币诞生的历史背景。", "tags": ["btc", "satoshi"], "url": "satoshi-legend.html", "file": "satoshi-legend"},
